@@ -73,3 +73,21 @@ Si quieres ser un desarrollador java Spring y avanzar al siguiente nivel, es cas
 * Profesionales técnicos o ingenieros que dominan Java y quieran introducirse en el desarrollo de aplicaciones web con Spring.
 * Desarrolladores apasionados de las nuevas tecnologías con alguna base en Java.
 * En general, personas que dominan Java SE y/o Java EE y quieran dar el salto con Spring Framework.
+
+# Instalaciones Necesarias
+
+* [**JDK (Java SE Development Kit)**](https://www.oracle.com/co/java/technologies/downloads/) - [**OpenJKD**](https://openjdk.org/)
+* [**Srping Tools IDE (Eclipse)**](https://spring.io/tools)
+* **Maven:** El cual si instalamos Srping Tools IDE (Eclipse) ya viene por defecto, de lo contrario si usamos el VSCode este se instala con el Extension Pack for Java.
+* **MySQL**
+
+**NOTA:** En el curso usan el Spring Tools IDE (Eclipse) que se descarga como un .jar y se instala.
+
+Pero también podemos usar directamente los paquetes que se ofrecen para VSCode y que se pueden intalar directamente desde la marketplace. En este caso lo que se instala son las herramientas de Spring y el Extension Pack for Java.
+
+Las urls para las instalaciones son:
+
+* [**Spring Boot Extension Pack - VSCode**](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-boot-dev-pack)
+* [**Extension Pack for Java - VSCode**](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+
+Adicionalment se tienen que realizar algunas configuraciones y para lo cual podemos ver un tutorial en YouTube para este proceso.
