@@ -1,5 +1,8 @@
 package com.bolsadeideas.springboot.web.app.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  *  Importaciones de paquetes
  */
@@ -130,11 +133,25 @@ public class IndexController {
 		// Pasamos los valores
 		usuario.setNombre("Pepito");
 		usuario.setApellido("Pérez");
+		usuario.setEmail("test@test.com");
 		
 		model.addAttribute( "usuario", usuario );
 		model.addAttribute("titulo", "Perfil de Usuario: ".concat(usuario.getNombre()));
 		
 		return "perfil";
+	}
+	
+	@RequestMapping( "/listar" )
+	public String listar( Model model ) {
+		
+		// Creamos el arreglo
+		List<Usuario> usuarios = new ArrayList<>();
+		
+		model.addAttribute("usuarios", usuarios);
+		
+		model.addAttribute("titulo", "Lista de Usuarios: ");
+		
+		return "listar";
 	}
 	
 }

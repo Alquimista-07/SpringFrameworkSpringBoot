@@ -10,6 +10,14 @@
 	
 	<span th:text="${usuario.nombre}"></span>
 	<span th:text="${usuario.apellido}"></span>
+	<br>
+	
+	<!-- Acá usamos la directiva if de thymeleaf para validar si el email existe y si existe
+	     lo vamos a mostrar -->
+	<span th:if="${usuario.email}" th:text="${usuario.email}"></span><br>
+	
+	<!-- En caso contrario mostramos un texto por defecto -->
+	<span th:if="${usuario.email == null}">El usuario no tiene correo</span>
 
 </body>
 </html>
