@@ -6,6 +6,7 @@ package com.bolsadeideas.springboot.web.app.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /*
  *  NOTA: Esta clase la creamos como una clase java normal y a la cual posteriormente le agregamos la
@@ -15,6 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
           y tome las clases que usan el deocrador @Controller.
  */
 @Controller
+/*
+ * NOTA: Podemos mapear el controlador con @RequestMapping una ruta base que va a ser en comun para todos
+ *       los métodos del controlador, es decir, todos los méotodos handler, y este decorador recibe una ruta
+ *       url que sea genérica base para todos los métodos, y esta ruta sería de primer nivel, y la de los 
+ *       métodos de segundo nivel, por lo tanto todas las rutas de los métodos deben pasar primero por la 
+ *       principal o de primer nivel por ejemplo: http://localhost:8080/app/index
+ */
+@RequestMapping( "/app" )
 public class IndexController {
 
 	/*
