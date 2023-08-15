@@ -12,6 +12,25 @@
 	<div th:if="${usuarios.size() == 0}">
 		No hay usuarios en la lista!
 	</div>
+	
+	<!-- Mostramos los datos en una tabla -->
+	<table th:if="${ !usuarios.isEmpty() }">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Recorremos el arreglo usando el each de tymeleaf para repetir las filas y mostrar los datos -->
+			<tr th:each="usu: ${usuarios}">
+				<td th:text="${usu.nombre}"></td>
+				<td th:text="${usu.apellido}"></td>
+				<td th:text="${usu.email}"></td>
+			</tr>
+		</tbody>
+	</table>
 
 </body>
 </html>

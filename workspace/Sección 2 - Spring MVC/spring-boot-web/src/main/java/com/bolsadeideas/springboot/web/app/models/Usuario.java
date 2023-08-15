@@ -17,11 +17,22 @@ public class Usuario {
 	private String apellido;
 	private String email;
 	
+	// Constructores
+	public Usuario() {
+	}
+	
+	public Usuario(String nombre, String apellido, String email) {
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.email = email;
+	}
+	
+	
 	// Getters y Setters
 	public String getNombre() {
 		return nombre;
 	}
-	
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}

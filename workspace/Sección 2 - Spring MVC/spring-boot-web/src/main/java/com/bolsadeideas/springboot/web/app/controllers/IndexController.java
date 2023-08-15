@@ -1,6 +1,7 @@
 package com.bolsadeideas.springboot.web.app.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -144,8 +145,12 @@ public class IndexController {
 	@RequestMapping( "/listar" )
 	public String listar( Model model ) {
 		
-		// Creamos el arreglo
-		List<Usuario> usuarios = new ArrayList<>();
+		// Creamos el arreglo y le agregamos elementos al arreglo
+		List<Usuario> usuarios = Arrays.asList(
+				new Usuario("Pepito", "Pérez", "test@test.com"),
+				new Usuario("Carlos", "Cárdenas", "test2@test.com"),
+				new Usuario("Meliza", "Herández", "test3@test.com")
+				);
 		
 		model.addAttribute("usuarios", usuarios);
 		
