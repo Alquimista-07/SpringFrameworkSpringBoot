@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bolsadeideas.springboot.web.app.models.Usuario;
+
 /*
  *  NOTA: Esta clase la creamos como una clase java normal y a la cual posteriormente le agregamos la
           anotación o decorador @Controller y lo importamos. Adicionalmente al agregar este decorador 
@@ -114,6 +116,25 @@ public class IndexController {
 		          sería en src/main/resouces/templates
 		 */
 		return "index";
+	}
+	
+	/*
+	 * NOTA: En el @RequestMapping si no indicamos el method por defecto el que se asigna es el GET.
+	 */
+	@RequestMapping( "/perfil" )
+	public String perfil( Model model ) {
+		
+		// Creamos la instancia de la clase.
+		Usuario usuario = new Usuario();
+		
+		// Pasamos los valores
+		usuario.setNombre("Pepito");
+		usuario.setApellido("Pérez");
+		
+		model.addAttribute( "usuario", usuario );
+		model.addAttribute("titulo", "Perfil de Usuario: ".concat(usuario.getNombre()));
+		
+		return "perfil";
 	}
 	
 }
