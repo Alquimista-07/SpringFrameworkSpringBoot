@@ -4,6 +4,7 @@ package com.bolsadeideas.springboot.web.app.controllers;
  *  Importaciones de paquetes
  */
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /*
@@ -63,7 +64,41 @@ public class IndexController {
 	
 	 */
 	@GetMapping( { "/index", "/", "/home" } )
-	public String index() {
+	public String index( Model model ) {
+		/*
+		 * NOTA: Para pasar datos a la vista tenemos una primera forma que es usando  la interface model a la cual le 
+		 *       especificamos la llave, y el valor para posteriormente del lado del html especificar el xmlns (Namespace) 
+		 *       y asignar la llave tal cual como la especificamos en el model.
+		 *       
+		 *       También existe una segunda forma para pasar la información que es el ModelMap, con la diferencia de
+		 *       que esta es una clase pero de la misma forma maneja el addAttribute con su clave y valor, es decir, 
+		 *       que no hay ninguna diferencia con el Model.
+		 *       
+		 *       Una tercera forma es usar directamente la interface de Java Map para pasar valores, indicando los tipos, 
+		 *       un ejemplo sería el siguiente:
+		 *       
+		 *        	public String index( Map<Sring, Object> map ){
+		 *        
+		 *        		map.put( "titulo", "Hola Spring Framework" )
+		 *          	return index;
+		 *          
+		 *        	}
+		 *        
+		 *        Tenemos una cuarta forma que es el el ModelAndView que es otra clase y se usa de la siguiente forma:
+		 *        
+		 *        	public ModelAndView index( ModelAndView mv ){
+		 *        
+		 *        		mv.addObject( "titulo", "Hola Spring Framework!!!..." );
+		 *          
+		 *          	// Indicamos el nombre de la vista con el setViewName
+		 *        		mv.setViewName("index");
+		 *        	
+		 *          	return mv;
+		 *          
+		 *        	}
+		 *        
+		 */
+		model.addAttribute("titulo", "Hola Spring Framework!!!...");
 		/*
 		 *  NOTA: Acá se retona el nombre de la vista, por lo tanto debe existir una plantilla llamada con el mismo nombre,
 		          en este caso del ejemplo sería index.html y dicha plantilla debería estar en la ruta de los templates que
