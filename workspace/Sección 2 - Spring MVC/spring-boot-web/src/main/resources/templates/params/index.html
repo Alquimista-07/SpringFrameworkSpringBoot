@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Enviar parámetros del Request HTTP GET - URL</title>
+</head>
+<body>
+	
+	<h1>Enviar parámetros del Request HTTP GET - URL</h1>
+	
+	<ul>
+		<li>
+			<!-- Para enviar la ruta en thymeleaf usamos el th:href y en lugar del signo $
+			     usamos es el @, adicionalmente tienen que ser rutas mapeadas a métodos 
+			     handeler, y el parámetro se indica dentro de paréntesis y cuando es string
+			     se envia con comilla sencilla y si se envía más de un parámetro se seapara 
+			     con coma -->
+			<a th:href="@{ /params/string(texto='valor parametro') }">/params/string?texto=valor parametro</a>			
+		</li>
+		
+		<li>
+			<a th:href="@{ /params/string(texto='Hola que tal') }">/params/string?texto=Hola que tal</a>
+		</li>
+	</ul>
+
+</body>
+</html>
