@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bolsadeideas.springboot.web.app.models.Usuario;
@@ -145,6 +146,7 @@ public class IndexController {
 	@RequestMapping( "/listar" )
 	public String listar( Model model ) {
 		
+		/*
 		// Creamos el arreglo y le agregamos elementos al arreglo
 		List<Usuario> usuarios = Arrays.asList(
 				new Usuario("Pepito", "Pérez", "test@test.com"),
@@ -152,11 +154,37 @@ public class IndexController {
 				new Usuario("Meliza", "Herández", "test3@test.com")
 				);
 		
+		
 		model.addAttribute("usuarios", usuarios);
+		
+		*/
 		
 		model.addAttribute("titulo", "Lista de Usuarios: ");
 		
 		return "listar";
+	}
+	
+	/*
+	 * NOTA: Una quinta forma de pasar datos a la vista es usando el decorador @ModelAttribute,
+	 *       al cual como parámetro se le pasa el nombre con el que queremos guardar en la vista
+	 *       en este caso del ejemplo sería usuarios y así lo usariamos en la vista.
+	 *       
+	 *       Adicionalmete hay que tener en cuenta que el objeto que se retorna es en común para
+	 *       todos los méotods handler, y básicamente lo usamos cuando se quieren pasar datos a
+	 *       la vista que son comunes a varios métodos handler del controlador, o bien cuando es
+	 *       un formulario con varios campos o listas desplegables y queremos problarlas. También
+	 *       se puede hacer con los radio button, checklist, etc.
+	 */
+	@ModelAttribute("usuarios")
+	public List<Usuario> poblarUsuarios(){
+		
+		// Creamos el arreglo y le agregamos elementos al arreglo
+		List<Usuario> usuarios = Arrays.asList(
+					new Usuario("Pepito", "Pérez", "test@test.com"),
+					new Usuario("Carlos", "Cárdenas", "test2@test.com"),
+					new Usuario("Meliza", "Herández", "test3@test.com")
+				);
+		return usuarios;
 	}
 	
 }
