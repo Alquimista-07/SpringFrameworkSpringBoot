@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 /*
  *  Importaciones de paquetes
  */
@@ -32,6 +33,19 @@ import com.bolsadeideas.springboot.web.app.models.Usuario;
  */
 @RequestMapping( "/app" )
 public class IndexController {
+	
+	/*
+	 * NOTA: Usando el decorador @value propia de spring podemos inyectar valores que tengamos definidos por ejemplo
+	 *       en el archivo application.properties
+	 */
+	@Value("${texto.indexcontroller.index.titulo}") 
+	String textoIndex;
+	
+	@Value("${texto.indexcontroller.perfil.titulo}")
+	private String textoPerfil;
+	
+	@Value("${texto.indexcontroller.listar.titulo}")
+	private String textoListar;
 
 	/*
 	 *  NOTA: Ahora hay que tener en cuenta que un controlador va a tener métodos de acción o handler
@@ -115,6 +129,7 @@ public class IndexController {
 		 *        
 		 */
 		model.addAttribute("titulo", "Hola Spring Framework!!!...");
+		model.addAttribute( "tituloInyectado", textoIndex );
 		/*
 		 *  NOTA: Acá se retona el nombre de la vista, por lo tanto debe existir una plantilla llamada con el mismo nombre,
 		          en este caso del ejemplo sería index.html y dicha plantilla debería estar en la ruta de los templates que
@@ -139,6 +154,7 @@ public class IndexController {
 		
 		model.addAttribute( "usuario", usuario );
 		model.addAttribute("titulo", "Perfil de Usuario: ".concat(usuario.getNombre()));
+		model.addAttribute( "tituloInyectado", textoPerfil.concat(usuario.getNombre()) );
 		
 		return "perfil";
 	}
@@ -160,6 +176,7 @@ public class IndexController {
 		*/
 		
 		model.addAttribute("titulo", "Lista de Usuarios: ");
+		model.addAttribute( "tituloInyectado", textoListar );
 		
 		return "listar";
 	}
