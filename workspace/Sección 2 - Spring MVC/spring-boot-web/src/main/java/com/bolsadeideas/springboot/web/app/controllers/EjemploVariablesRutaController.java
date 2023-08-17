@@ -10,6 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/variables")
 public class EjemploVariablesRutaController {
+	
+	/*
+	 * NOTA: Mapeamos y creamos una ruta index para mostrar el ejemplo de @PathVarible
+	 *       con varios parámetros
+	 */
+	@GetMapping("/")
+	public String index( Model model ) {
+		model.addAttribute("titulo", "Recibir parámetros de la ruta (@PathVariable)");
+		return "variables/index";
+	}
 
 	/*
 	 * NOTA: Ahora vamos a realizar otra forma de pasar parámetros
@@ -35,6 +45,18 @@ public class EjemploVariablesRutaController {
 	public String variables( @PathVariable(name = "texto") String textoOtro, Model model ) {
 		model.addAttribute("titulo", "Recibir parámetros de la ruta (@PathVariable)");
 		model.addAttribute("resultado", "El texto enviado en la ruta es: " + textoOtro );
+		return "variables/ver";
+	}
+	
+	/*
+	 * NOTA: Pasar más de un parámetro en el @PathVariable, para ello lo que se hace es
+	 *       ir seaparandolos con un /
+	 */
+	@GetMapping("/string/{texto}/{numero}")
+	public String variables( @PathVariable String texto, @PathVariable Integer numero, Model model ) {
+		model.addAttribute("titulo", "Recibir parámetros de la ruta (@PathVariable)");
+		model.addAttribute("resultado", "El texto enviado en la ruta es: " + texto
+				+ " y el número enviado en el path es: " + numero);
 		return "variables/ver";
 	}
 	

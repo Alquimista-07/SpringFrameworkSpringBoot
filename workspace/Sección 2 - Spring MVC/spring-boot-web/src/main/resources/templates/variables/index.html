@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- NOTA: Los cierres de etiquetas de parte del html son importantes ya que al usar thymeleaf y no tenemos esos
+		   cierres de forma correcta, nos marcaría error. Adicionalmente el encoding del archivo debe ser el mismo
+		   que por defecto es UTF-8 
+-->
+<meta charset="UTF-8" />
+<title th:text="${titulo}"></title>
+</head>
+<body>
+	
+	<h1 th:text="${titulo}"></h1>
+	
+	<ul>
+		<li> 
+			<a th:href="@{/variables/string/} + 'Hola que tal'">
+				/variables/string/Hola que tal
+			</a>
+		</li>
+		
+		<li>
+			<a th:href="@{/variables/string/} + 'Hola que tal John'">
+				/variables/string/Hola que tal John
+			</a>
+			</li>
+		
+		<li>
+			<a th:href="@{/variables/string/} + 'Saludos Pedro' + '/' + 7">
+				/variables/string/Saludos Pedro/7
+			</a>
+		</li>
+		
+		<li>
+			<a th:href="@{/variables/string/} + ${'Saludos Pedro'} + '/' + ${7}">
+				/variables/string/${'Saludos Pedro'}/7
+			</a>
+		</li>
+		
+		<!--
+			NOTA: Incluso los parámetros pueden venir de una varibla por ejemplo
+			      de la variable que usamos para el titulo
+		-->
+		<li>
+			<a th:href="@{/variables/string/} + ${titulo} + '/' + ${7}">
+				/variables/string/${titulo}/7
+			</a>
+		</li>
+		
+	</ul>
+
+</body>
+</html>
