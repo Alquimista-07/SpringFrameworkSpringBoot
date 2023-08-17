@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- NOTA: Los cierres de etiquetas de parte del html son importantes ya que al usar thymeleaf y no tenemos esos
+		   cierres de forma correcta, nos marcaría error. Adicionalmente el encoding del archivo debe ser el mismo
+		   que por defecto es UTF-8 
+-->
+<meta charset="UTF-8" />
+<title th:txto="titulo"></title>
+</head>
+<body>
+	
+	<h1 th:text="titulo"></h1>
+	
+	<div th:text="${resultado}"></div>
+
+</body>
+</html>
