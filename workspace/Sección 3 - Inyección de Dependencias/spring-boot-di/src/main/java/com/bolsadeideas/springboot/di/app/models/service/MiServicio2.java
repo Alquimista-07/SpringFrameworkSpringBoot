@@ -39,11 +39,34 @@ import org.springframework.stereotype.Component;
  *       represena un servicio en Spring, es decir, una clase de lógica de negocio
  */
 
+/*
+ * NOTA: Como se había mencionado anteriormente que aún no estaba totalemten desacoplada
+ *       ya que no usabamos interfaces, ni clases abstractas por lo tanto en este nuevo
+ *       ejercicio ahora si vamos a implementar una interface para hacer ese desacoplamiento
+ *       total.
+ */
+
 @Component
-public class MiServicio2 {
+public class MiServicio2 implements IServicio2 {
 	
+	/*
+	 * NOTA: La anotación @Override indica que este método es una implementación de un
+	 *       padre, ya sea una inreface o una clase que se este heredando.
+	 *       
+	 */
+	/*
+	 * NOTA: También tenemos que tener en cuenta que una clase componente Spring tienq que
+	 *       tener ciertas características como por ejemplo tiene que tener siempre un 
+	 *       constructor por defecto vacío ya que por ejemplo si tenemos una clase la cual 
+	 *       tiene un constructor con parámetros además de ese constructor estamos obligados
+	 *       a crear otro constructor sin argumentos, como se mencionó anteriormente vacío
+	 *       ya que Spring por detrás de escena instancia estos objtos y los maneja de forma
+	 *       automática y dichas instancias las realiza con el contructor sin parámetros, 
+	 *       por lo tanto si tenemos solo el contructor con parámetros nos daría error
+	 */
+	@Override
 	public String operacion() {
-		return "Ejecutnaod algún proceso importante... Usando inyección de dependencias";
+		return "Ejecutando algún proceso importante... Usando inyección de dependencias";
 	}
 
 }

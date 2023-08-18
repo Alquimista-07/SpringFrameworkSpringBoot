@@ -5,8 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.bolsadeideas.springboot.di.app.models.service.MiServicio;
-import com.bolsadeideas.springboot.di.app.models.service.MiServicio2;
+import com.bolsadeideas.springboot.di.app.models.service.IServicio2;
+/*
+ * NOTA: Como estamos usando el tipo genérico interface para desacoplar completamente esta importación 
+ *       ya no es necesaria. Adicionalmente eliminamos la importación de la clase MiServicio que anteriormente
+ *       no se había eliminado. También esta explicación se complementa con los comentrios realizados más abajo
+ *       cuando se cambio la clase MiServicio2 por la interface IServicio2 en la inyección.
+ */
+// import com.bolsadeideas.springboot.di.app.models.service.MiServicio;
+// import com.bolsadeideas.springboot.di.app.models.service.MiServicio2;
 
 @Controller
 public class IndexController {
@@ -67,11 +74,24 @@ public class IndexController {
 	 *       inyectar por el tipo cocreto se inyecta por la interface y así se desacopla completamente
 	 *       cualquier implementación concreta y de hecho así no se tendrían que estar modificando 
 	 *       los controladores que estén usando ese componente cuando se quiera cambiar una implementación
-	 *       a otra ya que es genérico, es una interface y lo podría implementar más de una clase concreta
+	 *       a otra ya que es genérico, es una interface y lo podría implementar más de una clase concreta.
+	 *       
+	 *       El siguiente es un ejemplo de como se codificaba o usaba para la explicación anterior y que se
+	 *       mencionaba que a pesar de ya estar usando la inyección de dependencias aún no se encontraba 
+	 *       totalmente desacoplado ya que no se usaban los tipos genéricos:
+	 *       
+	 *       @Autowired
+	 *       private MiServicio2 servicio;
+	 *       
+	 *       Por lo tanto como se mencionó anteriormente que aún no se estaba totalmente desacoplado y para lo
+	 *       cual ahora si en este ejercicio creamos la interface, con su respectivo método y la implementamos en
+	 *       el servicio lo siguiente es usar el tipo genérico que en este caso es la interface, eliminando la
+	 *       anterior importación de la clase y de la misma manera se usa la anotación @Autowired por lo tanto
+	 *       el único cambio seria el mencionado y el código quedaría de la siguiente forma:
 	 */
 	
 	@Autowired
-	private MiServicio2 servicio;
+	private IServicio2 servicio;
 	
 	@GetMapping({ "/", "/index", "" })
 	public String index(Model model) {
