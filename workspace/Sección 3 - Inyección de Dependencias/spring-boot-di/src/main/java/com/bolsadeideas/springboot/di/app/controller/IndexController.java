@@ -88,9 +88,45 @@ public class IndexController {
 	 *       el servicio lo siguiente es usar el tipo genérico que en este caso es la interface, eliminando la
 	 *       anterior importación de la clase y de la misma manera se usa la anotación @Autowired por lo tanto
 	 *       el único cambio seria el mencionado y el código quedaría de la siguiente forma:
+	 *       
+	 *       @Autowired
+	 *       private IServicio2 servicio;
+	 */
+	/*
+	 * NOTA: Existe otra forma de realizar la inyección de dependencias la cual vía métodos Set y
+	 *       el cual es otra alternativa para realizar la inyección a parte de la de atributos, para 
+	 *       ello lo que vamos a hacer es crear o generar de forma automática el método Set del atributo 
+	 *       que creamos para el llamado a la interface y mover la anotación @Autowired del atributo a 
+	 *       dicho método Set creado.
+	 *       
+	 *       Ejemplo:
+	 *       
+	 *       private IServicio2 servicio;
+	 *       
+	 *       @Autowired
+	 *       public void setServicio(IServicio2 servicio) {
+	 *      	this.servicio = servicio;
+	 *       }
+	 *       
+	 * NOTA: También existe otra forma de realizar la inyección en lugar de por atributo o método Set y es a través
+	 *       del constructor, y para la cual de la misma forma como se explico para cuando usamos el Set lo que hacemos
+	 *       es crear o gener el constructor y anotar con el @Autowired o moverlo en caso de que ya lo tuvieramos en el 
+	 *       atributo o en el set.
+	 *      
+	 *       A TENER EN CUENTA: Cuando inyectamos por constructor la anotación @Autowired se puede omitir,
+	 *       y por lo tanto no la importamos.
+	 *       
+	 *       Ejemplo:
+	 *       
+	 *       private IServicio2 servicio;
+	 *       
+	 *       @Autowired
+	 *       public IndexController(IServicio2 servicio) {
+	 *      	this.servicio = servicio;
+	 *       }
+	 *       
 	 */
 	
-	@Autowired
 	private IServicio2 servicio;
 	
 	@GetMapping({ "/", "/index", "" })
@@ -98,5 +134,21 @@ public class IndexController {
 		model.addAttribute("objeto", servicio.operacion());
 		return "index";
 	}
+
+	/*
+	// Setter
+	@Autowired
+	public void setServicio(IServicio2 servicio) {
+		this.servicio = servicio;
+	}
+	*/
+
+	// Constructor
+	@Autowired
+	public IndexController(IServicio2 servicio) {
+		this.servicio = servicio;
+	}
+	
+	
 
 }
