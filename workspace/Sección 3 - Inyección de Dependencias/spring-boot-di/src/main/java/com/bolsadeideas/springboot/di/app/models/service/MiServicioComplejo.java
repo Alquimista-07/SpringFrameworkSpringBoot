@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 
-@Component("miServicioComplejo")
+//@Component("miServicioComplejo")
 /*
  * NOTA: Como tenemos dos clases que implementan la misma interface, es decir, son dos candidatos posibles,
  *       para la misma interface y por lo tanto nos va a causar un error, por lo tanto tenemos dos caminos
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  *       este servicio. Y si queremos hacer el switch de una clase a otra simplemente es cambiar el decorador
  *       @Primary a la clase que queremos que sea tomada.
  */
-@Primary
+//@Primary
 public class MiServicioComplejo implements IServicio2 {
 	
 	@Override

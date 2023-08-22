@@ -46,7 +46,7 @@ import org.springframework.stereotype.Component;
  *       total.
  */
 
-@Component("miServicioSimple")
+//@Component("miServicioSimple")
 public class MiServicio2 implements IServicio2 {
 	
 	/*
