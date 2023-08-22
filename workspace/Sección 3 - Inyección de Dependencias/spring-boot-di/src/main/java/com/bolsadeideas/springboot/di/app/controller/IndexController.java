@@ -1,6 +1,7 @@
 package com.bolsadeideas.springboot.di.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -127,6 +128,17 @@ public class IndexController {
 	 *       
 	 */
 	
+	/*
+	 * NOTA: El @Qualifier permite inyectar un servicio usando un nombre, es decir, si tengo un servicio definido con @Primary
+	 *       pero en algún momento quiero usar otro, lo puedo hacer a través de este @Qualifaier e indicar directamente por su 
+	 *       nombre el cual se indica dentro de paréntesis en la anotación @Component que es ese el que voy a usar simplemente 
+	 *       llamandolo con el @Qualifier.
+	 *       Adicionalmente el uso de esta anotación se usa en la definición de la interface luego del @Autowired y también si 
+	 *       se desea hacer el switch como cuando se usa el @Primary, simplemte sería alternar entre
+	 *       los componentes usando su respectivo nombre definido como se mencionó anteriormente.
+	 */
+	@Autowired
+	@Qualifier("miServicioSimple")
 	private IServicio2 servicio;
 	
 	@GetMapping({ "/", "/index", "" })

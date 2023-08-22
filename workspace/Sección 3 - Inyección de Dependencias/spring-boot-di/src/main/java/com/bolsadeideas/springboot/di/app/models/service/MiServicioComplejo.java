@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 
-@Component
+@Component("miServicioComplejo")
 /*
  * NOTA: Como tenemos dos clases que implementan la misma interface, es decir, son dos candidatos posibles,
  *       para la misma interface y por lo tanto nos va a causar un error, por lo tanto tenemos dos caminos
