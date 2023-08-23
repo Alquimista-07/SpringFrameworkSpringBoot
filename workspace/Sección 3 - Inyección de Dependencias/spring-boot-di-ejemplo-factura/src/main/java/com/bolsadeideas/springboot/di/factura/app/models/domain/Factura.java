@@ -15,7 +15,7 @@ public class Factura {
 	 * por lo tanto los inyectamos usando el decorador @Value para inyectar sus
 	 * correspondientes valores.
 	 */
-	@Value("${descripcion.factura}")
+	@Value("${factura.descripcion}")
 	private String descipción;
 
 	/*
@@ -24,6 +24,13 @@ public class Factura {
 	@Autowired
 	private Cliente cliente;
 
+	/*
+	 * NOTA: Inyectamos el listado de los items, y como tenemos un solo componente,
+	 * una sola implementación, un solo método, lo podemos inyectar de forma
+	 * directa, pero si tuviermos más de una podríamos hacer la inyección usando la
+	 * anotación @Primary o bien con el @Qualifier y el nombre del Bean
+	 */
+	@Autowired
 	private List<ItemFactura> items;
 
 	// Getters y Setters
