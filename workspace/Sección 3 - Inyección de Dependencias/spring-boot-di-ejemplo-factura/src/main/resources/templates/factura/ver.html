@@ -8,7 +8,11 @@
 	
 	<h1 th:text="${titulo}"></h1>
 	
-	<h3 th:text="${factura.descripcion}"></h3>
+	<!-- NOTA: Como la tilde no se muestra correctamente lo que tenemos que en lugar de usar el th:text en la vista usamos es 
+	           el th:utext y lo que significa la u es unescaped, es decir que no escape los caracteres especiales de las 
+	           entidades html
+	-->
+	<h3 th:utext="${factura.descripcion}"></h3>
 	
 	<div>
 		<!-- NOTA: Como la tilde no se muestra correctamente lo que tenemos que hacer es en el archivo properties colocar &(aca la letra del acento)acute;

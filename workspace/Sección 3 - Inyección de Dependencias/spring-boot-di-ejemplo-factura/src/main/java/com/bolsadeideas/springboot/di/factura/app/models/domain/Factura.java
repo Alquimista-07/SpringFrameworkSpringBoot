@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+
 @Component
 public class Factura {
 
@@ -32,6 +35,40 @@ public class Factura {
 	 */
 	@Autowired
 	private List<ItemFactura> items;
+	
+	/*
+	 * NOTA: Método para que inicialice el componente justo después de que el contenedor
+	 *       de Spring cree e instancie el objeto y podemos hacer o ejecutar alguna tarea.
+	 *       
+	 *       Este método se ejecuta justo después de crear los atributos e inyectar las 
+	 *       dependencias.
+	 *       Adicionalmente cabe decir que con esta anotación @PostConstruct podemos modificar
+	 *       datos del componente o hacer alguna tarea o un proceso justo después de que se 
+	 *       construya el objeto en el contenedor de Spring, como inicializar recursos, objetos
+	 *       y al final es muy parecido a un constructor pero de una forma mucho más elegando y 
+	 *       y permite que Spring maneje la construcción del objeto y después nosostros 
+	 *       inicializamos lo que queramos.
+	 */
+	@PostConstruct
+	public void inicializar() {
+		cliente.setNombre(cliente.getNombre().concat(" ").concat("José"));
+		descripcion = descripcion.concat(" del cliente: ").concat(cliente.getNombre());
+	}
+	
+	/*
+	 * NOTA: Método para que se ejecute otra tarea justo antes de que se destruya el 
+	 *       componente, es decir también podemos realizar alguna tarea.
+	 *       
+	 *       Y por lo tanto esto lo vamos a ver cuando se destruya el componente, que 
+	 *       en este caso es cuando bajamos la aplicación y por lo tanto acá podemos 
+	 *       hacer algo o ejecutar alguan tarea justo antes de que se destruya el 
+	 *       componente, por ejemplo si tenemos componentes con conexiones a recursos,
+	 *       podremos cerrar la conexión a estos recursos.
+	 */
+	@PreDestroy
+	public void destruir() {
+		System.out.println("Factura destruida: ".concat(descripcion));
+	}
 
 	// Getter
 	public String getDescripcion() {
