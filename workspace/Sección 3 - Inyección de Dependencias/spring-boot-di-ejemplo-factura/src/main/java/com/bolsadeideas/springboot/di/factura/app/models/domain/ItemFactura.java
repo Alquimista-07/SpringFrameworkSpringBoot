@@ -29,5 +29,12 @@ public class ItemFactura {
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
+	
+	/*
+	 * NOTA: Método para calulcar el total o importe
+	 */
+	public Integer calcularImporte() {
+		return cantidad * producto.getPrecio();
+	}
 
 }

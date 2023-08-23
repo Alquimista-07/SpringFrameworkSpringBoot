@@ -16,7 +16,7 @@ public class Factura {
 	 * correspondientes valores.
 	 */
 	@Value("${factura.descripcion}")
-	private String descipción;
+	private String descripcion;
 
 	/*
 	 * NOTA: Inyectamos el cliente usando el @Autowired
@@ -33,13 +33,13 @@ public class Factura {
 	@Autowired
 	private List<ItemFactura> items;
 
-	// Getters y Setters
-	public String getDescipción() {
-		return descipción;
+	// Getter
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDescipción(String descipción) {
-		this.descipción = descipción;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public Cliente getCliente() {
@@ -57,5 +57,7 @@ public class Factura {
 	public void setItems(List<ItemFactura> items) {
 		this.items = items;
 	}
+
+	
 
 }

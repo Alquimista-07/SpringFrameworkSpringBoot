@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${titulo}"></title>
+</head>
+<body>
+	
+	<h1 th:text="${titulo}"></h1>
+	
+	<h3 th:text="${factura.descripcion}"></h3>
+	
+	<div>
+		<!-- NOTA: Como la tilde no se muestra correctamente lo que tenemos que hacer es en el archivo properties colocar &(aca la letra del acento)acute;
+		           y en lugar de usar el th:text en la vista usamos es el th:utext y lo que significa la u es unescaped, es decir que no escape los caracteres
+		           especiales de las entidades html-->
+		Cliente: <span th:utext="${factura.cliente.nombre + ' ' + factura.cliente.apellido}"></span>
+	</div>
+	
+	<h4>Detalle de la factura</h4>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Producto</th>
+				<th>Precio</th>
+				<th>Cantidad</th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!--NOTA: Vamos a iterar cada línea para mostrar los elementos
+			          por lo tanto creamos el objeto item y recorremos sobre
+			          la lista
+			 -->
+			<tr th:each="item: ${factura.items}">
+				<!--NOTA: Acá mostramos los elementos-->
+				<td th:text="${item.producto.nombre}"></td>
+				<td th:text="${item.producto.precio}"></td>
+				<td th:text="${item.cantidad}"></td>
+				<!--NOTA: En este caso vamos a crear un método adicional en la clase ItemFactura
+				          para que se encargue de realizar el cálculo, pero facilmente también 
+				          podríamos dejarlo de esta forma:
+				          
+				          <td th:text="${item.producto.precio * item.cantidad}"></td>
+				          
+				          En este caso como creamos el método lo llamamos y lo dejamos de la siguiente
+				          forma:
+				-->
+				<td th:text="${item.calcularImporte()}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
