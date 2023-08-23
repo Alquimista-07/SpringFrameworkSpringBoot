@@ -7,6 +7,12 @@ public class Producto {
 	
 	private Integer precio;
 	
+	// Constructor	
+	public Producto(String nombre, Integer precio) {
+		this.nombre = nombre;
+		this.precio = precio;
+	}
+	
 	// Getters y Setters
 	public String getNombre() {
 		return nombre;
