@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import com.bolsadeideas.springboot.di.factura.app.models.domain.ItemFactura;
 import com.bolsadeideas.springboot.di.factura.app.models.domain.Producto;
@@ -36,6 +37,22 @@ public class AppConfig {
 		 * ArrayList = new ArrayList y agregaramos los elementos usando el .add()
 		 */      
 		return Arrays.asList(linea1, linea2);
+	}
+	
+	@Bean("itemsFacturaOficina")
+	@Primary
+	public List<ItemFactura> registrarItemsOficina(){
+		Producto prod1 = new Producto("Monitor LG LDC 24", 250);
+		Producto prod2 = new Producto("Notebook Asus", 500);
+		Producto prod3 = new Producto("Impresora HP Multifuncional", 80);
+		Producto prod4 = new Producto("Escritorio Oficina", 300);
+		
+		ItemFactura linea1 = new ItemFactura(prod1, 2);
+		ItemFactura linea2 = new ItemFactura(prod2, 1);
+		ItemFactura linea3 = new ItemFactura(prod3, 1);
+		ItemFactura linea4 = new ItemFactura(prod4, 1);
+		    
+		return Arrays.asList(linea1, linea2, linea3, linea4);
 	}
 
 }
