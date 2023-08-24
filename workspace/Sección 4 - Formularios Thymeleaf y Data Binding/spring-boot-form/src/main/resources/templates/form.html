@@ -2,9 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title th:text="${titulo}"></title>
 </head>
 <body>
+	
+	<h2 th:text="${titulo}"></h2>
 	
 	<!--NOTA: El form tiene que tener un target, es decir, una ruta URL
 	          a la cual vamos a enviar el formulario.
