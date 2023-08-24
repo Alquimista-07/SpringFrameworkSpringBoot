@@ -23,6 +23,10 @@ public class FormController {
 	@GetMapping("/form")
 	public String form(Model model) {
 		model.addAttribute("titulo", "Formulario Usuario");
+		// En la primera creación del formulario para que no de error debemos crear un objeto usuario vacío
+		// y pasarlo al formulario si no nos da un error NullPointerException.
+		Usuario usuario = new Usuario();
+		model.addAttribute("usuario", usuario);
 		return "form";
 	}
 	
@@ -57,6 +61,15 @@ public class FormController {
 	/*
 	 * NOTA: Para las validaciones es necesario indicar la anotación @Valid y en el POJO 
 	 *       se indica la regla de validación.
+	 */
+	/*
+	 * NOTA IMPORTATE: Si queremos cambiar el nombre del paramétro del POJO en este caso la clase usuario
+	 *                 y queremos llamarla de otra forma por ejemplo user, hacemos uso de la anotación 
+	 *                 @ModelAttribut la cual se usa de la sigueiente forma:
+	 *                 
+	 *                 public String procesarFormulario(Model model, @Valid @ModelAttribute("user") Usuario usuario, BindingResult result) {
+	 *                 
+	 *                 Y ya del lado de la vista ya no usamos usuario sino user
 	 */
 	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result) {
 		

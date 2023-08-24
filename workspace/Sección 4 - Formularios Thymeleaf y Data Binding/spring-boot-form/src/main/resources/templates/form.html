@@ -21,8 +21,11 @@
 		<div>
 			<label for="username">Username</label>
 			<div>
-				<input type="text" name="username" id="username">
+				<!--NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""-->
+				<input type="text" name="username" id="username" th:value="${usuario.username}">
 			</div>
+			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
+			<div th:if="${error != null && error.containsKey('username')}" th:text="${error.username}"></div>
 		</div>
 		
 		<div>
@@ -30,13 +33,18 @@
 			<div>
 				<input type="password" name="pwd" id="pwd">
 			</div>
+			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
+			<div th:if="${error != null && error.containsKey('pwd')}" th:text="${error.pwd}"></div>
 		</div>
 		
 		<div>
 			<label for="email">Email</label>
 			<div>
-				<input type="text" name="email" id="email">
+				<!--NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""-->
+				<input type="text" name="email" id="email" th:value="${usuario.email}">
 			</div>
+			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
+			<div th:if="${error != null && error.containsKey('email')}" th:text="${error.email}"></div>
 		</div>
 		
 		<div>
