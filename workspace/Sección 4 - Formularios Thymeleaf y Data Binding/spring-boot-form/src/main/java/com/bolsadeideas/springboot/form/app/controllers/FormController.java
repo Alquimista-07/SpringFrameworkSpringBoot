@@ -1,12 +1,18 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class FormController {
@@ -48,7 +54,11 @@ public class FormController {
 	 *							                  @RequestParam String pwd,
 	 *							                  @RequestParam String email) {
 	 */
-	public String procesarFormulario(Model model, Usuario usuario) {
+	/*
+	 * NOTA: Para las validaciones es necesario indicar la anotación @Valid y en el POJO 
+	 *       se indica la regla de validación.
+	 */
+	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result) {
 		
 		/*
 		 * NOTA: Creamos la instancia de la clase, adicionalmente esta se podría inyectar
@@ -74,6 +84,35 @@ public class FormController {
 		
 		// Pasamos los datos a la vista con model
 		model.addAttribute("titulo", "Resultador Form");
+		
+		/*
+		 *  NOTA: Antes de pasar el formulario tenemos que validar si el formulario es válido
+		 *        y para ello nos apoyamos en la interface BindingReult que es un argumento que 
+		 *        colocamos en el método. Y esta interface es propia de spring y representa el
+		 *        resultado de la validación, es decir, contiene los mensajes de error en caso 
+		 *        de que ocurran errores. Y este se inyecta automáticamente cuando el objeto esta
+		 *        anotado con @Valido pero este tiene una restricció muy importante que se tiene
+		 *        que respetar y es que siempre el BindingResult tiene que estar justo después
+		 *        del objeto que se va a validar
+		 */
+		if( result.hasErrors() ) {
+			
+			Map<String, String> errores = new HashMap<>();
+			// Usamos el result para obtener el mensaje de error y vamos poblando el mapa
+			// con los mensajes de error.
+			// Recorremos por cada mensaje de error.
+			result.getFieldErrors().forEach(err -> {
+				// Y acá asignamos la llave (nombre del campo obtenido con getField) y el valor
+				// es el mensaje de error que queremos manejar.
+				errores.put(err.getField(), "El campo ".concat(err.getField().concat(" ").concat(err.getDefaultMessage())));
+			});
+			
+			// Pasamos a la vista los errores
+			model.addAttribute("error", errores);
+			
+			return "form";
+			
+		}
 		
 		// NOTA: Se realizo el refactor para pasar directamente el objeto
 		model.addAttribute("usuario", usuario);
