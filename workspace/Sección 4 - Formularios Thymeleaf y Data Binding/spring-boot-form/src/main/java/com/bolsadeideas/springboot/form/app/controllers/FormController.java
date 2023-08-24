@@ -34,9 +34,21 @@ public class FormController {
 	 *       
 	 *       @RequestParam(name="email") String correo
 	 */
-	public String procesarFormulario(Model model, @RequestParam(name = "username") String username,
-								                  @RequestParam String pwd,
-								                  @RequestParam String email) {
+	/*
+	 *       NOTA ACTUALIZACIÓN Y MEJORA:
+	 *       Mejoramos y eliminamos el @RequestParam y la instancia de la clase ya que
+	 *       el formulario de forma automática se mapea a una clase POJO y en este caso
+	 *       ya creamos nuestra clase POJO usuario, por lo tanto la pasamos como parametro
+	 *       la clase pero si tenemos que tener en cuenta que los nombres de los atirubutos
+	 *       de la clase POJO coincidan con el nombre de los atributos name del formulario.
+	 *       
+	 *       IMPORTANTE: Tenemos que tener los Getters y Setter en el POJO.
+	 *       
+	 *       public String procesarFormulario(Model model, @RequestParam(name = "username") String username,
+	 *							                  @RequestParam String pwd,
+	 *							                  @RequestParam String email) {
+	 */
+	public String procesarFormulario(Model model, Usuario usuario) {
 		
 		/*
 		 * NOTA: Creamos la instancia de la clase, adicionalmente esta se podría inyectar
@@ -46,13 +58,19 @@ public class FormController {
 		 *       tanto no es una clase de servicio que presta alguna lógica de negocio con
 		 *       estos datos, o una clase de configuración o una clase helper o de utilidad
 		 *       con funciones.
-		 */   
-		  
-		Usuario usuario = new Usuario();
-		
-		usuario.setUsername(username);
-		usuario.setPwd(pwd);
-		usuario.setEmail(email);
+		 */       
+		 
+		/* NOTA ACTUALIZACIÓN:
+		 *       Como ser realizo el refactor usando el POJO la instancia ya no es necesario crearla acá
+		 *       ni seter los argumentos.
+		 */    
+		/*
+		   Usuario usuario = new Usuario();
+		 
+		   usuario.setUsername(username);
+           usuario.setPwd(pwd);
+		   usuario.setEmail(email);
+		 */
 		
 		// Pasamos los datos a la vista con model
 		model.addAttribute("titulo", "Resultador Form");
