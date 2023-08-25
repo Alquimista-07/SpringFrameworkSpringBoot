@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.form.app.models.domain;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /*
@@ -13,6 +14,19 @@ public class Usuario {
 	//       que si va a tener información
 	private String identificador;
 	
+	// Atributo para mostrar como funcionan las validaciones con expresiones regulares
+	// El \\d es equivalente a [0-9]
+	@Pattern(regexp = "[0-9]{2}[.][\\d]{3}[.][\\d]{3}[-][A-Z]{1}")
+	private String idRegex;
+	
+	public String getIdRegex() {
+		return idRegex;
+	}
+
+	public void setIdRegex(String idRegex) {
+		this.idRegex = idRegex;
+	}
+
 	//
 	/*
 	 * NOTA: Muy importante que estos nombre de atributos correspondan al mismo

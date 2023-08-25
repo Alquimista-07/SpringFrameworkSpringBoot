@@ -44,6 +44,20 @@
 		</div>
 		
 		<div>
+			<label for="idRegex">Identificador con Regex</label>
+			<div>
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+					      
+					      Adicionalmente es el que vamos a validar usando expresiones regulares
+				-->
+				<input type="text" id="idRegex" th:field="*{idRegex}">
+			</div>
+			<div th:if="${#fields.hasErrors('idRegex')}" th:errors="*{idRegex}"></div>
+		</div>
+		
+		<div>
 			<label for="apellido">Apellido</label>
 			<div>
 				<!--

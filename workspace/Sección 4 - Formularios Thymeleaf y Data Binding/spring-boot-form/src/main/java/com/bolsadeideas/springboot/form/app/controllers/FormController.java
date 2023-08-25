@@ -50,6 +50,9 @@ public class FormController {
 		//       pero si queremos que persista y se muestre en el resutlado
 		usuario.setIdentificador("123.456.789-Z");
 		
+		// Asignamos un valor por defecto al idRegex para ver las validaciones con expresiones regulares
+		usuario.setIdRegex("987.654.321-X");
+		
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}
