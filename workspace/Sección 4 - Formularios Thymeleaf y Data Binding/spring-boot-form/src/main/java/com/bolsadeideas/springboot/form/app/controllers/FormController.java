@@ -1,7 +1,7 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -109,19 +109,24 @@ public class FormController {
 		 *        del objeto que se va a validar
 		 */
 		if( result.hasErrors() ) {
-			
-			Map<String, String> errores = new HashMap<>();
-			// Usamos el result para obtener el mensaje de error y vamos poblando el mapa
-			// con los mensajes de error.
-			// Recorremos por cada mensaje de error.
-			result.getFieldErrors().forEach(err -> {
-				// Y acá asignamos la llave (nombre del campo obtenido con getField) y el valor
-				// es el mensaje de error que queremos manejar.
-				errores.put(err.getField(), "El campo ".concat(err.getField().concat(" ").concat(err.getDefaultMessage())));
-			});
-			
-			// Pasamos a la vista los errores
-			model.addAttribute("error", errores);
+			/*
+			 * NOTA: Optimización de los errores para manejarlo de forma automática e implícita en thymeleaf 
+			 *       y Spring Framework y no manual como lo tenemos acá. Por lo tanto comentamos este código
+			 *       y en la vista en los div cambiamos por la implementación propia de thymeleaf con Spring
+			 * 
+			 * Map<String, String> errores = new HashMap<>();
+			 * // Usamos el result para obtener el mensaje de error y vamos poblando el mapa
+			 * // con los mensajes de error.
+			 * // Recorremos por cada mensaje de error.
+			 * result.getFieldErrors().forEach(err -> {
+			 * // Y acá asignamos la llave (nombre del campo obtenido con getField) y el valor
+			 * // es el mensaje de error que queremos manejar.
+			 * errores.put(err.getField(), "El campo ".concat(err.getField().concat(" ").concat(err.getDefaultMessage())));
+			 * });
+			 * 
+			 * // Pasamos a la vista los errores
+			 * model.addAttribute("error", errores); 
+			 */
 			
 			return "form";
 			

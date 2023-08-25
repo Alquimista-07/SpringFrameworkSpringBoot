@@ -6,6 +6,19 @@
 </head>
 <body>
 	
+	<!--
+		NOTA: 
+		      * Cuando usamos el *{} es para mapear un campo del formulario ya se a para un atributo entity y en estos casos para el mensaje de error
+		        del campo.
+		      
+		      * Mientras que el ${} es para una expresión con código Java, ya sea para una expresión con th:if, para una interpolación de String, para
+		        mostrar datos, y en este caso para mapear el objeto usuario
+		      
+		      * Con el @{} son para usar rutas URL.
+		      
+		      * Con el #{} es para usar helpers.
+	-->
+	
 	<h2 th:text="${titulo}"></h2>
 	
 	<!--NOTA: El form tiene que tener un target, es decir, una ruta URL
@@ -16,35 +29,87 @@
 	          indicamos que era la ruta /form y adicionalmente también le
 	          indicamos el método ya que por defecto es get.
 	-->
-	<form th:action="@{/form}" method="post">
+	<form th:action="@{/form}" th:object="${usuario}" method="post">
 		
 		<div>
 			<label for="username">Username</label>
 			<div>
-				<!--NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""-->
-				<input type="text" name="username" id="username" th:value="${usuario.username}">
+				<!--
+					NOTA: Refactora para optimizar más la implementación del formulario para el cual comentamos y cambiamos los input
+					      para usar una etiqueta propia de thymelaf y spring. Por lo tanto para indicar que es un atirbuto usamos el *
+					
+					Anteriormente:
+				    NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""
+					<input type="text" name="username" id="username" th:value="${usuario.username}">
+				-->
+				<input type="text" id="username" th:field="*{username}">
 			</div>
-			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
-			<div th:if="${error != null && error.containsKey('username')}" th:text="${error.username}"></div>
+			<!--
+				NOTA: Refactor para usar la implementación propia de thymeleaf y spring para el manejo de errores y para el cual a parte del refactor
+			          del lado del controlador acá también hacemos el refactor para cambiar el div e indicar con el #fields.hasErrors con el nombre del
+			          campo para validar si tienen errores ya que al indicar el # nos sirve para usar un objeto helper.
+			          Adicionalmente también cambiamos el th:text por el th:errors e indicamos el campo con el *
+			          
+			          Anteriormente:
+			          NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple
+					  
+					  <div th:if="${error != null && error.containsKey('username')}" th:text="${error.username}"></div>
+			-->
+			<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 		</div>
 		
 		<div>
 			<label for="pwd">Password</label>
 			<div>
-				<input type="password" name="pwd" id="pwd">
+				<!--
+					NOTA: Refactora para optimizar más la implementación del formulario para el cual comentamos y cambiamos los input
+					      para usar una etiqueta propia de thymelaf y spring. Por lo tanto para indicar que es un atirbuto usamos el *
+					      
+					      Anteriormente:
+					      <input type="password" name="pwd" id="pwd">
+				-->
+				<input type="password" th:field="*{pwd}" id="pwd">
 			</div>
-			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
-			<div th:if="${error != null && error.containsKey('pwd')}" th:text="${error.pwd}"></div>
+			<!--
+				NOTA: Refactor para usar la implementación propia de thymeleaf y spring para el manejo de errores y para el cual a parte del refactor
+			          del lado del controlador acá también hacemos el refactor para cambiar el div e indicar con el #fields.hasErrors con el nombre del
+			          campo para validar si tienen errores ya que al indicar el # nos sirve para usar un objeto helper.
+			          Adicionalmente también cambiamos el th:text por el th:errors e indicamos el campo con el *
+			    
+			         Anteriormente:
+			    	 NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple
+			         
+			         <div th:if="${error != null && error.containsKey('pwd')}" th:text="${error.pwd}"></div>
+			-->
+			<div th:if="${#fields.hasErrors('pwd')}" th:errors="*{pwd}"></div>
 		</div>
 		
 		<div>
 			<label for="email">Email</label>
 			<div>
-				<!--NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""-->
-				<input type="text" name="email" id="email" th:value="${usuario.email}">
+				<!--
+					NOTA: Refactora para optimizar más la implementación del formulario para el cual comentamos y cambiamos los input
+					      para usar una etiqueta propia de thymelaf y spring. Por lo tanto para indicar que es un atirbuto usamos el *
+					  
+					      Anteriormente:       
+					      NOTA: Para que mantenga el valor cuando enviamos el formulario y este no es válido usamos el th:value=""
+
+					      <input type="text" name="email" id="email" th:value="${usuario.email}">
+				-->
+				<input type="text" th:field="*{email}" id="email">
 			</div>
-			<!--NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple-->
-			<div th:if="${error != null && error.containsKey('email')}" th:text="${error.email}"></div>
+			<!--
+				NOTA: Refactor para usar la implementación propia de thymeleaf y spring para el manejo de errores y para el cual a parte del refactor
+			          del lado del controlador acá también hacemos el refactor para cambiar el div e indicar con el #fields.hasErrors con el nombre del
+			          campo para validar si tienen errores ya que al indicar el # nos sirve para usar un objeto helper.
+			          Adicionalmente también cambiamos el th:text por el th:errors e indicamos el campo con el *
+				
+					  Anteriormente:
+			          NOTA: Hacemos la validación del map errores para validar la llave y mostramos el mensaje de error con el th:text si la validación no se cumple
+			          
+			          <div th:if="${error != null && error.containsKey('email')}" th:text="${error.email}"></div>
+			-->
+			<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 		</div>
 		
 		<div>
