@@ -2,7 +2,7 @@ package com.bolsadeideas.springboot.form.app.models.domain;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+//import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /*
@@ -16,16 +16,13 @@ public class Usuario {
 	
 	// Atributo para mostrar como funcionan las validaciones con expresiones regulares
 	// El \\d es equivalente a [0-9]
-	@Pattern(regexp = "[0-9]{2}[.][\\d]{3}[.][\\d]{3}[-][A-Z]{1}")
+	/*
+	 * NOTA: Comentamos el @Pattern para hacer validaciones a través de una clase personalizada a la cual se le implmenta
+	 *       la interface Validator del paquete org.springframework.validation.Validator
+	 *       
+	 * @Pattern(regexp = "[0-9]{2}[.][\\d]{3}[.][\\d]{3}[-][A-Z]{1}")
+	 */
 	private String idRegex;
-	
-	public String getIdRegex() {
-		return idRegex;
-	}
-
-	public void setIdRegex(String idRegex) {
-		this.idRegex = idRegex;
-	}
 
 	//
 	/*
@@ -37,7 +34,12 @@ public class Usuario {
 	 *       ejemplo @NotEmpty que es para campos requeridos
 	 */	
 	// Este permite validar el nombre y adicionalmente con la propiedad message asingar un mensaje personalizado
-	@NotEmpty(message = "El nombre no puede estar vacío")
+	/*
+	 *  NOTA: Comentamos esto para hacer validaciones a través de una clase personalizada a la cual se le implmenta
+	 *       la interface Validator del paquete org.springframework.validation.Validator
+	 * 
+	 * @NotEmpty(message = "El nombre no puede estar vacío")
+	 */
 	private String nombre;
 	
 	@NotEmpty
@@ -104,5 +106,12 @@ public class Usuario {
 		this.identificador = identificador;
 	}
 	
+	public String getIdRegex() {
+		return idRegex;
+	}
+	
+	public void setIdRegex(String idRegex) {
+		this.idRegex = idRegex;
+	}
 
 }

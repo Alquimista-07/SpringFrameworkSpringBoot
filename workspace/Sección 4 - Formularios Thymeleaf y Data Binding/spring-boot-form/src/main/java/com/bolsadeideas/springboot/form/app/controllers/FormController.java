@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 //import java.util.HashMap;
 //import java.util.Map;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
+import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
 
 import jakarta.validation.Valid;
 
@@ -29,6 +32,10 @@ import jakarta.validation.Valid;
  */
 @SessionAttributes("usuario")
 public class FormController {
+	
+	// Inyectamos la calse validadora que se creo
+	@Autowired
+	private UsuarioValidador validador;
 	
 	/*
 	 * NOTA: Método para mostrar el formulario en la pantalla
@@ -102,6 +109,9 @@ public class FormController {
 	 *       cuando finalice el proceso, es decir, cuando se envíe el formulario de forma correcta.
 	 */
 	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result, SessionStatus status) {
+		
+		// Usamos la instancia inyectada de la clase de validaciones personalizada
+		validador.validate(usuario, result);
 		
 		/*
 		 * NOTA: Creamos la instancia de la clase, adicionalmente esta se podría inyectar
