@@ -1,6 +1,8 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 /*
  * NOTA: Esta es una clase POJO, una clase Entity que representa datos
@@ -20,19 +22,23 @@ public class Usuario {
 	 * NOTA: Acá indicamos la regla de validación con anotaciones como por 
 	 *       ejemplo @NotEmpty que es para campos requeridos
 	 */	
-	@NotEmpty
+	// Este permite validar el nombre y adicionalmente con la propiedad message asingar un mensaje personalizado
+	@NotEmpty(message = "El nombre no puede estar vacío")
 	private String nombre;
 	
 	@NotEmpty
 	private String apellido;
 	
 	@NotEmpty
+	@Size(min = 3, max = 8)
 	private String username;
 	
 	@NotEmpty
 	private String pwd;
 	
 	@NotEmpty
+	// Este permite validar el correo y adicionalmente con la propiedad message asingar un mensaje personalizado
+	@Email(message = "Correo con formato incorrecto")
 	private String email;
 
 	// Getters y Setters
