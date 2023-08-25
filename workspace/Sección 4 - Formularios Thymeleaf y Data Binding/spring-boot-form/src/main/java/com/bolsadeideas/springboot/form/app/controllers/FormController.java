@@ -26,6 +26,17 @@ public class FormController {
 		// En la primera creación del formulario para que no de error debemos crear un objeto usuario vacío
 		// y pasarlo al formulario si no nos da un error NullPointerException.
 		Usuario usuario = new Usuario();
+		
+		/*
+		 * NOTA: Pasamos datos por defecto al formulario
+		 */
+		usuario.setNombre("Jhon");
+		usuario.setApellido("Doe");
+		
+		// NOTA: Este campo como mencionamos en la clase Usuario no es un campo que es propio del formulario
+		//       pero si queremos que persista y se muestre en el resutlado
+		usuario.setIdentificador("123.458.96.7-Z");
+		
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}

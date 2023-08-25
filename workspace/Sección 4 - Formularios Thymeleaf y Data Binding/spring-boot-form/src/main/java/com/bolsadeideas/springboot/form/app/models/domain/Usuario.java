@@ -6,7 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
  * NOTA: Esta es una clase POJO, una clase Entity que representa datos
  */
 public class Usuario {
-
+	
+	// NOTA: Este campo no va a estar en el formulario sino que va a ser un dato interno
+	//       que si va a tener información
+	private String identificador;
+	
 	//
 	/*
 	 * NOTA: Muy importante que estos nombre de atributos correspondan al mismo
@@ -15,7 +19,13 @@ public class Usuario {
 	/*
 	 * NOTA: Acá indicamos la regla de validación con anotaciones como por 
 	 *       ejemplo @NotEmpty que es para campos requeridos
-	 */
+	 */	
+	@NotEmpty
+	private String nombre;
+	
+	@NotEmpty
+	private String apellido;
+	
 	@NotEmpty
 	private String username;
 	
@@ -49,5 +59,30 @@ public class Usuario {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getIdentificador() {
+		return identificador;
+	}
+
+	public void setIdentificador(String identificador) {
+		this.identificador = identificador;
+	}
+	
 
 }
