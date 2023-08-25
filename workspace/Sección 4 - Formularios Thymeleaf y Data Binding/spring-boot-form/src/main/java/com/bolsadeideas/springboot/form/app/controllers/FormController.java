@@ -9,12 +9,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
 
 import jakarta.validation.Valid;
 
 @Controller
+/*
+ * NOTA: Para matener los datos del usuario, en este caso el identificador el cual es un dato que no 
+ *       esta mapeado en el formulario pero que tiene que ser enviado ya que tiene un valor asignado
+ *       y para que no se envíe en null a la vista resultado usamos la anotación @SessionAttributes
+ *       para mantenerlo. A dicha anotación tenemos que darle un nombre, pero tiene que ser el mismo
+ *       nombre con el que se pasa a la vista que en este caso al objeto lo llamamos usuario. Y dicho
+ *       objeto se va a guardar en una sesión HTTP, y va a contener todos los datos que tenga independiente
+ *       si están en el formulario como campo se van a mantener de forma persistente entre el formulario y
+ *       cuando se envíen los datos. Pero si cambiamos algún dato ene el formulario se va a actualizar
+ */
+@SessionAttributes("usuario")
 public class FormController {
 	
 	/*
@@ -35,7 +48,7 @@ public class FormController {
 		
 		// NOTA: Este campo como mencionamos en la clase Usuario no es un campo que es propio del formulario
 		//       pero si queremos que persista y se muestre en el resutlado
-		usuario.setIdentificador("123.458.96.7-Z");
+		usuario.setIdentificador("123.456.789-Z");
 		
 		model.addAttribute("usuario", usuario);
 		return "form";
@@ -81,8 +94,11 @@ public class FormController {
 	 *                 public String procesarFormulario(Model model, @Valid @ModelAttribute("user") Usuario usuario, BindingResult result) {
 	 *                 
 	 *                 Y ya del lado de la vista ya no usamos usuario sino user
+	 *                 
+	 * NOTA: La interface SessionStatus nos va a servir para limpiar el objeto de la sesión que creamos para almacenar los valores del objeto usuario
+	 *       cuando finalice el proceso, es decir, cuando se envíe el formulario de forma correcta.
 	 */
-	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result) {
+	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result, SessionStatus status) {
 		
 		/*
 		 * NOTA: Creamos la instancia de la clase, adicionalmente esta se podría inyectar
@@ -142,6 +158,9 @@ public class FormController {
 			return "form";
 			
 		}
+		
+		// Completamos la sessión para que elimine de forma automática el objeto usuario creado en la sesión.
+		status.setComplete();
 		
 		// NOTA: Se realizo el refactor para pasar directamente el objeto
 		model.addAttribute("usuario", usuario);
