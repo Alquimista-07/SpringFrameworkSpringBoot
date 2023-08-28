@@ -1,6 +1,7 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
 import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
+import com.bolsadeideas.springboot.form.app.validation.Requerido;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,12 +48,23 @@ public class Usuario {
 	 */
 	private String nombre;
 	
-	@NotEmpty
+	/*
+	 * NOTA: Comentamos la anotación para usar una anotación personalizada creada por nosotros mismos.
+	 *       Adicionalmente también cambiamos el mensaje ya sea de la siguiente forma:
+	 *       
+	 *       @Requerido(message = "Campo requerido")
+	 *       
+	 *       O también lo cambiamos a través del messages.properties ya que nuestra anotación personalizada
+	 *       la creamos con un mensaje un poco más genérico para que sirva para validar otros campos.
+	 *       
+	 */
+	//@NotEmpty
+	@Requerido
 	private String apellido;
 	
 	/*
 	 * NOTA: La anotación @NotBlank evita que se acepten espacioes en blanco y
-	 *       que pase la validación.
+	 *       que pase la validación. Adiciona
 	 */
 	@NotBlank
 	@Size(min = 3, max = 8)
