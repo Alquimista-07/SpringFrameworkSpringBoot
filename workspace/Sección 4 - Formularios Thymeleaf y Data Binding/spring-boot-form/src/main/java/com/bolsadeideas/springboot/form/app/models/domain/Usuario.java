@@ -8,11 +8,13 @@ import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
 import com.bolsadeideas.springboot.form.app.validation.Requerido;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 //import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -91,6 +93,12 @@ public class Usuario {
 	private Integer cuenta;
 	
 	@NotNull
+	// NOTA: La anotación @Past valida que tiene que ser una fecha pasada a la actual y no una futura
+	//       también existe la @PastOrPresent
+	//@Past
+	// NOTA: La antoación @Future valida que tiene que ser una fecha futura y no una pasada o presente
+	//       también existe la @FutureOrPresent
+	@Future
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
 
