@@ -2,7 +2,7 @@ package com.bolsadeideas.springboot.form.app.models.domain;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
+//import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
 import com.bolsadeideas.springboot.form.app.validation.Requerido;
@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
+//import jakarta.validation.constraints.Past;
 //import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -99,7 +99,8 @@ public class Usuario {
 	// NOTA: La antoación @Future valida que tiene que ser una fecha futura y no una pasada o presente
 	//       también existe la @FutureOrPresent
 	@Future
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	// NOTA: Comentamos el date format para formatear fechas con @InitBinder y registrar un CustomDateEditor
+	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
 
 	// Getters y Setters

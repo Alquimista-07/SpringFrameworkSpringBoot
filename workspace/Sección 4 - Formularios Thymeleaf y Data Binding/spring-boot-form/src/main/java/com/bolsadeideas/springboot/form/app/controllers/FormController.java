@@ -1,6 +1,10 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 
 //import java.util.HashMap;
 //import java.util.Map;
@@ -49,6 +53,15 @@ public class FormController {
 		//       que tenemos por anotación en la clase Usuario ya que reemplaza el validador
 		//       por lo tanto para que esto no sucede tenemos que usar el addValidators
 		binder.addValidators(validador);
+		
+		// Creamos el formato fecha
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		// NOTA: Indicamos que sea estricto y no tolerante a ajustar el formato para evitar que 
+		//       se coloquen fechas con formato incorreco para ello esto lo hacemos con el uso 
+		//       del setLenient en false
+		dateFormat.setLenient(false);
+		
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 	
 	/*
