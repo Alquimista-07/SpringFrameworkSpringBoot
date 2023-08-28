@@ -17,6 +17,15 @@
 		<li th:text="${usuario.identificador}"></li>
 		<li th:text="${usuario.cuenta}"></li>
 		<li th:text="${usuario.pais}"></li>
+		<!--
+			NOTA: Formas de dar formato visual a la fecha con thymeleaf,
+			      para más información podemos ir a la documentación oficial
+			      de thymeleaf en el siguiente enlace:
+			      
+			      https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html
+		-->
+		<li th:text="${#dates.format(usuario.fechaNacimiento, 'dd/MM/yyyy')}"></li>
+		<li th:text="${#calendars.format(usuario.fechaNacimiento, 'dd-MM-yyyy')}"></li>
 	</ul>
 		
 </body>
