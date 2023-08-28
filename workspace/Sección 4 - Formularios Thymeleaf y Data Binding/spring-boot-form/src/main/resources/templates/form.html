@@ -32,6 +32,21 @@
 	<form th:action="@{/form}" th:object="${usuario}" method="post">
 		
 		<div>
+			<label for="pais">Pais</label>
+			<div>
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+				-->
+				<select type="text" id="pais" th:field="*{pais}">
+					<option value="">-- Seleccionar --</option>
+					<option th:each="pais: ${paises}" th:text="${pais}" th:value="${pais}"></option>
+				</select>
+			</div>
+			<div th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></div>
+		</div>
+		
+		<div>
 			<label for="nombre">Nombre</label>
 			<div>
 				<!--

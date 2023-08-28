@@ -102,6 +102,9 @@ public class Usuario {
 	// NOTA: Comentamos el date format para formatear fechas con @InitBinder y registrar un CustomDateEditor
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
+	
+	@NotEmpty
+	private String pais;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -175,7 +178,13 @@ public class Usuario {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-	
-	
+
+	public String getPais() {
+		return pais;
+	}
+
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
 
 }

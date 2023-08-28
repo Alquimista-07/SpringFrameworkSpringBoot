@@ -1,7 +1,9 @@
 package com.bolsadeideas.springboot.form.app.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -15,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -72,6 +75,11 @@ public class FormController {
 		 */
 		binder.registerCustomEditor( String.class, "nombre",new NombreMayusculaEditor() );
 		binder.registerCustomEditor( String.class, "apellido",new NombreMayusculaEditor() );
+	}
+	
+	@ModelAttribute("paises")
+	public List<String> paises() {
+		return Arrays.asList("Japón", "Colombia", "España", "México", "Chile", "Venezuela");
 	}
 	
 	/*
