@@ -25,7 +25,7 @@ public class UsuarioValidador implements Validator {
 		// Acá pasamos como segundo argumento un string pero con el mismo nombre que tenemos el 
 		// atributo en el POJO, y como tercer argumento pasamos la llave del propertie tal cual
 		// como se llama en nuestro archivo messages.properties
-		ValidationUtils.rejectIfEmpty(errors, "nombre", "NotEmpty.usuario.nombre");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nombre", "NotEmpty.usuario.nombre");
 		
 		/*
 		 *  Otra forma de hacer la misma validación del nombre sería:

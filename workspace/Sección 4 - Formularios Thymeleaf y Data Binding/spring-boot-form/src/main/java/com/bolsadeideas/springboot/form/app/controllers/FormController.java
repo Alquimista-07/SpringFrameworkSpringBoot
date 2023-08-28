@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -36,6 +38,18 @@ public class FormController {
 	// Inyectamos la calse validadora que se creo
 	@Autowired
 	private UsuarioValidador validador;
+	
+	/*
+	 *  NOTA: Registramos en el initbinder, es decir, cuando se inicializa el proceso de validación
+	 *        el proceso de pasar los datos, al objeto usuario.
+	 */
+	@InitBinder
+	public void initBinder( WebDataBinder binder ) {
+		// NOTA: Acá si usamos el método setValidator se nos pierden las demás validaciones
+		//       que tenemos por anotación en la clase Usuario ya que reemplaza el validador
+		//       por lo tanto para que esto no sucede tenemos que usar el addValidators
+		binder.addValidators(validador);
+	}
 	
 	/*
 	 * NOTA: Método para mostrar el formulario en la pantalla
@@ -110,8 +124,15 @@ public class FormController {
 	 */
 	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result, SessionStatus status) {
 		
-		// Usamos la instancia inyectada de la clase de validaciones personalizada
-		validador.validate(usuario, result);
+		/*
+		 *  NOTA: Comentamos esta línea de código para pasar el validador directamente y hacerlo de forma más
+		 *        trasparente a través del @initBinder el cual es un método que anotado que se encarga inicializar
+		 *        
+		 *        // Usamos la instancia inyectada de la clase de validaciones personalizada
+		 *        //validador.validate(usuario, result);
+		 *        
+		 */ 
+		
 		
 		/*
 		 * NOTA: Creamos la instancia de la clase, adicionalmente esta se podría inyectar
