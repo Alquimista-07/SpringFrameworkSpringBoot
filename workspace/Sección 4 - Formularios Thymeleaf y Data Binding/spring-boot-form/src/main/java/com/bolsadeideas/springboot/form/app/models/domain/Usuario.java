@@ -1,5 +1,9 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
 import com.bolsadeideas.springboot.form.app.validation.Requerido;
 
@@ -85,6 +89,10 @@ public class Usuario {
 	@Min(5)
 	@Max(5000)
 	private Integer cuenta;
+	
+	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date fechaNacimiento;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -149,6 +157,14 @@ public class Usuario {
 
 	public void setCuenta(Integer cuenta) {
 		this.cuenta = cuenta;
+	}
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 	
 	
