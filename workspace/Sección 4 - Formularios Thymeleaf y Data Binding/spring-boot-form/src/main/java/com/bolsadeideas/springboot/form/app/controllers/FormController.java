@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.bolsadeideas.springboot.form.app.editors.NombreMayusculaEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
 import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
 
@@ -62,6 +63,15 @@ public class FormController {
 		dateFormat.setLenient(false);
 		
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+		
+		/*
+		 * NOTA: Como primer atributo recibe el tipo, como segundo atributo el nombre de campo ya que si no lo especificamos
+		 *       va a aplicar para todo lo que sea String y por lo tanto todo lo va a volver a mayúscula, pero en este caso 
+		 *       queremos que solo sea el nombre entonces por eso lo especificamos y como tercer atributo recibe la lase custom
+		 *       que creamos y que hereda PropertyEditorSupport.
+		 */
+		binder.registerCustomEditor( String.class, "nombre",new NombreMayusculaEditor() );
+		binder.registerCustomEditor( String.class, "apellido",new NombreMayusculaEditor() );
 	}
 	
 	/*
