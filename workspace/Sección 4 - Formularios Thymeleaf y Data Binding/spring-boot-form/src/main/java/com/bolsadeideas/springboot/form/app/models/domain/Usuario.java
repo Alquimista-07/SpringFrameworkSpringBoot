@@ -4,8 +4,11 @@ import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
 import com.bolsadeideas.springboot.form.app.validation.Requerido;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 //import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -78,6 +81,11 @@ public class Usuario {
 	@Email(message = "Correo con formato incorrecto")
 	private String email;
 
+	@NotNull
+	@Min(5)
+	@Max(5000)
+	private Integer cuenta;
+
 	// Getters y Setters
 	public String getUsername() {
 		return username;
@@ -134,5 +142,15 @@ public class Usuario {
 	public void setIdRegex(String idRegex) {
 		this.idRegex = idRegex;
 	}
+
+	public Integer getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Integer cuenta) {
+		this.cuenta = cuenta;
+	}
+	
+	
 
 }

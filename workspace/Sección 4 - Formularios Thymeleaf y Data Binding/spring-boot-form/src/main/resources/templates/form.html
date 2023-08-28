@@ -151,6 +151,18 @@
 		</div>
 		
 		<div>
+			<label for="cuenta">Cuenta</label>
+			<div>
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+				-->
+				<input type="number" id="cuenta" th:field="*{cuenta}">
+			</div>
+			<div th:if="${#fields.hasErrors('cuenta')}" th:errors="*{cuenta}"></div>
+		</div>
+		
+		<div>
 			<div>
 				<input type="submit" value="Enviar">
 			</div>
