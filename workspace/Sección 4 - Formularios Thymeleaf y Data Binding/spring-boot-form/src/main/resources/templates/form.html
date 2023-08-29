@@ -102,6 +102,22 @@
 		</div>
 		
 		<div>
+			<label>Roles</label>
+			<div th:each="role: ${listaRolesString}">
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+				-->
+				<input type="checkbox" th:field="*{roles}" th:value="${role}">
+				<!-- NOTA: El helper ids nos permie obtener el id que se genera autimáticamente para cada check 
+				           y básicamente con él obtenemos el último id generado en la iteración.
+				-->
+				<label th:for="${#ids.prev('roles')}" th:text="${role}"></label>
+			</div>
+			<div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>
+		</div>
+		
+		<div>
 			<label for="nombre">Nombre</label>
 			<div>
 				<!--
