@@ -70,18 +70,35 @@
 		-->
 		
 		<div>
+			<!--
+					NOTA: Como usamos el property editor entonces modificamos acá. Ya que con el property editor
+					      estamos guardando esta vez el objeto completo con todos sus atributos
 			<label for="pais.id">Lista Paises Objeto</label>
+			-->
+			<label for="pais">Lista Paises Objeto</label>
 			<div>
 				<!--
 					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
 					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
 				-->
-				<select type="text" id="pais.id" th:field="*{pais.id}">
+				<!--
+					NOTA: Como usamos el property editor entonces modificamos acá. Ya que con el property editor
+					      estamos guardando esta vez el objeto completo con todos sus atributos
+				
+					<select type="text" id="pais.id" th:field="*{pais.id}">
+				-->
+				<select type="text" id="pais" th:field="*{pais}">
 					<option value="">-- Seleccionar --</option>
 					<option th:each="pais: ${listaPaises}" th:text="${pais.nombre}" th:value="${pais.id}"></option>
 				</select>
 			</div>
-			<div th:if="${#fields.hasErrors('pais.id')}" th:errors="*{pais.id}"></div>
+			<!--
+					NOTA: Como usamos el property editor entonces modificamos acá. Ya que con el property editor
+					      estamos guardando esta vez el objeto completo con todos sus atributos
+					      
+					      <div th:if="${#fields.hasErrors('pais.id')}" th:errors="*{pais.id}"></div>
+			-->
+			<div th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></div>
 		</div>
 		
 		<div>

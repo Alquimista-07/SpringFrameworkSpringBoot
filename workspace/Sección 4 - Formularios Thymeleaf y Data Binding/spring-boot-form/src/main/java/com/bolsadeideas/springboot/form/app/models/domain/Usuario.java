@@ -104,7 +104,9 @@ public class Usuario {
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
 	
-	@Valid
+	// NOTA: Como cambiamos por un property editor del objeto país ya no usamos el @Valid
+	//@Valid
+	@NotNull
 	private Pais pais;
 
 	// Getters y Setters

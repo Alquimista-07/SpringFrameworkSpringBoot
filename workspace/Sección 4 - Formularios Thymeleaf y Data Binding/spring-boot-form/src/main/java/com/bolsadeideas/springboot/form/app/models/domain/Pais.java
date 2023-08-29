@@ -1,11 +1,13 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
-import jakarta.validation.constraints.NotNull;
+//import jakarta.validation.constraints.NotNull;
 
 public class Pais {
 
 	// Atributos
-	@NotNull
+	// Como estamos validando por el property editor del objeto esta validación con la
+	// anotación @NotNull ya no es necesaria.
+	//@NotNull
 	private Integer id;
 	
 	private String codigo;
