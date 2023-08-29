@@ -139,6 +139,17 @@ public class FormController {
 		return roles;
 	}
 	
+	@ModelAttribute("listaRolesMap")
+	public Map<String, String> listaRolesMap() {
+		Map<String, String> roles = new HashMap<>();
+		
+		roles.put("ROLE_ADMIN", "Administrador");
+		roles.put("ROLE_USER", "Usuario");
+		roles.put("ROLE_MODERTATOR", "Moderador");
+		
+		return roles;
+	}
+	
 	/*
 	 * NOTA: Método para mostrar el formulario en la pantalla
 	 */
