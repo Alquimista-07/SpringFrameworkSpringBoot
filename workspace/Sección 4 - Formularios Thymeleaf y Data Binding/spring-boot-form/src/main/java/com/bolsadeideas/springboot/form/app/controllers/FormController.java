@@ -28,6 +28,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.bolsadeideas.springboot.form.app.editors.NombreMayusculaEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Pais;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
+import com.bolsadeideas.springboot.form.app.services.PaisService;
 import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
 
 import jakarta.validation.Valid;
@@ -49,6 +50,9 @@ public class FormController {
 	// Inyectamos la calse validadora que se creo
 	@Autowired
 	private UsuarioValidador validador;
+	
+	@Autowired
+	private PaisService paisService;
 	
 	/*
 	 *  NOTA: Registramos en el initbinder, es decir, cuando se inicializa el proceso de validación
@@ -82,6 +86,7 @@ public class FormController {
 	
 	@ModelAttribute("listaPaises")
 	public List<Pais> listaPaises() {
+		/*
 		return Arrays.asList(
 				new Pais(1, "JP","Japón"),
 				new Pais(2, "CO", "Colombia"),
@@ -90,6 +95,8 @@ public class FormController {
 				new Pais(5, "CL", "Chile"),
 				new Pais(6, "VE", "Venezuela"),
 				new Pais(7, "AR", "Argentina"));
+		*/
+		return paisService.listar();
 	}
 	
 	@ModelAttribute("paises")
