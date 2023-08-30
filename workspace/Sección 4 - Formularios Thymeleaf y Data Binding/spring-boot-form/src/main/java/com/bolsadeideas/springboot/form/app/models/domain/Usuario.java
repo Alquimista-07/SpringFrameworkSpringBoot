@@ -117,6 +117,10 @@ public class Usuario {
 	
 	// Atributo para checkbox true o false
 	private Boolean habilitar;
+	
+	// Atributo para el manejo de radio button
+	@NotEmpty
+	private String genero;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -213,6 +217,14 @@ public class Usuario {
 
 	public void setHabilitar(Boolean habilitar) {
 		this.habilitar = habilitar;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
 	}
 	
 

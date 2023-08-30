@@ -44,6 +44,19 @@
 			</div>
 		</div>
 		
+		<div>
+			<label>Género</label>
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+				-->
+			<div th:each="gen: ${genero}">
+				<input type="radio" th:field="*{genero}" th:value="${gen}">
+				<label th:for="${#ids.prev('genero')}" th:text="${gen}"></label>
+			</div>
+			<div th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+		</div>
+		
 		<!--
 		<div>
 			<label for="pais">Pais</label>
