@@ -320,6 +320,8 @@
 			<div th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
 		</div>
 		
+		<input type="hidden" th:field="*{valorSecreto}">
+		
 		<div>
 			<div>
 				<input type="submit" value="Enviar">

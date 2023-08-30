@@ -201,6 +201,9 @@ public class FormController {
 		// Habilitamos el checkbox por defecto
 		usuario.setHabilitar(true);
 		
+		// Asignamos un valor por defecto al atributo hidden
+		usuario.setValorSecreto("Algún valor secreto!!!...");
+		
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}

@@ -121,6 +121,9 @@ public class Usuario {
 	// Atributo para el manejo de radio button
 	@NotEmpty
 	private String genero;
+	
+	// Atributo hidden
+	private String valorSecreto;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -225,6 +228,14 @@ public class Usuario {
 
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+
+	public String getValorSecreto() {
+		return valorSecreto;
+	}
+
+	public void setValorSecreto(String valorSecreto) {
+		this.valorSecreto = valorSecreto;
 	}
 	
 
