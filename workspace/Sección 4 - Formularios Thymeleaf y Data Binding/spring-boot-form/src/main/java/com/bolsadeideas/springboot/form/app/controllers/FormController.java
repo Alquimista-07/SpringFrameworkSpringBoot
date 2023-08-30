@@ -204,6 +204,10 @@ public class FormController {
 		// Asignamos un valor por defecto al atributo hidden
 		usuario.setValorSecreto("Algún valor secreto!!!...");
 		
+		usuario.setPais(new Pais(1, "JP", "Japón"));
+		
+		usuario.setRoles(Arrays.asList(new Role(2, "Usuario", "ROLE_USER")));
+		
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}

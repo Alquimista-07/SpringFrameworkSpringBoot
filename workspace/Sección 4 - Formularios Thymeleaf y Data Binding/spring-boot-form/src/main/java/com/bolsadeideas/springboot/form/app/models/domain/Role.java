@@ -41,4 +41,21 @@ public class Role {
 		this.role = role;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		
+		if( this == obj ) {
+			return true;
+		}
+		
+		if(!(obj instanceof Role)) {
+			return false;
+		}
+		
+		// Si es una instancia de role hacemos
+		Role role = (Role) obj;
+		// Comparamos cada objeto con la lista de los usuarios para marcar el role por defecto
+		return this.id != null && this.id.equals(role.getId());
+	}
+
 }

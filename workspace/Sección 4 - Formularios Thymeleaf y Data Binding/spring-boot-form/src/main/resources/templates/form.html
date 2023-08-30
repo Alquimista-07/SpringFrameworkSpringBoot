@@ -165,7 +165,8 @@
 				<!-- NOTA: Refactor por objeto de clase
 				<input type="checkbox" th:field="*{roles}" th:value="${role.key}">
 				-->
-				<input type="checkbox" th:field="*{roles}" th:value="${role.id}">
+				<input type="checkbox" th:field="*{roles}" th:value="${role.id}"
+				th:checked="${#lists.contains(usuario.roles, role)}">
 				<!-- NOTA: El helper ids nos permie obtener el id que se genera autimáticamente para cada check 
 				           y básicamente con él obtenemos el último id generado en la iteración.
 				-->
