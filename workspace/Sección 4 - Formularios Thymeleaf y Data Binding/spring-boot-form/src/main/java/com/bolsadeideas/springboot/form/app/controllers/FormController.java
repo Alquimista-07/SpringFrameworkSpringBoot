@@ -193,6 +193,9 @@ public class FormController {
 		// Asignamos un valor por defecto al idRegex para ver las validaciones con expresiones regulares
 		usuario.setIdRegex("987.654.321-X");
 		
+		// Habilitamos el checkbox por defecto
+		usuario.setHabilitar(true);
+		
 		model.addAttribute("usuario", usuario);
 		return "form";
 	}

@@ -114,6 +114,9 @@ public class Usuario {
 	@NotEmpty
 	//private List<String> roles;
 	private List<Role> roles;
+	
+	// Atributo para checkbox true o false
+	private Boolean habilitar;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -202,6 +205,14 @@ public class Usuario {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Boolean getHabilitar() {
+		return habilitar;
+	}
+
+	public void setHabilitar(Boolean habilitar) {
+		this.habilitar = habilitar;
 	}
 	
 

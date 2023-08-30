@@ -31,6 +31,19 @@
 	-->
 	<form th:action="@{/form}" th:object="${usuario}" method="post">
 		
+		<div>
+			<label for="habilitar">Habilitar</label>
+			<div>
+				<!--
+					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
+					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
+					      
+					      Adicionalmente es el que vamos a validar usando expresiones regulares
+				-->
+				<input type="checkbox" id="habilitar" th:field="*{habilitar}">
+			</div>
+		</div>
+		
 		<!--
 		<div>
 			<label for="pais">Pais</label>
