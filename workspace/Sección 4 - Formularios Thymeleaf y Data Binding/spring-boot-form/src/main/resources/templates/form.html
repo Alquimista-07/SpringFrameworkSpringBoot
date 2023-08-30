@@ -101,34 +101,52 @@
 			<div th:if="${#fields.hasErrors('pais')}" th:errors="*{pais}"></div>
 		</div>
 		
+		<!--NOTA: Refactor ya que ahora se pasan los roles como objeto de una clase -->
+		<!--
 		<div>
 			<label>Roles</label>
 			<div th:each="role: ${listaRolesString}">
+				-->
 				<!--
 					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
 					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
 				-->
+				<!--
 				<input type="checkbox" th:field="*{roles}" th:value="${role}">
+				-->
 				<!-- NOTA: El helper ids nos permie obtener el id que se genera autimáticamente para cada check 
 				           y básicamente con él obtenemos el último id generado en la iteración.
 				-->
+				<!--
 				<label th:for="${#ids.prev('roles')}" th:text="${role}"></label>
 			</div>
 			<div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>
 		</div>
+		-->
 		
 		<div>
+			<!-- NOTA: Refactor ya que se esta pasando ahora los roles como un objeto de una clase -->
+			<!--
 			<label>Roles MAP</label>
 			<div th:each="role: ${listaRolesMap.entrySet()}">
+			-->
+			<label>Roles</label>
+			<div th:each="role: ${listaRoles}">
 				<!--
 					NOTA: Campo nuevo usando los refactors y optimizaciones ya por defecto y que se le realizaron a los campos username, email
 					      y password. Para más información de dichos refactor ver las notas indicadas más abajo para cada campo.
 				-->
+				<!-- NOTA: Refactor por objeto de clase
 				<input type="checkbox" th:field="*{roles}" th:value="${role.key}">
+				-->
+				<input type="checkbox" th:field="*{roles}" th:value="${role.id}">
 				<!-- NOTA: El helper ids nos permie obtener el id que se genera autimáticamente para cada check 
 				           y básicamente con él obtenemos el último id generado en la iteración.
 				-->
+				<!--NOTA: Refactor por objeto de clase 
 				<label th:for="${#ids.prev('roles')}" th:text="${role.value}"></label>
+				-->
+				<label th:for="${#ids.prev('roles')}" th:text="${role.nombre}"></label>
 			</div>
 			<div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>
 		</div>

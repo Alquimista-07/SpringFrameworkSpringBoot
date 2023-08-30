@@ -29,8 +29,10 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.bolsadeideas.springboot.form.app.editors.NombreMayusculaEditor;
 import com.bolsadeideas.springboot.form.app.editors.PaisPropertyEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Pais;
+import com.bolsadeideas.springboot.form.app.models.domain.Role;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
 import com.bolsadeideas.springboot.form.app.services.PaisService;
+import com.bolsadeideas.springboot.form.app.services.RoleService;
 import com.bolsadeideas.springboot.form.app.validation.UsuarioValidador;
 
 import jakarta.validation.Valid;
@@ -55,6 +57,10 @@ public class FormController {
 	
 	@Autowired
 	private PaisService paisService;
+	
+	// Inyectamos el servicio para manejar los roles como objetos
+	@Autowired
+	private RoleService roleService;
 	
 	// NOTA: Inyectamos el property editor
 	@Autowired
@@ -137,6 +143,11 @@ public class FormController {
 		roles.add("ROLE_MODERTATOR");
 		
 		return roles;
+	}
+	
+	@ModelAttribute("listaRoles")
+	public List<Role> listaRoles(){
+		return this.roleService.listar();
 	}
 	
 	@ModelAttribute("listaRolesMap")

@@ -110,8 +110,10 @@ public class Usuario {
 	@NotNull
 	private Pais pais;
 	
-	@NotEmpty
-	private List<String> roles;
+	// NOTA: Refactor para pasar el role como un objeto de una clase con todos sus atributos
+	//@NotEmpty
+	//private List<String> roles;
+	private List<Role> roles;
 
 	// Getters y Setters
 	public String getUsername() {
@@ -194,11 +196,11 @@ public class Usuario {
 		this.pais = pais;
 	}
 
-	public List<String> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 	
