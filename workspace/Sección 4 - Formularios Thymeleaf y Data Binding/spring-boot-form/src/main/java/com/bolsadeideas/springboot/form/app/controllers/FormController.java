@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -256,7 +257,7 @@ public class FormController {
 	 * NOTA: La interface SessionStatus nos va a servir para limpiar el objeto de la sesión que creamos para almacenar los valores del objeto usuario
 	 *       cuando finalice el proceso, es decir, cuando se envíe el formulario de forma correcta.
 	 */
-	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result, SessionStatus status) {
+	public String procesarFormulario(Model model, @Valid Usuario usuario, BindingResult result) {
 		
 		/*
 		 *  NOTA: Comentamos esta línea de código para pasar el validador directamente y hacerlo de forma más
@@ -290,9 +291,6 @@ public class FormController {
 		   usuario.setEmail(email);
 		 */
 		
-		// Pasamos los datos a la vista con model
-		model.addAttribute("titulo", "Resultador Form");
-		
 		/*
 		 *  NOTA: Antes de pasar el formulario tenemos que validar si el formulario es válido
 		 *        y para ello nos apoyamos en la interface BindingReult que es un argumento que 
@@ -323,18 +321,35 @@ public class FormController {
 			 * model.addAttribute("error", errores); 
 			 */
 			
+			// Pasamos los datos a la vista con model
+			model.addAttribute("titulo", "Resultado Form");
+			
 			return "form";
 			
 		}
 		
-		// Completamos la sessión para que elimine de forma automática el objeto usuario creado en la sesión.
-		status.setComplete();
-		
 		// NOTA: Se realizo el refactor para pasar directamente el objeto
 		model.addAttribute("usuario", usuario);
 		
+		// Ajuste para redirecciónar y no permitir que el usuario pueda hacer refresh sobre el formulario enviado y que
+		// nuevamente envíe los datos
+		return "redirect:/ver";
+	}
+
+	@GetMapping("/ver")
+	// NOTA: Como estamos pasando el objeto del Usuario con el @SessionAttribute ya no es necesario pasarlo con model
+	public String ver(@SessionAttribute(name="usuario", required = false) Usuario usuario, Model model, SessionStatus status) {
+		
+		if(usuario == null) {
+			return "redirect:/form";
+		}
+		
+		model.addAttribute("titulo", "Resultado Form");
+		
+		// Completamos la sessión para que elimine de forma automática el objeto usuario creado en la sesión.
+		status.setComplete();
+		
 		return "resultado";
 	}
-	
 
 }
