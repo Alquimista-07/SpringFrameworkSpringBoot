@@ -28,6 +28,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.bolsadeideas.springboot.form.app.editors.NombreMayusculaEditor;
 import com.bolsadeideas.springboot.form.app.editors.PaisPropertyEditor;
+import com.bolsadeideas.springboot.form.app.editors.RolesEditor;
 import com.bolsadeideas.springboot.form.app.models.domain.Pais;
 import com.bolsadeideas.springboot.form.app.models.domain.Role;
 import com.bolsadeideas.springboot.form.app.models.domain.Usuario;
@@ -66,6 +67,10 @@ public class FormController {
 	@Autowired
 	private PaisPropertyEditor paisEditor;
 	
+	// Inyectamos el property editor de los roles
+	@Autowired
+	private RolesEditor roleEditor;
+	
 	/*
 	 *  NOTA: Registramos en el initbinder, es decir, cuando se inicializa el proceso de validación
 	 *        el proceso de pasar los datos, al objeto usuario.
@@ -97,6 +102,10 @@ public class FormController {
 		
 		// Registramos el property editor
 		binder.registerCustomEditor(Pais.class, "pais", paisEditor);
+		
+		// Registramos el property editor de los roles
+		// Y como primer parametro enviamos el tipo definido en la clase Usuario, como segundo el nombre del atributo en la clase Usuario y como tercer valor el editor
+		binder.registerCustomEditor(Role.class, "roles", roleEditor);
 	}
 	
 	@ModelAttribute("listaPaises")

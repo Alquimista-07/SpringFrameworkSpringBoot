@@ -111,7 +111,7 @@ public class Usuario {
 	private Pais pais;
 	
 	// NOTA: Refactor para pasar el role como un objeto de una clase con todos sus atributos
-	//@NotEmpty
+	@NotEmpty
 	//private List<String> roles;
 	private List<Role> roles;
 
