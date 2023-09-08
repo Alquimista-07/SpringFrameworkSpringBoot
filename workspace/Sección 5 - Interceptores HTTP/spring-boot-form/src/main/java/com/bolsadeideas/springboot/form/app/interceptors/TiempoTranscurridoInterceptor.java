@@ -79,6 +79,17 @@ public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		
+		// Adicioanlmente para el tema de que cuando queremos pasar el interceptor solo en unas rutas específicas,
+		// si nos fijamos en el lado del MVcCongig donde registramos el interceptor, allí solo podemos indicar la ruta
+		// pero en este caso en el controlador tenemos dos rutas /form solo que una es de tipo GET y la otra de tipo POST
+		// por lo tanto si solo queremos aplicarla al GET o al POST tenemos que hacerlo de forma programática, y para ello
+		// lo podemos hacer acá de la siguiente forma:
+		if( request.getMethod().equalsIgnoreCase("post") ) {
+			// Si corresponde al post, lo omitimos y al retornar un void eso es lo que presisamente vamos a retornar
+			// para que no continue
+			return ;
+		}
+		
 		// Calculamos el tiempo en ms el tiempo actual
 		long tiempoFin = System.currentTimeMillis();
 		// Calculamos el tiempo en ms el tiempo actual
