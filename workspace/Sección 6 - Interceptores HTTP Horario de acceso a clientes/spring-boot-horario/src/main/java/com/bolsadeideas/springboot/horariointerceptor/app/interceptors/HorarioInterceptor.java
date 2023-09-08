@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -59,8 +60,11 @@ public class HorarioInterceptor implements HandlerInterceptor {
 		// Obtenemos el mensaje
 		String mensaje  = (String) request.getAttribute("mensaje");
 		
-		// y se lo pasamos a la vista
-		modelAndView.addObject("horario", mensaje);
+		// Validamos
+		if ( modelAndView != null && handler instanceof HandlerMethod ) {			
+			// y se lo pasamos a la vista
+			modelAndView.addObject("horario", mensaje);
+		}
 	}
 	
 	
