@@ -26,7 +26,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		// Si no agregamos el patron de ruta (addPathPatterns()) el intetceptor se va a aplicar de forma global
 		// a todas las ruta, por lo tanto si queremos que sean algunas en específico debemos indicar dicho método
 		// addPathPatterns y para el cual se pasa una lista de string sepsrada por coma (Ej: .addPathPatterns("/form/**", "/admin/usuarios");)
-		registry.addInterceptor(tiempoTranscurridoInterceptor);
+		registry.addInterceptor(tiempoTranscurridoInterceptor).addPathPatterns("/form/**");
 	}
 	
 	

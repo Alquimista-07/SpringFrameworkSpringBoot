@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--Le asignamos un nombre al fragmento-->
+<section th:fragment="interceptor">
+	<!--También usamos la directiva de thymeleaf if para validar y mostrar de forma condicional el fagmento debido a que 
+	    ahora indicamos con el addPathPatterns registramos solo unas rutas en específico al momento de registrar el interceptor-->
+	<div class="alert alert-success" th:if="${tiempoTranscurrido != null}">
+		<!--Usamos el interceptor en la vista usando el nombre que le dimos en el modelAndView para pasarlo a la vista-->
+		<span th:text="'Tiempo transcurrido: ' + ${tiempoTranscurrido + ' en milisegundos'}"></span>
+	</div>
+</section>
+
+</body>
+</html>

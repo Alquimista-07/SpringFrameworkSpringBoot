@@ -7,10 +7,10 @@
 </head>
 <body>
 	
-<div class="alrt alert-success">
-	<!--Usamos el interceptor en la vista usando el nombre que le dimos en el modelAndView para pasarlo a la vista-->
-	<span th:text="'Tiempo transcurrido: ' + ${tiempoTranscurrido + 'en milisegundos'}"></span>
-</div>
+	<!--Usamos el fragmento que creamos como un componente para evitar la repetición de código
+	    para el cual usamos el replace y le pasamos la ubicación con el nombre del archivo sin
+	    extensión y adicionalmente el identificador que le asignamos (interceptor)-->
+	<section th:replace="componentes/tiempo :: interceptor"></section>
 
 	<h3 th:text="${titulo}"></h3>
 	<div class="container">
