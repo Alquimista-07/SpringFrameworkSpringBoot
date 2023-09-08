@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
  *       a un conjunto de Actions.
  */
 
-@Component
+@Component("tiempoTranscurridoInterceptor")
 public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 	
 	// Atributo log para poder registrar eventos en el log o traza de la aplicación
@@ -33,8 +34,19 @@ public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
+		// Validamos si es instancia del controlador
+		if( handler instanceof HandlerMethod ) {
+			HandlerMethod metodo = (HandlerMethod) handler;
+			logger.info("Es un método del controlador " + metodo.getMethod().getName() );
+		}
+		
 		// Con el logger podemos mostrar información del interceptor
 		logger.info("TiempoTranscurridoInterceptor: preHandle() entrando...");
+		
+		// Para ver o saber que recursos se están invocando, si es un controlador, si es un método handler,
+		// si es una hoja de estilos. Para esto podemos usar el logger podemos imprimir el handler de la 
+		// siguiente forma:
+		logger.info("Interceptando: " + handler);
 		
 		// Calculamos el tiempo en ms el tiempo actual
 		long tiempoInicio = System.currentTimeMillis();
@@ -66,8 +78,8 @@ public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 		
 		long tiempoTranscurrido = tiempoFin - tiempoInicio;
 		
-		// Pasamos los datos a la vista
-		if( modelAndView != null ) {
+		// Pasamos los datos a la vista y validamos para evitar errores
+		if( handler instanceof HandlerMethod && modelAndView != null ) {
 			modelAndView.addObject("tiempoTranscurrido", tiempoTranscurrido);
 		}
 		
