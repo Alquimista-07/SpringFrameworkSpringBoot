@@ -73,6 +73,15 @@ public class TiempoTranscurridoInterceptor implements HandlerInterceptor {
 		// Si retorna true continua con la ejecución normal del controlador y demás interceptores
 		// de lo contrario si es false termina la ejecución.
 		return true;
+		
+		// Si realizaramos lo siguiente nos serviría por ejemplo para redirigir en caso de que el usuario no este
+		// autenticado, por lo tanto devolveríamos false al interceptor y haríamos la redirección. O en caso de que 
+		// por ejemplo ya no se estuviera atendiendo debido al horario también lo podríamos hacer
+		/*
+		response.sendRedirect(request.getContextPath().concat("/login"));
+		return false;
+		*/
+		
 	}
 
 	@Override
