@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.bolsadeideas.springboot.error.app.errors.UsuarioNoEncontradoException;
+
 // NOTA: Esta clase va a ser un controlador personalizado que nos va a permitir manejar errores como por
 //       ejemplo el ArithmeticException que se genera al dividir por cero. Con la diferencia es que este
 //       controlador no se anota como lo haríamos normalmente con el @Controller sino que se anota con el 
@@ -45,5 +47,15 @@ public class ErrorHandlerController {
 		model.addAttribute("timestamp", new Date());
 		return "error/numero-formato";
 	}
+	
+	// Creamos el método para capturar la excepción del usuario no encontrado
+		@ExceptionHandler(UsuarioNoEncontradoException.class)
+		public String usuarioNoEncontrado(UsuarioNoEncontradoException ex, Model model) {
+			model.addAttribute("error", "Error: Usuario no encontrado!");
+			model.addAttribute("message", ex.getMessage());
+			model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+			model.addAttribute("timestamp", new Date());
+			return "error/usuario";
+		}
 	
 }

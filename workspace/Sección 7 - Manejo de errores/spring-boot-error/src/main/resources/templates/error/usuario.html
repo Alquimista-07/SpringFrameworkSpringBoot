@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${error}"></title>
+</head>
+<body>
+	
+	<!--NOTA: Por defecto sprigboot ya tiene una configuración para el manejo de errores como el 500, 404, etc
+	          por lo tanto solo con crear el directorior llamado error (OJO: Importante que se llame de esa forma)
+	          y dentro de dicho directorio agregar un html por ejemplo 500 (OJO: Es importante que cada archivo html
+	          se llame como el error que prentende manejar) y de esta forma automáticamente cuando se detecte este tipo
+	          de errores springboot va a mostrar la vista correspondiente -->
+	
+	<h3 th:text="${error}"></h3>
+	
+	<!--NOTA: Colocamos el más detallado del error usando objetos propios de springboot -->
+	<div th:text="${message}"></div>
+
+</body>
+</html>
