@@ -31,11 +31,23 @@ public class AppController {
 	
 	@GetMapping("/ver/{id}")
 	public String ver(@PathVariable Integer id, Model model) {
+		// NOTA: Como vamos a usar el Optional de Java 8 esta llamado del método
+		//       que teníamos anteriormente sino el nuevo méotodo que tiene el 
+		//       Optionaly la validación con el if ya no son necesarios, ya que 
+		//       el usuario lo obtenemos y lo validamos de otra forma.
+		/*
 		Usuario usuario = usuarioService.obtenerPorId(id);
 		
 		if ( usuario == null ) {
 			throw new UsuarioNoEncontradoException(id.toString());
 		}
+		*/
+		
+		// Ahora llamamos el método que creamos con el optional y le pasamos una expresión lamda para crear la instancia
+		// y ya esto por debajo va a retornar la excepción cuando sea necesario. Y ya con esto el resultado es el mismo
+		// como el que teníamos anteriormente solo que ahora lo manejamos de una forma más elegante en una sola línea de
+		// código.
+		Usuario usuario = usuarioService.obtenerPorIdOptional(id).orElseThrow( () -> new UsuarioNoEncontradoException(id.toString()) );
 		
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("titulo", "Detalle usuario: ".concat(usuario.getNombre()));

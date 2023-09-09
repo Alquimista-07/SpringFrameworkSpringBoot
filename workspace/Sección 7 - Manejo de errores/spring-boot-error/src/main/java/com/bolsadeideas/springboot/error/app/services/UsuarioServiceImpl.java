@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.error.app.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		
 		return resultado;
+	}
+
+	@Override
+	public Optional<Usuario> obtenerPorIdOptional(Integer id) {
+		Usuario usuario = this.obtenerPorId(id);
+		// Acá con este of lo que hacemos es convertir el objeto usuario, independiente si es enulo o no
+		// en un tipo optional y de este sale dos métodos, el of y el ofNullable. El of no acepta nulos 
+		// y el ofNullable si los acepta
+		return Optional.ofNullable(usuario);
 	}
 
 }
