@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${error}"></title>
+</head>
+<body>
+	
+	<!--NOTA: Por defecto sprigboot ya tiene una configuración para el manejo de errores como el 500, 404, etc
+	          por lo tanto solo con crear el directorior llamado error (OJO: Importante que se llame de esa forma)
+	          y dentro de dicho directorio agregar la vista para el manejo de errores que personalizamos -->
+	
+	<h3 th:text="${error}"></h3>
+	
+	<!--NOTA: Colocamos más detalles del error -->
+	<div th:text="${message}"></div>
+	<div th:text="${status}"></div>
+	<div th:text="${timestamp}"></div>
+
+</body>
+</html>
