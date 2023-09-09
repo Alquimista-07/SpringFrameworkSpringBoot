@@ -12,7 +12,10 @@ public class AppController {
 	// indica que la variable no se esta usando.
 	@SuppressWarnings("unused")
 	public String index () {
-		Integer valor = 100 / 0;
+		//Integer valor = 100 / 0;
+		
+		// Obligamos un error de number format exception
+		Integer valor = Integer.parseInt("10e10");
 		return "index";
 	}
 

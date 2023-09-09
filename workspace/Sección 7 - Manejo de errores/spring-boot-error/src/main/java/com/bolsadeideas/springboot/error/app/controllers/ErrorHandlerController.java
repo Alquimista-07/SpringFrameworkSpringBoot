@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 //       a una vista.
 @ControllerAdvice
 public class ErrorHandlerController {
+	
+	// OJO NOTA: En este caso estamos creando una plantilla html para cada excepción, pero esto no sería necesario
+	//           ya que si nos damos cuenta básicamente el contendido que le estamos pasando con el model es el mismo
+	//           por lo tanto podríamos crear una plantilla genérica y apuntar en el return de cada método a esa plantilla
+	//           html en la vista.
 
 	// NOTA: Como se mencionó anteriormente acá no se mapea a una ruta sino a una excepción
 	//       por lo tanto anotamos con @ExceptionHandler() y le pasamos como argumento la
@@ -29,6 +34,16 @@ public class ErrorHandlerController {
 		model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 		model.addAttribute("timestamp", new Date());
 		return "error/aritmetica";
+	}
+	
+	// Creamos el método para capturar la excepción de NumberFormat Exception
+	@ExceptionHandler(NumberFormatException.class)
+	public String numeroFormatoError(NumberFormatException ex, Model model) {
+		model.addAttribute("error", "Error: Fomato de número incorrecto!");
+		model.addAttribute("message", ex.getMessage());
+		model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+		model.addAttribute("timestamp", new Date());
+		return "error/numero-formato";
 	}
 	
 }
