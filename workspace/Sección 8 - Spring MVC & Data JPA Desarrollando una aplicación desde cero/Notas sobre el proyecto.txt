@@ -1,0 +1,8 @@
+NOTA: Las dependencias usadas para el proyecto son:
+
+- Spring Boot DevTools
+- Spring Data JPA
+- H2 Dabase (Base de datos en desarrollo)
+- MySQL Drive (Conector base de datos producción)
+- Thymeleaf
+- Spring Web
