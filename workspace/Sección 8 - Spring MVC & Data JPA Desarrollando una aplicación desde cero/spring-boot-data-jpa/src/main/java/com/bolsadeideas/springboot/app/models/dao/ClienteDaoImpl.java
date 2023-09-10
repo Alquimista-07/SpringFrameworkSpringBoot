@@ -13,8 +13,10 @@ import jakarta.persistence.PersistenceContext;
 // NOTA: Esta clase es un objeto de acceso a datos (en inglés: data access object, abreviado DAO) es un componente de software que suministra 
 //       una interfaz común entre la aplicación y uno o más dispositivos de almacenamiento de datos, tales como una Base de datos o un archivo
 
-// NOTA: La anotación @Repository se usa para marcar la clase como un componente de persitencia de acceso a datos (DAO)
-@Repository
+// NOTA: La anotación @Repository se usa para marcar la clase como un componente de persitencia de acceso a datos (DAO).
+//       Adicionalmente podemos indicar el nombre como parámetro entre comillas para poder usarlo con la anotación @Qualifier
+//       cuando queramos inyectar
+@Repository("clienteDaoJPA")
 public class ClienteDaoImpl implements IClienteDao {
 
 	// NOTA: Creamos el atributo entity manager el cual se encarga de manejar las clases que son entidades (que son anotadas con @Entity), su 
