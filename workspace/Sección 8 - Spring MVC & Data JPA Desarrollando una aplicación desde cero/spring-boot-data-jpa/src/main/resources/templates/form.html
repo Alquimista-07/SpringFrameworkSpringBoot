@@ -31,6 +31,17 @@
 		
 		<h1 th:text=${titulo} class="text-primary border border-secondary border-top-0 border-left-0 border-right-0"></h1>
 		
+		<!-- NOTA: Como este contenedor es usado solo para pasar lo mensajes a la vista no es necesario imprimir el contenedor
+		            html por lo tanto lo eliminamos usando el th:remove
+		-->
+		<div th:object=${cliente} th:remove="tag">
+			<!-- NOTA: Cuando le pasamos el * al helper indicamos que no es un campo específico sino que son todos y lo usamos para
+			           validar con un if si hay algún error en algún campo para mostrar el elemento html -->
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+				<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+			</ul>
+		</div>
+		
 		<!--NOTA: Usamos el action para pasar la url del método POST que envía el formulario y que definimos en el controlador,
 		          adicionalmente con el objet mapeamos el objeto al formulario y también el métod que tiene que se POST-->
 		<form th:action="@{/form}" th:object="${cliente}" method="post">
