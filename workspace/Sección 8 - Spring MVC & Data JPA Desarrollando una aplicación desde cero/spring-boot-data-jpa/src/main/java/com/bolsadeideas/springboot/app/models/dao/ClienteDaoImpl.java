@@ -61,9 +61,18 @@ public class ClienteDaoImpl implements IClienteDao {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Cliente findOne(Long id) {
 		// Buscamos un cliente por id usando un método propio del entity manager
 		return em.find(Cliente.class, id);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		// Obtenemos el cliente a eliminar usando el méotodo findOne previamente impementado
+		// y se lo pasamos al método propio del entity manager que sirve para eliminar
+		em.remove(findOne(id));
 	}
 
 }
