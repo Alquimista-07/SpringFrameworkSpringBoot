@@ -95,8 +95,11 @@
 					</div>
 				</div>
 			
+			<!-- NOTA ACTUALIZACIÓN: Decidimos almacenar el objeto cliente completo en el Session Attribute y de ahí usar el id ya que tenemos el objeto con todos sus atributos almacenado allá
+			                         entonces para pasar el objeto al sessión attribute anotamos con @SessionAttributes en el controlador. Y esto lo hacemos es porque es una mejor práctica y es
+			                         más seguro -->
 			<!-- NOTA: El id como es autoincremental lo podemos dejar oculto -->
-			<input type="hidden" th:field="*{id}">
+			<!-- <input type="hidden" th:field="*{id}"> -->
 			
 		</form>
 	</div>

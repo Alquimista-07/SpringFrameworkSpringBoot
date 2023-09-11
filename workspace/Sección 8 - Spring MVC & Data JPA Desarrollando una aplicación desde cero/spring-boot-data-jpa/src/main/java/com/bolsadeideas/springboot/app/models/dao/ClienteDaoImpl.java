@@ -48,7 +48,22 @@ public class ClienteDaoImpl implements IClienteDao {
 	@Override
 	@Transactional
 	public void save(Cliente cliente) {
-		em.persist(cliente);		
+		// Validamos para saber si es un cliente nuevo o uno que vamos a editar
+		if (cliente.getId() != null && cliente.getId() > 0) {
+			// Editamos el cliente usando un método propio del entity manager
+			em.merge(cliente);
+		} else {	
+			// Si no indica que es un cliente nuevo por lo tanto guardamos en la base de datos usando
+			// el persist que es un método propio del entity manager
+			em.persist(cliente);		
+		}
+		
+	}
+
+	@Override
+	public Cliente findOne(Long id) {
+		// Buscamos un cliente por id usando un método propio del entity manager
+		return em.find(Cliente.class, id);
 	}
 
 }
