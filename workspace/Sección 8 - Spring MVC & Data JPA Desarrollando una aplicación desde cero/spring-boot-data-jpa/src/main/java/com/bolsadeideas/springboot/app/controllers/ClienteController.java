@@ -44,7 +44,7 @@ public class ClienteController {
 	}
 	
 	// Método para procesar o enviar los datos del formulario
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar( Cliente cliente ) {
 		clienteDao.save(cliente);
 		return "redirect:listar";

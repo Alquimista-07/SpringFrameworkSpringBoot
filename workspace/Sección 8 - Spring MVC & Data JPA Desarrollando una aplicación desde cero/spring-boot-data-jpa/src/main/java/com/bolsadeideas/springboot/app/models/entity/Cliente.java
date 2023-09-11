@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -67,6 +68,15 @@ public class Cliente implements Serializable {
 	//       el TIME (solo la hora) y el TIMESTAMP (Fecha y hora).
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+	
+	// Método para cargar la fecha antes de guardar en la base de datos
+	// Y para que sea gestionado y llamado por el entity manager y se 
+	// ejecute como un evento antes de guardar en la base de datos es
+	// necesario decorar con el @PrePersist
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 
 	// -------------------------------
 	// Getters y Setters
