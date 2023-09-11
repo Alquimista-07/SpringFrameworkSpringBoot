@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.bolsadeideas.springboot.app.models.dao.IClienteDao;
+import com.bolsadeideas.springboot.app.models.dao.service.IClienteService;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 
 import jakarta.validation.Valid;
@@ -22,10 +22,11 @@ import jakarta.validation.Valid;
 @SessionAttributes("cliente")
 public class ClienteController {
 	
-	// Inyectamos la interface DAO para el llamado a los métodos
+	// Como realizamos el refactor para implementar la clase service ahora ya no inyectamos el DAO directamente
+	// sino que inyectamos el servicio
 	@Autowired
-	@Qualifier("clienteDaoJPA")
-	private IClienteDao clienteDao;
+	@Qualifier("clienteServiceJPA")
+	private IClienteService clienteService;
 	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
@@ -33,7 +34,7 @@ public class ClienteController {
 		model.addAttribute("titulo", "Listado de clientes");
 		// Usamos el atributo que creamos y que hace referencia a la interface para llamar el método
 		// y se lo pasamos a la vista para mostrarlo
-		model.addAttribute("clientes", clienteDao.findAll());
+		model.addAttribute("clientes", clienteService.findAll());
 		return "listar";
 	}
 	
@@ -65,7 +66,7 @@ public class ClienteController {
 			return "form";
 		}
 		
-		clienteDao.save(cliente);
+		clienteService.save(cliente);
 		// Limpiamos el session atribute
 		status.setComplete();
 		return "redirect:listar";
@@ -79,7 +80,7 @@ public class ClienteController {
 		
 		if ( id > 0 ) {
 			// Buscamos en la base de datos
-			cliente = clienteDao.findOne(id);
+			cliente = clienteService.findOne(id);
 		} else {
 			return "redirect:/listar";
 		}
@@ -94,7 +95,7 @@ public class ClienteController {
 	public String eliminar( @PathVariable(value = "id") Long id ) {
 		
 		if ( id > 0 ) {
-			clienteDao.delete(id);
+			clienteService.delete(id);
 		}
 		
 			return "redirect:/listar";

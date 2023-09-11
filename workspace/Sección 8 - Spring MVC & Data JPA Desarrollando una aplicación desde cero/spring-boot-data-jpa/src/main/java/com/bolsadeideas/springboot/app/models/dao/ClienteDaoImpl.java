@@ -3,7 +3,6 @@ package com.bolsadeideas.springboot.app.models.dao;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 
@@ -16,7 +15,7 @@ import jakarta.persistence.PersistenceContext;
 // NOTA: La anotación @Repository se usa para marcar la clase como un componente de persitencia de acceso a datos (DAO).
 //       Adicionalmente podemos indicar el nombre como parámetro entre comillas para poder usarlo con la anotación @Qualifier
 //       cuando queramos inyectar
-@Repository("clienteDaoJPA")
+@Repository
 public class ClienteDaoImpl implements IClienteDao {
 
 	// NOTA: Creamos el atributo entity manager el cual se encarga de manejar las clases que son entidades (que son anotadas con @Entity), su 
@@ -34,10 +33,6 @@ public class ClienteDaoImpl implements IClienteDao {
 	
 	// Suprimimos los warnings
 	@SuppressWarnings("unchecked")
-	// NOTA: Esta anotación @Transactional importada del paquete de spring marcamos el método como transaccional y le indicamos que es solamente de
-	//       lectura, ya que como tal solo es una consulta. Pero cuando es un insert es decir un persist, el parámetro readOnly lo podemos omitir
-	//       ya que por obvias rezones no es solo de lectura sino también de escritura
-	@Transactional(readOnly = true)
 	@Override
 	public List<Cliente> findAll() {
 		// NOTA: Acá en el return de este método creamos una consulta usando el método createQuery, el cual recibe como parámetro
@@ -46,7 +41,6 @@ public class ClienteDaoImpl implements IClienteDao {
 	}
 
 	@Override
-	@Transactional
 	public void save(Cliente cliente) {
 		// Validamos para saber si es un cliente nuevo o uno que vamos a editar
 		if (cliente.getId() != null && cliente.getId() > 0) {
@@ -61,14 +55,12 @@ public class ClienteDaoImpl implements IClienteDao {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Cliente findOne(Long id) {
 		// Buscamos un cliente por id usando un método propio del entity manager
 		return em.find(Cliente.class, id);
 	}
 
 	@Override
-	@Transactional
 	public void delete(Long id) {
 		// Obtenemos el cliente a eliminar usando el méotodo findOne previamente impementado
 		// y se lo pasamos al método propio del entity manager que sirve para eliminar
