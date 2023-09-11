@@ -3,6 +3,8 @@ package com.bolsadeideas.springboot.app.models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -67,16 +69,26 @@ public class Cliente implements Serializable {
 	//       guardar la fecha en la tabla de la base de datos. Y para esto tenemos el DATE (Solo fecha),
 	//       el TIME (solo la hora) y el TIMESTAMP (Fecha y hora).
 	@Temporal(TemporalType.DATE)
+	// NOTA: Con @DateTimeFormat especificamos el formato de la fecha
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
+	
+	
+	//---------------------------------------------------------------------------------------------------------------------
+	// NOTA: Este método lo comentamos ya que agregamos un campo adicional en el formulario para ingresar la fecha 
+	//       y no generarla por sistema como estabamos haciendo.
 	
 	// Método para cargar la fecha antes de guardar en la base de datos
 	// Y para que sea gestionado y llamado por el entity manager y se 
 	// ejecute como un evento antes de guardar en la base de datos es
 	// necesario decorar con el @PrePersist
+	/*
 	@PrePersist
 	public void prePersist() {
 		createAt = new Date();
 	}
+	*/
+	//---------------------------------------------------------------------------------------------------------------------
 
 	// -------------------------------
 	// Getters y Setters

@@ -57,8 +57,12 @@
 					</div>
 				</div>
 	
-				<!-- NOTA: Adicionalmente la fecha no la agregamos en el formulario ya que vamos a tener un método prePersist (antes de guardar en la base de datos) que se va a llamar para cargarla al atributo con la fecha
-				           al enviar el formulario -->
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-control">Fecha</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" th:field="*{createAt}">
+					</div>
+				</div>
 	
 				<!-- NOTA: Input de tipo submit para simular el botón -->
 				<div class="form-group row">
