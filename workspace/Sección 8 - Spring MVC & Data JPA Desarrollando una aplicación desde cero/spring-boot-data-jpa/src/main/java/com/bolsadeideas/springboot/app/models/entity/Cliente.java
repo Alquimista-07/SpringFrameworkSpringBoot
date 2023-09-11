@@ -14,6 +14,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 // NOTA: Esta clase entity es la que va a estar mapeada a la tabla de base de datos. Por lo tanto lo que hacemos para indicar que 
 //       una clase POJO con atributos y métodos getter y setter que están mapeados a una tabla es una entidad de JPA o Hibernate
@@ -59,11 +62,17 @@ public class Cliente implements Serializable {
 	//
 	//       Ejemplo: @Column(name = "nombre_cliente", length = 30, unique = true)
 	//
+	@NotEmpty
 	private String nombre;
 
+	@NotEmpty
 	private String apellido;
+	
+	@NotEmpty
+	@Email
 	private String email;
 
+	@NotNull
 	@Column(name = "create_at")
 	// NOTA: Esta anotación @Temporal solo se usa para fechas e indica el formato en el cual se va a 
 	//       guardar la fecha en la tabla de la base de datos. Y para esto tenemos el DATE (Solo fecha),
