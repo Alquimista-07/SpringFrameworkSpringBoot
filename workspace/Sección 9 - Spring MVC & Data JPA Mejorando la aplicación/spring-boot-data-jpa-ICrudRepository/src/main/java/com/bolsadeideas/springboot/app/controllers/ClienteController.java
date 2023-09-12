@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.dao.service.IClienteService;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
+import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
 import jakarta.validation.Valid;
 
@@ -46,6 +47,10 @@ public class ClienteController {
 		// Invocamos el servide findAll pero paginable, es decir el nuevo método que agregamos en la
 		// interface IClienteService
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+		
+		// Llamamos nuesto page render generico ya que sirve para paginar cualquier objeto no solo clientes.
+		// Y el cual recibe la url y lo que devuelve el método findAll()
+		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
 		model.addAttribute("titulo", "Listado de clientes");
 		// Usamos el atributo que creamos y que hace referencia a la interface para llamar el método
@@ -54,6 +59,9 @@ public class ClienteController {
 		// NOTA ACTUALIZACIÓN: Comentamos esto para cambiar por el atributo que tiene los datos paginados
 		//model.addAttribute("clientes", clienteService.findAll());
 		model.addAttribute( "clientes", clientes );
+		
+		// Agregamos el paginador a la vista
+		model.addAttribute( "page", pageRender );
 		
 		return "listar";
 	}
