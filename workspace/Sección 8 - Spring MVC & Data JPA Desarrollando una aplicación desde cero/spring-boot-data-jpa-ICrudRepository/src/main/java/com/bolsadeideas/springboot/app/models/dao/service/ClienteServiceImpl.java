@@ -28,7 +28,9 @@ public class ClienteServiceImpl implements IClienteService{
 	//       ya que por obvias rezones no es solo de lectura sino también de escritura
 	@Transactional(readOnly = true)
 	public List<Cliente> findAll() {
-		return clienteDao.findAll();
+		// NOTA: Casteamos a un list de cliente ya que el findAll() de la interface CrudRepository retorna un iterable.
+		//       y esto para no tener que cambiar el método que previamente teníamos ya implementado.
+		return (List<Cliente>) clienteDao.findAll();
 	}
 
 	@Override
@@ -40,13 +42,19 @@ public class ClienteServiceImpl implements IClienteService{
 	@Override
 	@Transactional(readOnly = true)
 	public Cliente findOne(Long id) {
-		return clienteDao.findOne(id);
+		// NOTA: Cambiamos el findOne que teníamos previamente y que creamos nosotros mismos por un método propio de la interface
+		//       CrudRepository, y el cual recibe el id y retorna un Optional de cliente. Lo que hace un Optional básicamente es
+		//       envolver el resultado de la consulta con sus propios métodos, como get(), orElse(), entre otros.
+		//       En ese caso usmao el orElse, que básicamente indica que si lo encuentra lo retorna y si no retorna un null.
+		return clienteDao.findById(id).orElse(null);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		clienteDao.delete(id);
+		// NOTA: Acá aplica lo mismo que el anterior método en el cual cambiamos el método que teniamos propio por el de la interface
+		//       CrudRepository
+		clienteDao.deleteById(id);
 	}
 
 	
