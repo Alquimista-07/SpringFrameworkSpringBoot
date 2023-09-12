@@ -5,81 +5,86 @@
 	
 <header th:replace="layout/layout :: header"></header>
 	
-	<div class="container">
+	<div class="container py-4">
 		
-		<h1 th:text=${titulo} class="text-primary border border-secondary border-top-0 border-left-0 border-right-0"></h1>
+		<div class="card bg-dark text-white">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
 		
-		<!-- NOTA: Como este contenedor es usado solo para pasar lo mensajes a la vista no es necesario imprimir el contenedor
-		            html por lo tanto lo eliminamos usando el th:remove
-		-->
-		<div th:object=${cliente} th:remove="tag">
-			<!-- NOTA: Cuando le pasamos el * al helper indicamos que no es un campo específico sino que son todos y lo usamos para
-			           validar con un if si hay algún error en algún campo para mostrar el elemento html -->
-			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-				<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
-			</ul>
-		</div>
 		
-		<!--NOTA: Usamos el action para pasar la url del método POST que envía el formulario y que definimos en el controlador,
-		          adicionalmente con el objet mapeamos el objeto al formulario y también el métod que tiene que se POST-->
-		<form th:action="@{/form}" th:object="${cliente}" method="post">
-			
-			<!-- NOTA: Para mapear cada uno de los campos a los atributos de la clase Cliente usamos el th:field="*{}" -->
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Nombre</label>
-					<div class="col-sm-6">
-						<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
-						<input type="text" th:field="*{nombre}" class="form-control"  th:errorclass="'form-control alert-danger'">
-						<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
-						<small class="form-text text-danger" th:if=${#fields.hasErrors('nombre')} th:errors="*{nombre}"></small>
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Apellido</label>
-					<div class="col-sm-6">
-						<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
-						<input type="text" th:field="*{apellido}" class="form-control" th:errorclass="'form-control alert-danger'">
-						<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
-						<small class="form-text text-danger" th:if=${#fields.hasErrors('apellido')} th:errors="*{apellido}"></small>
-					</div>
+				<!-- NOTA: Como este contenedor es usado solo para pasar lo mensajes a la vista no es necesario imprimir el contenedor
+				            html por lo tanto lo eliminamos usando el th:remove
+				-->
+				<div th:object=${cliente} th:remove="tag">
+					<!-- NOTA: Cuando le pasamos el * al helper indicamos que no es un campo específico sino que son todos y lo usamos para
+					           validar con un if si hay algún error en algún campo para mostrar el elemento html -->
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
 				</div>
 				
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Email</label>
-					<div class="col-sm-6">
-						<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
-						<!--      Adicionalmente se cambio el type del input de email a text para que no valide con HTML5 sino directamente con las validaciones de thymeleaf-->
-						<input type="text" th:field="*{email}" class="form-control" th:errorclass="'form-control alert-danger'">
-						<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
-						<small class="form-text text-danger" th:if=${#fields.hasErrors('email')} th:errors="*{email}"></small>
-					</div>
-				</div>
-	
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-control">Fecha</label>
-					<div class="col-sm-6">
-						<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
-						<input type="text" class="form-control" th:field="*{createAt}" th:errorclass="'form-control alert-danger'">
-						<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
-						<small class="form-text text-danger" th:if=${#fields.hasErrors('createAt')} th:errors="*{createAt}"></small>
-					</div>
-				</div>
-	
-				<!-- NOTA: Input de tipo submit para simular el botón -->
-				<div class="form-group row">
-					<div class="col-sm-6">
-						<input type="submit" value="Crear cliente" class="btn btn-primary">
-					</div>
-				</div>
+				<!--NOTA: Usamos el action para pasar la url del método POST que envía el formulario y que definimos en el controlador,
+				          adicionalmente con el objet mapeamos el objeto al formulario y también el métod que tiene que se POST-->
+				<form th:action="@{/form}" th:object="${cliente}" method="post">
+					
+					<!-- NOTA: Para mapear cada uno de los campos a los atributos de la clase Cliente usamos el th:field="*{}" -->
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Nombre</label>
+							<div class="col-sm-6">
+								<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
+								<input type="text" th:field="*{nombre}" class="form-control"  th:errorclass="'form-control alert-danger'">
+								<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
+								<small class="form-text text-danger" th:if=${#fields.hasErrors('nombre')} th:errors="*{nombre}"></small>
+							</div>
+						</div>
+		
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Apellido</label>
+							<div class="col-sm-6">
+								<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
+								<input type="text" th:field="*{apellido}" class="form-control" th:errorclass="'form-control alert-danger'">
+								<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
+								<small class="form-text text-danger" th:if=${#fields.hasErrors('apellido')} th:errors="*{apellido}"></small>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Email</label>
+							<div class="col-sm-6">
+								<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
+								<!--      Adicionalmente se cambio el type del input de email a text para que no valide con HTML5 sino directamente con las validaciones de thymeleaf-->
+								<input type="text" th:field="*{email}" class="form-control" th:errorclass="'form-control alert-danger'">
+								<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
+								<small class="form-text text-danger" th:if=${#fields.hasErrors('email')} th:errors="*{email}"></small>
+							</div>
+						</div>
 			
-			<!-- NOTA ACTUALIZACIÓN: Decidimos almacenar el objeto cliente completo en el Session Attribute y de ahí usar el id ya que tenemos el objeto con todos sus atributos almacenado allá
-			                         entonces para pasar el objeto al sessión attribute anotamos con @SessionAttributes en el controlador. Y esto lo hacemos es porque es una mejor práctica y es
-			                         más seguro -->
-			<!-- NOTA: El id como es autoincremental lo podemos dejar oculto -->
-			<!-- <input type="hidden" th:field="*{id}"> -->
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-control">Fecha</label>
+							<div class="col-sm-6">
+								<!--NOTA: Con el th:errorclass lo que hacemos es alterar la clase css del elemento para mostrarla en este caso en color rojo e indicar que tiene error -->
+								<input type="text" class="form-control" th:field="*{createAt}" th:errorclass="'form-control alert-danger'">
+								<!--NOTA: Mostramos el mensje de error usando el helper de thymeleaf fields y que colocamos con #-->
+								<small class="form-text text-danger" th:if=${#fields.hasErrors('createAt')} th:errors="*{createAt}"></small>
+							</div>
+						</div>
 			
-		</form>
+						<!-- NOTA: Input de tipo submit para simular el botón -->
+						<div class="form-group row">
+							<div class="col-sm-6">
+								<input type="submit" value="Crear cliente" class="btn btn-secondary">
+							</div>
+						</div>
+					
+					<!-- NOTA ACTUALIZACIÓN: Decidimos almacenar el objeto cliente completo en el Session Attribute y de ahí usar el id ya que tenemos el objeto con todos sus atributos almacenado allá
+					                         entonces para pasar el objeto al sessión attribute anotamos con @SessionAttributes en el controlador. Y esto lo hacemos es porque es una mejor práctica y es
+					                         más seguro -->
+					<!-- NOTA: El id como es autoincremental lo podemos dejar oculto -->
+					<!-- <input type="hidden" th:field="*{id}"> -->
+					
+				</form>
+			</div>
+		</div>
 	</div>
 	
 	<footer th:replace="layout/layout :: footer"></footer>
