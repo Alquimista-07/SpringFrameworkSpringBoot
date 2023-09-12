@@ -4,12 +4,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,13 +33,28 @@ public class ClienteController {
 	@Qualifier("clienteServiceJPA")
 	private IClienteService clienteService;
 	
-	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping
+	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
-	public String listar(Model model) {
+	// NOTA: Vamos a usar el request param para obtener la página actual y de esta forma llamar al nuevo método que creamos
+	//       y que se encarga de la paginación.
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+		
+		// Creamos el objeto pageable para la paginación al cual le pasamos como primer parametro
+		// la página actual y como segundo la cantidad de elementos a mostrar por página.
+		Pageable pageRequest = PageRequest.of(page, 4);
+		
+		// Invocamos el servide findAll pero paginable, es decir el nuevo método que agregamos en la
+		// interface IClienteService
+		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+
 		model.addAttribute("titulo", "Listado de clientes");
 		// Usamos el atributo que creamos y que hace referencia a la interface para llamar el método
 		// y se lo pasamos a la vista para mostrarlo
-		model.addAttribute("clientes", clienteService.findAll());
+		
+		// NOTA ACTUALIZACIÓN: Comentamos esto para cambiar por el atributo que tiene los datos paginados
+		//model.addAttribute("clientes", clienteService.findAll());
+		model.addAttribute( "clientes", clientes );
+		
 		return "listar";
 	}
 	

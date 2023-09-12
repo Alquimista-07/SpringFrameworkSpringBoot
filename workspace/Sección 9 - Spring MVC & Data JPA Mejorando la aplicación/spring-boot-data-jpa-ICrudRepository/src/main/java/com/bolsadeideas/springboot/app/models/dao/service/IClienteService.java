@@ -2,11 +2,17 @@ package com.bolsadeideas.springboot.app.models.dao.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 
 public interface IClienteService {
 	
 	public List<Cliente> findAll();
+	
+	// Método para manejar la paginación
+	public Page<Cliente> findAll(Pageable pageable);
 	
 	public void save(Cliente cliente);
 	
