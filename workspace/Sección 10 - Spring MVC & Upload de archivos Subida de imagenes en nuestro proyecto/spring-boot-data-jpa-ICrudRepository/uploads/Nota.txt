@@ -1,0 +1,2 @@
+// Este es el directorio para almacenar imágenes cuando usamos la tercera forma de pasar la ruta 
+// al cargar los archvios en el método guardar del controlador

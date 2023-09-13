@@ -5,7 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -38,6 +41,9 @@ public class ClienteController {
 	@Autowired
 	@Qualifier("clienteServiceJPA")
 	private IClienteService clienteService;
+	
+	// Creamos un logger para hacer debug de los nombres de directorio en la consola en el método de guardar
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
@@ -103,33 +109,63 @@ public class ClienteController {
 		// Validamos la foto y pasamos el path donde se van a guardar las imágenes
 		if ( !foto.isEmpty() ) {
 			
+			//----------------------------------------------------------------------
+			// PRIMER MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
+			//----------------------------------------------------------------------
 			// NOTA: Comentamos esto ya que vamos a pasar de un directorio dentro del proyecto a otro directorio
 			//       fuera de este en otra ubicación.
 			// Path directorioRecursos = Paths.get("src/main/resources/static/uploads");
 			// String rootPath = directorioRecursos.toFile().getAbsolutePath();
 			
+			//----------------------------------------------------------------------
+			// SEGUNDO MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
+			//----------------------------------------------------------------------
 			// NOTA: Esto es para windows, pero por ejemplo en linux pasariamos 
 			//       la ubicación como "file:/opt/uploads/"
 			//       físico.
-			String rootPath = "C://Temp//uploads";
-			System.out.println("Entro aca: " + rootPath);
+			// NOTA: Comentamos esto para cambiar por un directorio absoluto en la raiz del mismo proyecto,
+	        //       ya que este hace referencia a un directorio dentro del servidor.
+			//String rootPath = "C://Temp//uploads";
+			//System.out.println("Entro aca: " + rootPath);
+			
+			//----------------------------------------------------------------------
+			// TERCER MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
+			//----------------------------------------------------------------------
+			// Y generamos un uid aleatorio para que no se repitan los nombres dentro del servidor y se
+			// puedan sobreescribir archivos por error.
+			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
+			Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
+			// Ruta absoluta
+			Path rootAbsolutePath = rootPath.toAbsolutePath();
+			
+			// Log
+			log.info("rootPath: " + rootPath);
+			log.info("rootAbsolutePath: " + rootAbsolutePath);
 			
 			try {
+				// Comentamos esto para cambiarlo por el método Files.copy() para la 
+				// copia o guardado del archivo en vez de obtener lo bytes
+				//----------------------------------------------------------------------
 				// Obtenemos los bytes de la imágen
-				byte[] bytes = foto.getBytes();
+				//byte[] bytes = foto.getBytes();
 				
 				// Obtenemos la ruta final con el nombre del archivo
-				Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+				//Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
 				
 				// Gudardamos la foto
-				Files.write(rutaCompleta, bytes);
+				//Files.write(rutaCompleta, bytes);
+				//----------------------------------------------------------------------
+				
+				Files.copy(foto.getInputStream(), rootAbsolutePath);
 				
 				// Mandamos un mensaje al flash que creamos anteriormente
-				flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
+				//flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
+				flash.addFlashAttribute("info", "Ha subido correctamente '" + uniqueFilename + "'");
 				
 				// Pasamos el nombre de la foto al objeto cliente para que quede guardado en la base de datos
 				// y de esta forma poderla recuperar para mostrar o hacer alguna operación con ella.
-				cliente.setFoto(foto.getOriginalFilename());
+				//cliente.setFoto(foto.getOriginalFilename());
+				cliente.setFoto(uniqueFilename);
 			} 
 			
 			catch (IOException e) {
