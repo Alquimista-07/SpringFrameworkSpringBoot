@@ -9,7 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-	@Override
+	// NOTA: COMENTAMOS TODO EL MÉTODO PARA USAR UNA CUARTA FORMA DE SUBIR IMÁGENES
+	/*@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// TODO Auto-generated method stub
 		WebMvcConfigurer.super.addResourceHandlers(registry);
@@ -34,6 +35,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/uploads/**")
 		.addResourceLocations(resourcePath);
 	}
+	*/
 	
 	
 
