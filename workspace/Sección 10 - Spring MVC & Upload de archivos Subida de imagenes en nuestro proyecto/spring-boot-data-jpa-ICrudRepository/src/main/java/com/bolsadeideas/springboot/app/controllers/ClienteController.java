@@ -1,5 +1,9 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.dao.service.IClienteService;
@@ -85,13 +90,42 @@ public class ClienteController {
 	//       defecto esto lo maneja el framework, en caso de que por ejemplo lo pasaramos como clienteOtro, (Ejemplo: model.put("clienteOtro", cliente)) si sería necesario 
 	//       especificarlo usando como parámetro la anotación @ModelAttribute("clienteOtro") y como nos damos cuenta pasamos entre los paréntesis el nombre con el cual lo pasamo, 
 	//       pero para este caso no es necesario ya que como se mención lo estamos pasando con el mismo nombre del objeto a la vista, adicionalmente como almacenamos el objeto en el
-	//       session attribute para no usar el input que teníamos para el id en la vista, luego de guardar tenemos que limpiar dicho sessión atribute, y para ello usamos el SessionStatus
+	//       session attribute para no usar el input que teníamos para el id en la vista, luego de guardar tenemos que limpiar dicho sessión atribute, y para ello usamos el SessionStatus.
+	//       Para la subida de archivos agregamos otro parámtro que esl el @RequestParam
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar( @Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status ) {
+	public String guardar( @Valid Cliente cliente, BindingResult result, Model model, @RequestParam(name = "file") MultipartFile foto, RedirectAttributes flash, SessionStatus status ) {
 		
 		if( result.hasErrors() ) {
 			model.addAttribute("titulo", "Formulario de Cliente");
 			return "form";
+		}
+		
+		// Validamos la foto y pasamos el path donde se van a guardar las imágenes
+		if ( !foto.isEmpty() ) {
+			Path directorioRecursos = Paths.get("src/main/resources/static/uploads");
+			String rootPath = directorioRecursos.toFile().getAbsolutePath();
+			
+			try {
+				// Obtenemos los bytes de la imágen
+				byte[] bytes = foto.getBytes();
+				
+				// Obtenemos la ruta final con el nombre del archivo
+				Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+				
+				// Gudardamos la foto
+				Files.write(rutaCompleta, bytes);
+				
+				// Mandamos un mensaje al flash que creamos anteriormente
+				flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
+				
+				// Pasamos el nombre de la foto al objeto cliente para que quede guardado en la base de datos
+				// y de esta forma poderla recuperar para mostrar o hacer alguna operación con ella.
+				cliente.setFoto(foto.getOriginalFilename());
+			} 
+			
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con éxito!" : "Cliente creado con éxito!";
