@@ -14,4 +14,10 @@ public interface IUploadFileService {
 	
 	public boolean delete( String file );
 	
+	// Métodos para borrar todo el directorio uploads de forma recursiva
+	// OJO esto en entorno productivo no va ya que borra todo.
+	public void deleteAll();
+	
+	public void init() throws IOException;
+	
 }
