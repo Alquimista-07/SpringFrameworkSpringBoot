@@ -1,20 +1,12 @@
 package com.bolsadeideas.springboot.app.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.models.dao.service.IClienteService;
+import com.bolsadeideas.springboot.app.models.dao.service.IUploadFileService;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
@@ -48,11 +41,9 @@ public class ClienteController {
 	@Qualifier("clienteServiceJPA")
 	private IClienteService clienteService;
 	
-	// Creamos un logger para hacer debug de los nombres de directorio en la consola en el método de guardar
-	private final Logger log = LoggerFactory.getLogger(getClass());
-	
-	// Constante para almacenar el nombre del folder donde se guardan los archivos
-	private final static String UPLOADS_FOLDER = "uploads";
+	// Inyectamos la calse de servicio para la carga de archivos
+	@Autowired
+	private IUploadFileService uploadFileService;
 	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
@@ -122,79 +113,28 @@ public class ClienteController {
 			if ( cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null && cliente.getFoto().length() > 0 ) {
 				// Borramos la foto antigua
 				
-				// Obtenemos la ruta absoluta de la imágen para eliminarla
-				Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
-				// Obtenemos el archivo
-				File archivo = rootPath.toFile();
+				uploadFileService.delete(cliente.getFoto());
 				
-				if ( archivo.exists() && archivo.canRead() ) {
-					// Se elimina
-					archivo.delete();
-				}
 			}
 			
-			//----------------------------------------------------------------------
-			// PRIMER MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
-			//----------------------------------------------------------------------
-			// NOTA: Comentamos esto ya que vamos a pasar de un directorio dentro del proyecto a otro directorio
-			//       fuera de este en otra ubicación.
-			// Path directorioRecursos = Paths.get("src/main/resources/static/uploads");
-			// String rootPath = directorioRecursos.toFile().getAbsolutePath();
-			
-			//----------------------------------------------------------------------
-			// SEGUNDO MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
-			//----------------------------------------------------------------------
-			// NOTA: Esto es para windows, pero por ejemplo en linux pasariamos 
-			//       la ubicación como "file:/opt/uploads/"
-			//       físico.
-			// NOTA: Comentamos esto para cambiar por un directorio absoluto en la raiz del mismo proyecto,
-	        //       ya que este hace referencia a un directorio dentro del servidor.
-			//String rootPath = "C://Temp//uploads";
-			//System.out.println("Entro aca: " + rootPath);
-			
-			//----------------------------------------------------------------------
-			// TERCER MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
-			//----------------------------------------------------------------------
-			// Y generamos un uid aleatorio para que no se repitan los nombres dentro del servidor y se
-			// puedan sobreescribir archivos por error.
-			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
-			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFilename);
-			// Ruta absoluta
-			Path rootAbsolutePath = rootPath.toAbsolutePath();
-			
-			// Log
-			log.info("rootPath: " + rootPath);
-			log.info("rootAbsolutePath: " + rootAbsolutePath);
+			String uniqueFilename = null;
 			
 			try {
-				// Comentamos esto para cambiarlo por el método Files.copy() para la 
-				// copia o guardado del archivo en vez de obtener lo bytes
-				//----------------------------------------------------------------------
-				// Obtenemos los bytes de la imágen
-				//byte[] bytes = foto.getBytes();
-				
-				// Obtenemos la ruta final con el nombre del archivo
-				//Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-				
-				// Gudardamos la foto
-				//Files.write(rutaCompleta, bytes);
-				//----------------------------------------------------------------------
-				
-				Files.copy(foto.getInputStream(), rootAbsolutePath);
-				
-				// Mandamos un mensaje al flash que creamos anteriormente
-				//flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
-				flash.addFlashAttribute("info", "Ha subido correctamente '" + uniqueFilename + "'");
-				
-				// Pasamos el nombre de la foto al objeto cliente para que quede guardado en la base de datos
-				// y de esta forma poderla recuperar para mostrar o hacer alguna operación con ella.
-				//cliente.setFoto(foto.getOriginalFilename());
-				cliente.setFoto(uniqueFilename);
-			} 
-			
-			catch (IOException e) {
+				uniqueFilename = uploadFileService.copy(foto);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			// Mandamos un mensaje al flash que creamos anteriormente
+			//flash.addFlashAttribute("info", "Ha subido correctamente '" + foto.getOriginalFilename() + "'");
+			flash.addFlashAttribute("info", "Ha subido correctamente '" + uniqueFilename + "'");
+			
+			// Pasamos el nombre de la foto al objeto cliente para que quede guardado en la base de datos
+			// y de esta forma poderla recuperar para mostrar o hacer alguna operación con ella.
+			//cliente.setFoto(foto.getOriginalFilename());
+			cliente.setFoto(uniqueFilename);
+			
 		}
 		
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con éxito!" : "Cliente creado con éxito!";
@@ -240,16 +180,9 @@ public class ClienteController {
 			clienteService.delete(id);
 			flash.addFlashAttribute("success", "Cliente eliminado con éxito!");
 			
-			// Obtenemos la ruta absoluta de la imágen para eliminarla
-			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
-			// Obtenemos el archivo
-			File archivo = rootPath.toFile();
-			
-			if ( archivo.exists() && archivo.canRead() ) {
-				// Se elimina
-				if (archivo.delete() ) {
-					flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " eliminada con éxito!");
-				}
+			// Se elimina
+			if ( uploadFileService.delete(cliente.getFoto()) ) {
+				flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " eliminada con éxito!");
 			}
 		}
 		
@@ -278,17 +211,12 @@ public class ClienteController {
 	// El .+ evita que la extensión (jpg, png, etc) del archivo se trunque y sea eliminada
 	@RequestMapping(value = "/uploads/{filename:.+}", method = RequestMethod.GET)
 	public ResponseEntity<Resource> verFoto ( @PathVariable String filename ) {
-		Path pathFoto = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
-		log.info("pathFoto: " + pathFoto);
+		
 		Resource recurso = null;
 		
 		try {
-			recurso = new UrlResource(pathFoto.toUri());
-			if (!recurso.exists() && !recurso.isReadable() ) {
-				throw new RuntimeException("Error: No se puede cargar la imagen: " + pathFoto.toString());
-			}
-		}
-		catch (MalformedURLException e) {
+			recurso = uploadFileService.load(filename);
+		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
