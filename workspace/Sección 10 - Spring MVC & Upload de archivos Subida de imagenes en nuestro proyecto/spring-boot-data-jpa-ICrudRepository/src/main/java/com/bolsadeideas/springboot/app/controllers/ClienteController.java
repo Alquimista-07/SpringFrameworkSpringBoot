@@ -102,8 +102,17 @@ public class ClienteController {
 		
 		// Validamos la foto y pasamos el path donde se van a guardar las imágenes
 		if ( !foto.isEmpty() ) {
-			Path directorioRecursos = Paths.get("src/main/resources/static/uploads");
-			String rootPath = directorioRecursos.toFile().getAbsolutePath();
+			
+			// NOTA: Comentamos esto ya que vamos a pasar de un directorio dentro del proyecto a otro directorio
+			//       fuera de este en otra ubicación.
+			// Path directorioRecursos = Paths.get("src/main/resources/static/uploads");
+			// String rootPath = directorioRecursos.toFile().getAbsolutePath();
+			
+			// NOTA: Esto es para windows, pero por ejemplo en linux pasariamos 
+			//       la ubicación como "file:/opt/uploads/"
+			//       físico.
+			String rootPath = "C://Temp//uploads";
+			System.out.println("Entro aca: " + rootPath);
 			
 			try {
 				// Obtenemos los bytes de la imágen
