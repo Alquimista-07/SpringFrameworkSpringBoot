@@ -25,7 +25,7 @@
 				
 				<!--NOTA: Usamos el action para pasar la url del método POST que envía el formulario y que definimos en el controlador,
 				          adicionalmente con el objet mapeamos el objeto al formulario y también el métod que tiene que se POST-->
-				<form th:action="@{/form}" th:object="${cliente}" method="post">
+				<form th:action="@{/form}" th:object="${cliente}" method="post" enctype="multipart/form-data">
 					
 					<!-- NOTA: Para mapear cada uno de los campos a los atributos de la clase Cliente usamos el th:field="*{}" -->
 						<div class="form-group row">

@@ -82,6 +82,7 @@ public class Cliente implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 	
+	private String foto;	
 	
 	//---------------------------------------------------------------------------------------------------------------------
 	// NOTA: Este método lo comentamos ya que agregamos un campo adicional en el formulario para ingresar la fecha 
@@ -144,6 +145,14 @@ public class Cliente implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 }
