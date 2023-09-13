@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -49,6 +50,9 @@ public class ClienteController {
 	
 	// Creamos un logger para hacer debug de los nombres de directorio en la consola en el método de guardar
 	private final Logger log = LoggerFactory.getLogger(getClass());
+	
+	// Constante para almacenar el nombre del folder donde se guardan los archivos
+	private final static String UPLOADS_FOLDER = "uploads";
 	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
@@ -114,6 +118,21 @@ public class ClienteController {
 		// Validamos la foto y pasamos el path donde se van a guardar las imágenes
 		if ( !foto.isEmpty() ) {
 			
+			// Para el reemplazo y borrado de la imágen para que no ocupe espacio cuando se edita un cliente hacemos la siguiente validación
+			if ( cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null && cliente.getFoto().length() > 0 ) {
+				// Borramos la foto antigua
+				
+				// Obtenemos la ruta absoluta de la imágen para eliminarla
+				Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+				// Obtenemos el archivo
+				File archivo = rootPath.toFile();
+				
+				if ( archivo.exists() && archivo.canRead() ) {
+					// Se elimina
+					archivo.delete();
+				}
+			}
+			
 			//----------------------------------------------------------------------
 			// PRIMER MÉTODO PARA MANEJAR LA RUTA DE LA CARGA DE IMÁGENES
 			//----------------------------------------------------------------------
@@ -139,7 +158,7 @@ public class ClienteController {
 			// Y generamos un uid aleatorio para que no se repitan los nombres dentro del servidor y se
 			// puedan sobreescribir archivos por error.
 			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
-			Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFilename);
 			// Ruta absoluta
 			Path rootAbsolutePath = rootPath.toAbsolutePath();
 			
@@ -215,8 +234,23 @@ public class ClienteController {
 	public String eliminar( @PathVariable(value = "id") Long id, RedirectAttributes flash ) {
 		
 		if ( id > 0 ) {
+			
+			Cliente cliente = clienteService.findOne(id);
+			
 			clienteService.delete(id);
 			flash.addFlashAttribute("success", "Cliente eliminado con éxito!");
+			
+			// Obtenemos la ruta absoluta de la imágen para eliminarla
+			Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+			// Obtenemos el archivo
+			File archivo = rootPath.toFile();
+			
+			if ( archivo.exists() && archivo.canRead() ) {
+				// Se elimina
+				if (archivo.delete() ) {
+					flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " eliminada con éxito!");
+				}
+			}
 		}
 		
 			return "redirect:/listar";
@@ -244,7 +278,7 @@ public class ClienteController {
 	// El .+ evita que la extensión (jpg, png, etc) del archivo se trunque y sea eliminada
 	@RequestMapping(value = "/uploads/{filename:.+}", method = RequestMethod.GET)
 	public ResponseEntity<Resource> verFoto ( @PathVariable String filename ) {
-		Path pathFoto = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		Path pathFoto = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
 		log.info("pathFoto: " + pathFoto);
 		Resource recurso = null;
 		
