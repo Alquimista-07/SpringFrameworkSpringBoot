@@ -171,5 +171,23 @@ public class ClienteController {
 		
 			return "redirect:/listar";
 	}
+	
+	// Método para ver el detalle y la foto del cliente
+	// el cual va a tener un path variable
+	@RequestMapping(value = "/ver/{id}", method = RequestMethod.GET )
+	public String ver(@PathVariable(value="id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+		
+		Cliente cliente = clienteService.findOne(id);
+		
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
+			return "redirect:/listar";
+		}
+		
+		model.put("cliente", cliente);
+		model.put("titulo", "Detalle cliente: " + cliente.getNombre());
+		
+		return "ver";
+	}
 
 }
