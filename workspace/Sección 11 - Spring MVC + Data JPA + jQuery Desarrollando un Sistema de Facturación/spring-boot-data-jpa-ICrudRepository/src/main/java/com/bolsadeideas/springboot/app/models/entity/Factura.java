@@ -113,6 +113,21 @@ public class Factura implements Serializable {
 	public void addItemFactura( ItemFactura item ) {
 		this.items.add(item);
 	}
+	
+	// Metodo para calcular el gran total de la factura.
+	public Double getTotal() {
+		Double total = 0.0;
+		
+		int size = items.size();
+		
+		for( int i = 0; i < size; i++ ) {
+			// Por cada elemento calculamos el importe y lo sumamos para totalizar
+			total += items.get(i).calcularImporte();
+		}
+		
+		// Retornamos la sumatoria completa de la factura
+		return total;
+	}
 
 	// Atributo de la interace Serializable
 	private static final long serialVersionUID = 1L;
