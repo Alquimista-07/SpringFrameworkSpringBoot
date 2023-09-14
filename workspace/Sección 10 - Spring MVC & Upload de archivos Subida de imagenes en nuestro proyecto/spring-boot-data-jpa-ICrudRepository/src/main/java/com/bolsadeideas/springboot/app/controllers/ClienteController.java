@@ -136,6 +136,9 @@ public class ClienteController {
 			cliente.setFoto(uniqueFilename);
 			
 		}
+		else {
+			cliente.setFoto("");
+		}
 		
 		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con éxito!" : "Cliente creado con éxito!";
 		
