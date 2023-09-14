@@ -1,14 +1,20 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -41,7 +47,20 @@ public class Factura implements Serializable {
 	public void prePersist() {
 		createAt = new Date();
 	}
+	
+	// Creamos la relación una factura con muchos items factura
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// Acá como la relación es en un solo sentido debemos indicar cual es la llave foranea
+	// que va a relacionar la factura con items factura y la cual va a ser creada en la tabla
+	// items factura. Por lo tanto acá no es necesario indicar el mappedBy = "cliente" como 
+	// paso con cliente y factura que tienen una relación bidireccional.
+	@JoinColumn(name = "facura_id")
+	private List<ItemFactura> items;
 
+	public Factura() {
+		this.items = new ArrayList<ItemFactura>();
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -82,6 +101,19 @@ public class Factura implements Serializable {
 		this.cliente = cliente;
 	}
 	
+	public List<ItemFactura> getItems() {
+		return items;
+	}
+
+	public void setItems(List<ItemFactura> items) {
+		this.items = items;
+	}
+	
+	// Método para agregar item por item a la factura
+	public void addItemFactura( ItemFactura item ) {
+		this.items.add(item);
+	}
+
 	// Atributo de la interace Serializable
 	private static final long serialVersionUID = 1L;
 	
