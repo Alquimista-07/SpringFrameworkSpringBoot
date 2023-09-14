@@ -54,7 +54,7 @@ public class Factura implements Serializable {
 	// que va a relacionar la factura con items factura y la cual va a ser creada en la tabla
 	// items factura. Por lo tanto acá no es necesario indicar el mappedBy = "cliente" como 
 	// paso con cliente y factura que tienen una relación bidireccional.
-	@JoinColumn(name = "facura_id")
+	@JoinColumn(name = "factura_id")
 	private List<ItemFactura> items;
 
 	public Factura() {
