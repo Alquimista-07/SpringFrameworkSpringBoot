@@ -1,16 +1,20 @@
 package com.bolsadeideas.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -82,7 +86,28 @@ public class Cliente implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createAt;
 	
-	private String foto;	
+	private String foto;
+	
+	// NOTA: Atributo para la relación uno a muchos de la base de datos entre cliente y factur, ya que un cliente
+	//       puede tener muchas facturas por lo tanto lo definimos como un list.
+	// 
+	//       Adicionalmente debemos mapear la relación con cliente con la anotación que representa un cliente muchas
+	//       facturas @OneToMany y adicionalmente indicamos que el fetch lo haga con carga perezosa que es lo más
+	//       recomendado ya que al usar EAGER trae todo de una sola vez podiendo generar errores, inconsistencias o 
+	//       sobrecargar la base de datos y por lo tanto usamos el LAZY para que obtenga información cuando se le llame.
+	// 
+	//       Otra cosa importante es agregar el cascade de tipo all y que indica que todas las operaciones por ejemplo
+	//       delete y persist se relicen en cadena.
+	// 
+	//       Otro atributo importante es el mapped by que recibe el atributo de la clase con la cual tiene relación y
+	//       hacemos que sea bidireccional y lo que va a hacer es crear la llave foranea de clientes en la tabla facturas
+	//       de la base de datos.
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Factura> facturas;
+	
+	public Cliente () {
+		facturas = new ArrayList<Factura>();
+	}
 	
 	//---------------------------------------------------------------------------------------------------------------------
 	// NOTA: Este método lo comentamos ya que agregamos un campo adicional en el formulario para ingresar la fecha 
@@ -153,6 +178,20 @@ public class Cliente implements Serializable {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public List<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
+	}
+	
+	// La función de este método es agregar factura por factura en la clase cliente
+	// tal como si fuera un objeto de colección.
+	public void addFactura( Factura factura ) {
+		facturas.add(factura);
 	}
 
 }
