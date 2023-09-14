@@ -13,7 +13,9 @@
 			
 			<div class="card-body">
 			
-				<h4 class="card-title"></h4>
+				<h4 class="card-title">
+					<a class="btn btn-outline-light btn-xs" th:href="@{'/ver/' + ${factura.cliente.id}}" th:text="'&laquo; Volver'"></a>
+				</h4>
 				
 				<form th:action="@{/factura/form/}" th:object="${factura}" method="post">
 					
