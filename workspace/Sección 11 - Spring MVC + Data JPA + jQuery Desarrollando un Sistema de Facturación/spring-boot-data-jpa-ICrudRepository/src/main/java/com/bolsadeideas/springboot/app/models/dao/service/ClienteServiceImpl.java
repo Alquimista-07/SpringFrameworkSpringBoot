@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bolsadeideas.springboot.app.models.dao.IClienteDao;
+import com.bolsadeideas.springboot.app.models.dao.IProductoDao;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
+import com.bolsadeideas.springboot.app.models.entity.Producto;
 
 // NOTA: Una clase service esta basada en el patrón de diseño fachada, el cual es un único punto de acceso hacia 
 //       distitos DAO o repository y dentro de una clase servicio podríamos tener como atributo y podríamos operar
@@ -23,6 +25,9 @@ public class ClienteServiceImpl implements IClienteService{
 	
 	@Autowired
 	private IClienteDao clienteDao;
+	
+	@Autowired
+	private IProductoDao productoDao;
 	
 	@Override
 	// NOTA: Esta anotación @Transactional importada del paquete de spring marcamos el método como transaccional y le indicamos que es solamente de
@@ -64,6 +69,12 @@ public class ClienteServiceImpl implements IClienteService{
 	@Transactional(readOnly = true)
 	public Page<Cliente> findAll(Pageable pageable) {
 		return clienteDao.findAll(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByName(String term) {
+		return productoDao.findByName(term);
 	}
 
 	
