@@ -82,6 +82,11 @@
 				
 				this.calcularImporte(id, precio, cantidad);
 				
+			},
+			
+			// Función para eliminar una línea de la factura
+			eliminarLineaFactura: function(id) {
+				$("#row_" + id).remove();
 			}
 		}
 	
