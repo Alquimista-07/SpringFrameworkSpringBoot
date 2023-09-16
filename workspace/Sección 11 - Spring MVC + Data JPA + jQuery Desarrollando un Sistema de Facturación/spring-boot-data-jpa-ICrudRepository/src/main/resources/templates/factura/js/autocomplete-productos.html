@@ -51,6 +51,13 @@
 					return false;
 				}
 			});
+			
+			// Elimiminamos el tbody de la tabla cuando se guarde la factura en la base de datos
+			$("form").submit( function () {
+				$("#plantillaItemsFactura").remove();
+				return;
+			});
+			
 		});
 		
 		var itemsHelper = {
