@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.models.dao;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -23,6 +24,10 @@ import com.bolsadeideas.springboot.app.models.entity.Cliente;
 //        y el tipo de la llave
 public interface IClienteDao extends CrudRepository<Cliente, Long>, PagingAndSortingRepository<Cliente, Long> {
 	
-	
+	// NOTA: Agregamos el left join debido a que la regla del inner join es que ambas tienen que quener información y por lo tanto cuando el cliente
+	//       no tiene facturas nos va a dar un mensaje de que este no existe, entonces para solucionar el error ya que el cliente si existe usamos el
+	//       left join
+	@Query("select c from Cliente c left join fetch c.facturas f where c.id=?1")
+	public Cliente fetchByIdWithFacturas( Long id );
 	
 }

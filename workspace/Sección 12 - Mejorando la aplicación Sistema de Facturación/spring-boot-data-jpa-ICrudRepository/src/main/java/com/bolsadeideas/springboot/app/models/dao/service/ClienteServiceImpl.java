@@ -60,6 +60,12 @@ public class ClienteServiceImpl implements IClienteService{
 		//       En ese caso usmao el orElse, que básicamente indica que si lo encuentra lo retorna y si no retorna un null.
 		return clienteDao.findById(id).orElse(null);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Cliente fetchByIdWithFacturas(Long id) {
+		return clienteDao.fetchByIdWithFacturas(id);
+	}
 
 	@Override
 	@Transactional
