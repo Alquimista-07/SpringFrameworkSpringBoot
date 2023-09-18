@@ -14,7 +14,9 @@ public class LoginController {
 	// El principal es bien importante ya que nos permite realizar las validaciones
 	// respecto al inicio de sesión
 	@GetMapping("/login")
-	public String login( @RequestParam(value = "error", required = false) String error, Model model, Principal principal, RedirectAttributes flash ) {
+	public String login( @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout, Model model, Principal principal, RedirectAttributes flash ) {
+		
+		System.out.println(principal);
 		
 		if( principal != null ) {
 			// Ya había iniciado sesión por lo tanto no es necesario volver a solicitarlo
@@ -25,6 +27,10 @@ public class LoginController {
 		
 		if( error != null ) {
 			model.addAttribute("error", "Error al iniciar sesión: Nombre de usuario o contraseña incorrectos, por favor vuelva a intentarlo.");
+		}
+		
+		if ( logout != null ) {
+			model.addAttribute("success", "Ha cerrado sesión con éxito!");
 		}
 		
 		// No había iniciado sesión	
