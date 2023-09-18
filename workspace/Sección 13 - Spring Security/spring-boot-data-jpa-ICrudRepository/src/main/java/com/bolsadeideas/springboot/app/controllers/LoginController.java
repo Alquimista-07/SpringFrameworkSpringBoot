@@ -19,7 +19,7 @@ public class LoginController {
 			// Ya había iniciado sesión por lo tanto no es necesario volver a solicitarlo
 			// y simplemente rediregimos a la página de inicio
 			flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
-			return "rediredt:/";
+			return "redirect:/";
 		}
 		
 		// No había iniciado sesión	
