@@ -31,6 +31,12 @@
 							<input type="submit" class="btn btn-lg btn-primary btn-block" value="Iniciar Sesión">
 						</div>
 					</div>
+					
+					<!--Agregamos un input al cual le pasamos una variable global de spring security que nos ayuda con el csrf (Cross-Site Request Forgery) que 
+					    es un tipo de protección que impide que un sitio web pudiera hacer peticiones maliciosas a otro sitio web que fuese seguro. Aunque esto
+					    no es necesario ya que spring security lo hace de forma manual pero para fines demostrativos lo colocamos-->
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					
 				</form>
 				
 			</div>
