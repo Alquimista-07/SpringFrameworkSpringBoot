@@ -46,7 +46,7 @@ public class ClienteController {
 	private IUploadFileService uploadFileService;
 	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
-	@RequestMapping(value = "/listar", method = RequestMethod.GET)
+	@RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
 	// NOTA: Vamos a usar el request param para obtener la página actual y de esta forma llamar al nuevo método que creamos
 	//       y que se encarga de la paginación.
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {

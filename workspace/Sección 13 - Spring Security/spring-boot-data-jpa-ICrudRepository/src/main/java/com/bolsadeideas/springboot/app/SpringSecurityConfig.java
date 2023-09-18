@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SpringSecurityConfig  {
@@ -40,6 +42,40 @@ public class SpringSecurityConfig  {
 		builder.inMemoryAuthentication().
 		withUser(users.username("admin").password("12345").roles("ADMIN", "USER")).
 		withUser(users.username("andres").password("12345").roles("USER"));
+		
+	}
+	
+	// Arreglo de rutas permitidas a todo tipo de usuario
+	public static final String[] ENDPOINTS_WHITELIST = {
+			"/", 
+			"/css/**", 
+			"/js/**", 
+			"/images/**", 
+			"/listar"
+		};
+	
+	// Configuración para la protección de rutas http
+	@Bean
+	public SecurityFilterChain filterChain( HttpSecurity http ) throws Exception {
+		
+		http.authorizeHttpRequests( request -> {
+			
+			request
+				// Rutas publicas y de acceso a todo el mundo tanto para usuarios logueados como los anónimos
+				.requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+				
+				// Rutas privadas y que se quieren proteger dependiendo el role
+				.requestMatchers("/ver/**").hasAnyRole("USER")
+				.requestMatchers("/uploads/**").hasAnyRole("USER")
+				.requestMatchers("/form/**").hasAnyRole("ADMIN")
+				.requestMatchers("/eliminar/**").hasAnyRole("ADMIN")
+				.requestMatchers("/factura/**").hasAnyRole("ADMIN")
+				
+				.anyRequest().authenticated();
+				
+		});
+		
+		return http.build();
 		
 	}
 	
