@@ -2,7 +2,9 @@ package com.bolsadeideas.springboot.app;
 
 import java.nio.file.Paths;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -46,6 +48,11 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/error_403").setViewName("error_403");
 	}
 	
-	
+	// Creamos un método que permite registrar el password encoder (En este caso BCrypt que actualmente es el más robusto)
+		// por defecto en la configuración de Spring Security
+	@Bean
+	public static BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}	
 
 }

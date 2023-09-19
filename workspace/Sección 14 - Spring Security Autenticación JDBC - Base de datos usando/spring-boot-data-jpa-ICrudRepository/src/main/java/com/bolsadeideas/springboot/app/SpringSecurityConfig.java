@@ -1,12 +1,8 @@
 package com.bolsadeideas.springboot.app;
 
-import javax.lang.model.element.ModuleElement.Directive;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,12 +27,8 @@ public class SpringSecurityConfig  {
 	@Autowired
 	private LoginSuccessHandler successHandler;
 	
-	// Creamos un método que permite registrar el password encoder (En este caso BCrypt que actualmente es el más robusto)
-	// por defecto en la configuración de Spring Security
-	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	// Implementamos un método para poder registrar y configurar los usuarios de nuestro sistema de seguridad.
 	// Por ejemplo el usuario administrador o cualquier otro, asignar un username, un password y sus roles.
@@ -46,7 +38,7 @@ public class SpringSecurityConfig  {
 	public void configurerGlobal( AuthenticationManagerBuilder builder ) throws Exception {
 		
 		// Usamos el password encoder
-		PasswordEncoder encoder = passwordEncoder();
+		PasswordEncoder encoder = this.passwordEncoder;
 		
 		// Creamos y encriptamos la contraseña de los usuarios.
 		
