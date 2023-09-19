@@ -21,7 +21,7 @@ public class LoginController {
 		if( principal != null ) {
 			// Ya había iniciado sesión por lo tanto no es necesario volver a solicitarlo
 			// y simplemente rediregimos a la página de inicio
-			flash.addFlashAttribute("info", "Ya ha iniciado sesión anteriormente");
+			flash.addFlashAttribute("info", "Ya ha iniciado sesión.");
 			return "redirect:/";
 		}
 		

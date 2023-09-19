@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--NOTA: Agregamos el namespace xmlns:sec de spring security con el fin de usarlo para ocultar o mostrar elementos en la vista según el role del usuario-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head"></head>
 <body>
 	
@@ -12,7 +13,7 @@
 			<div class="card-body">
 				
 				<h4 class="card-title">
-					<td><a class="btn btn-primary btn-xs" th:href="@{'/factura/form/' + ${cliente.id}}" th:text="'Crear Factura'"></a></td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{'/factura/form/' + ${cliente.id}}" th:text="'Crear Factura'"></a></td>
 				</h4>
 				
 				<img th:if="${#strings.length(cliente.foto) > 0}" class="img-thumbnail rounded float-left" style="max-width: 25%;" th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}">
@@ -32,8 +33,8 @@
 							<th>Descripción</th>
 							<th>Fecha</th>
 							<th>Total</th>
-							<th>Ver</th>
-							<th>Eliminar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -42,8 +43,8 @@
 							<td th:text=${factura.descripcion}></td>
 							<td th:text=${factura.createAt}></td>
 							<td th:text=${factura.total}></td>
-							<td><a class="btn btn-secondary btn-xs" th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'Detalle'"></a></td>
-							<td><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/' + ${factura.id}}" th:text="'Eliminar'" onclick="return confirm('¿Está seguro de que desea eliminar la factura?');"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-secondary btn-xs" th:href="@{'/factura/ver/' + ${factura.id}}" th:text="'Detalle'"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs" th:href="@{'/factura/eliminar/' + ${factura.id}}" th:text="'Eliminar'" onclick="return confirm('¿Está seguro de que desea eliminar la factura?');"></a></td>
 						</tr>
 					</tbody>
 				</table>
