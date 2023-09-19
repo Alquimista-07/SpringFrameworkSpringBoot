@@ -81,7 +81,8 @@ public class SpringSecurityConfig  {
 				// Añadimos el formulario de login;
 				
 		}).formLogin(form -> form.loginPage("/login").permitAll())
-		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))));
+		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))))
+		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"));
 		
 		return http.build();
 		

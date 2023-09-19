@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -36,6 +37,14 @@ public class MvcConfig implements WebMvcConfigurer {
 		.addResourceLocations(resourcePath);
 	}
 	*/
+	
+	// Usamos este método para registrar un controlador de vista parametrizable y de esta forma personalizar
+	// la pantalla cuando el usuario no tiene acceso a una ruta.
+	// NOTA: Este método tiene que llamarese addViewControllers oblitagoriamente 
+	public void addViewControllers(ViewControllerRegistry registry) {
+		// Recibe como primer parámetro la ruta y como segundo parámetro la vista html
+		registry.addViewController("/error_403").setViewName("error_403");
+	}
 	
 	
 
