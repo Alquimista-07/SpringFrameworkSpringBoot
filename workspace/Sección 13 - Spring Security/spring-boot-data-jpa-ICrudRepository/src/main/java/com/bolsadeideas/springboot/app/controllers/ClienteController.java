@@ -15,6 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -133,6 +136,10 @@ public class ClienteController {
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	// NOTA: Acá no usamos el Model convencional para pasar datos a la vista sino que usamos un map
 	//       pero funcionan igual, es decir, son para pasar datos a la vista.
+	// NOTA: Usamos anotaciones para aplicar la seguridad ya que lo que teníamos en la clase SpringSecurityConfig
+	//       para la protección de las rutas lo comentamos. Adicionalmente podemos pasar más de un role como un arreglo
+	//       entre {} separado por comas
+	@Secured({"ROLE_ADMIN"})
 	public String crear(Map<String, Object> model) {
 		
 		Cliente cliente = new Cliente();
@@ -151,6 +158,10 @@ public class ClienteController {
 	//       session attribute para no usar el input que teníamos para el id en la vista, luego de guardar tenemos que limpiar dicho sessión atribute, y para ello usamos el SessionStatus.
 	//       Para la subida de archivos agregamos otro parámtro que esl el @RequestParam
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
+	// NOTA: Usamos anotaciones para aplicar la seguridad ya que lo que teníamos en la clase SpringSecurityConfig
+	//       para la protección de las rutas lo comentamos.Adicionalmente podemos pasar más de un role como un arreglo
+	//       entre {} separado por comas
+	@Secured("ROLE_ADMIN")
 	public String guardar( @Valid Cliente cliente, BindingResult result, Model model, @RequestParam(name = "file") MultipartFile foto, RedirectAttributes flash, SessionStatus status ) {
 		
 		if( result.hasErrors() ) {
@@ -203,6 +214,15 @@ public class ClienteController {
 	
 	// Metodo para editar, al cual le pasamos el id a través de un path variable
 	@RequestMapping(value = "/form/{id}")
+	// NOTA: La anotación preAutorize() es una alternativa a la anotación @Secured() y algo importante es que 
+	//       para poderla usar es necesario pasar el parámentro prePostEnabled = true indicandola en la anotación 
+	//       @EnableMethodSecurity() implementada en la clase SpringSecurityConfig para habilitarla. Adicionalmente
+	//       podemos pasar más de un role usando el hasAnyRole y separando por coma. 
+	//       
+	//       Ejemplo: 
+	//       @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_OTRO')")
+	//
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public String editar( @PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash ) {
 		
 		Cliente cliente = null;
@@ -226,6 +246,9 @@ public class ClienteController {
 	}
 	
 	@RequestMapping(value = "/eliminar/{id}")
+	// NOTA: Usamos anotaciones para aplicar la seguridad ya que lo que teníamos en la clase SpringSecurityConfig
+	//       para la protección de las rutas lo comentamos.
+	@Secured("ROLE_ADMIN")
 	public String eliminar( @PathVariable(value = "id") Long id, RedirectAttributes flash ) {
 		
 		if ( id > 0 ) {
@@ -247,6 +270,15 @@ public class ClienteController {
 	// Método para ver el detalle y la foto del cliente
 	// el cual va a tener un path variable
 	@RequestMapping(value = "/ver/{id}", method = RequestMethod.GET )
+	// NOTA: La anotación preAutorize() es una alternativa a la anotación @Secured() y algo importante es que 
+	//       para poderla usar es necesario pasar el parámentro prePostEnabled = true indicandola en la anotación 
+	//       @EnableMethodSecurity() implementada en la clase SpringSecurityConfig para habilitarla. Adicionalmente
+	//       podemos pasar más de un role usando el hasAnyRole y separando por coma. 
+	//       
+	//       Ejemplo: 
+	//       @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_OTRO')")
+	//
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public String ver(@PathVariable(value="id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 		
 		// Cliente cliente = clienteService.findOne(id);
@@ -266,6 +298,8 @@ public class ClienteController {
 	// Creamos un nuevo método que corresponde a la cuarta forma de subir archivos 
 	// El .+ evita que la extensión (jpg, png, etc) del archivo se trunque y sea eliminada
 	@RequestMapping(value = "/uploads/{filename:.+}", method = RequestMethod.GET)
+	// NOTA: Ahora vamos a usar anotaciones para aplicar la seguridad y no como teníamos en la clase SpringSecurityConfig que comentamos
+	@Secured("ROLE_USER")
 	public ResponseEntity<Resource> verFoto ( @PathVariable String filename ) {
 		
 		Resource recurso = null;

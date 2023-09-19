@@ -3,6 +3,8 @@ package com.bolsadeideas.springboot.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,13 @@ import com.bolsadeideas.springboot.app.models.entity.ItemFactura;
 import com.bolsadeideas.springboot.app.models.entity.Producto;
 
 import jakarta.validation.Valid;
+
+// NOTA: Como estamos manejando ahora la seguridad con anotaciones que es un poco más sencillo ya que solo anotamos los métodos
+//       y habilitamos en la clase SpringSecurity con la anotación @EnableMethodSecurity() y como esta clase en sí se tiene que
+//       restringir completamente no es neceario colocar método a método la anotación @Secured() como teníamos en el ClienteController
+//       sino que simplemente anotamos la clase completa con la anotación @Secured(). Y por lo tanto ya no damos seguridad en las rutas
+//       del request sino en los controladores y practicamente es lo mismo.
+@Secured("ROLE_ADMIN")
 
 @Controller
 @RequestMapping("/factura")

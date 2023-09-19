@@ -5,8 +5,10 @@ import javax.lang.model.element.ModuleElement.Directive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.User.UserBuilder;
@@ -19,6 +21,10 @@ import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter
 import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
 
 @Configuration
+// Necesitamos habilitar las anotaciones @Secured("") que colocamos en la clase ClienteController y que ayudan validar
+// la seguiridad en las rutas de una forma más sencilla y no como teníamos anteriormente con el método SecurityFilterChain
+// al cual le pasamos la ruta ver, listar, uploads, etc que comentamos y agregar esto es bastante importante
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SpringSecurityConfig  {
 	
 	// Inyectamos
@@ -76,11 +82,14 @@ public class SpringSecurityConfig  {
 				.requestMatchers(ENDPOINTS_WHITELIST).permitAll()
 				
 				// Rutas privadas y que se quieren proteger dependiendo el role
-				.requestMatchers("/ver/**").hasAnyRole("USER")
-				.requestMatchers("/uploads/**").hasAnyRole("USER")
-				.requestMatchers("/form/**").hasAnyRole("ADMIN")
-				.requestMatchers("/eliminar/**").hasAnyRole("ADMIN")
-				.requestMatchers("/factura/**").hasAnyRole("ADMIN")
+				
+				//NOTA: Acá comentamos el acceso a los recursos ver, uploads, form, eliminar y factura para mostrar como aplicar esto mismo de la seguriad y protección
+				//      de recursos usando anotaciones de spring boot
+				/*.requestMatchers("/ver/**").hasAnyRole("USER")*/
+				/*.requestMatchers("/uploads/**").hasAnyRole("USER")*/
+				/*.requestMatchers("/form/**").hasAnyRole("ADMIN")*/
+				/*.requestMatchers("/eliminar/**").hasAnyRole("ADMIN")*/
+				/*.requestMatchers("/factura/**").hasAnyRole("ADMIN")*/
 				
 				.anyRequest().authenticated();
 				
