@@ -20,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +38,7 @@ import com.bolsadeideas.springboot.app.models.dao.service.IUploadFileService;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -59,7 +61,7 @@ public class ClienteController {
 	@RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
 	// NOTA: Vamos a usar el request param para obtener la página actual y de esta forma llamar al nuevo método que creamos
 	//       y que se encarga de la paginación.
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request) {
 		
 		// Una forma de obtener el usuario autenticado
 		if ( authentication != null ) {
@@ -73,13 +75,33 @@ public class ClienteController {
 			logger.info("Utilizando formá estática SecurityContextHolder.getContext().getAuthentication(): Usuario autenticado, username es: ".concat(auth.getName()));
 		}
 		
-		// Validamos el role
+		// Validamos el role de varias formas (Los siguientes tres if-else)
+		//----------------------------------------------------------------------------------------
 		if( hasRole("ROLE_ADMIN") ) {
 			logger.info("Hola ".concat(auth.getName().concat(" tienes acceso!")));
 		}
 		else {
 			logger.info("Hola ".concat(auth.getName().concat(" NO tienes acceso!")));
 		}
+		//----------------------------------------------------------------------------------------
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+		
+		if( securityContext.isUserInRole("ADMIN") ) {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName().concat(" tienes acceso!")));
+		}
+		else {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName().concat(" NO tienes acceso!")));
+		}
+		//----------------------------------------------------------------------------------------
+		
+		if( request.isUserInRole("ROLE_ADMIN") ) {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName().concat(" tienes acceso!")));
+		}
+		else {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName().concat(" NO tienes acceso!")));
+		}
+		//----------------------------------------------------------------------------------------
 		
 		// Creamos el objeto pageable para la paginación al cual le pasamos como primer parametro
 		// la página actual y como segundo la cantidad de elementos a mostrar por página.
