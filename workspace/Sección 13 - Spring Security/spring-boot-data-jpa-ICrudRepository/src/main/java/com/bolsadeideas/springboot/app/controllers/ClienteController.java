@@ -2,6 +2,7 @@ package com.bolsadeideas.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -15,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,6 +71,14 @@ public class ClienteController {
 		
 		if ( auth != null ) {
 			logger.info("Utilizando formá estática SecurityContextHolder.getContext().getAuthentication(): Usuario autenticado, username es: ".concat(auth.getName()));
+		}
+		
+		// Validamos el role
+		if( hasRole("ROLE_ADMIN") ) {
+			logger.info("Hola ".concat(auth.getName().concat(" tienes acceso!")));
+		}
+		else {
+			logger.info("Hola ".concat(auth.getName().concat(" NO tienes acceso!")));
 		}
 		
 		// Creamos el objeto pageable para la paginación al cual le pasamos como primer parametro
@@ -245,6 +257,50 @@ public class ClienteController {
 		
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ recurso.getFilename() +"\"")
 				.body(recurso);
+	}
+	
+	// Método para validar roles y verificar permisos
+	private boolean hasRole(String role) {
+		
+		// Obtenemos el objeto authentication de forma estática
+		SecurityContext context = SecurityContextHolder.getContext();
+		
+		if( context == null ) {
+			return false;
+		}
+		
+		// Obtenemos el authentication
+		Authentication auth = context.getAuthentication();
+		
+		if( auth == null ) {
+			return false;
+		}
+		
+		// Obtenemos la colección de roles
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+		
+		//-------------------------------------
+		// Primera forma
+		//-------------------------------------
+		/*
+		// Iteramos para preguntar por cada authority para preguntar si el role que estamos pasando por 
+		// parámetro es igual al role
+		for ( GrantedAuthority authority : authorities ) {
+			if( role.equals(authority.getAuthority()) ) {
+				// Si se cumple tiene el role por lo tanto tiene permiso
+				logger.info("Hola usuario".concat(auth.getName().concat(" tu role es: ".concat(authority.getAuthority()))));
+				return true;
+			}
+		}
+		
+		// No tiene acceso no tiene role
+		return false;
+		*/
+		
+		//-------------------------------------
+		// Segunda forma sin iterar
+		//-------------------------------------
+		return authorities.contains(new SimpleGrantedAuthority(role));
 	}
 
 }
