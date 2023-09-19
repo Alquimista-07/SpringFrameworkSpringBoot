@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -12,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +39,8 @@ import jakarta.validation.Valid;
 @SessionAttributes("cliente")
 public class ClienteController {
 	
+	protected final Log logger = LogFactory.getLog(this.getClass());
+	
 	// Como realizamos el refactor para implementar la clase service ahora ya no inyectamos el DAO directamente
 	// sino que inyectamos el servicio
 	@Autowired
@@ -49,7 +55,19 @@ public class ClienteController {
 	@RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
 	// NOTA: Vamos a usar el request param para obtener la página actual y de esta forma llamar al nuevo método que creamos
 	//       y que se encarga de la paginación.
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication) {
+		
+		// Una forma de obtener el usuario autenticado
+		if ( authentication != null ) {
+			logger.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
+		}
+		
+		// Otra forma de obtener el usuario autenticado
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if ( auth != null ) {
+			logger.info("Utilizando formá estática SecurityContextHolder.getContext().getAuthentication(): Usuario autenticado, username es: ".concat(auth.getName()));
+		}
 		
 		// Creamos el objeto pageable para la paginación al cual le pasamos como primer parametro
 		// la página actual y como segundo la cantidad de elementos a mostrar por página.
