@@ -16,8 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
+import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
+
 @Configuration
 public class SpringSecurityConfig  {
+	
+	// Inyectamos
+	@Autowired
+	private LoginSuccessHandler successHandler;
 	
 	// Creamos un método que permite registrar el password encoder (En este caso BCrypt que actualmente es el más robusto)
 	// por defecto en la configuración de Spring Security
@@ -80,7 +86,9 @@ public class SpringSecurityConfig  {
 				
 				// Añadimos el formulario de login;
 				
-		}).formLogin(form -> form.loginPage("/login").permitAll())
+		}).formLogin(form -> form.loginPage("/login")
+				.successHandler(successHandler)
+				.permitAll())
 		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))))
 		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"));
 		
