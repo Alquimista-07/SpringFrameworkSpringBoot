@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.app;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +31,10 @@ public class SpringSecurityConfig  {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	// Inyectamos el datasource para la conexión en base de datos.
+	@Autowired
+	private DataSource dataSource;
 
 	// Implementamos un método para poder registrar y configurar los usuarios de nuestro sistema de seguridad.
 	// Por ejemplo el usuario administrador o cualquier otro, asignar un username, un password y sus roles.
@@ -37,6 +43,8 @@ public class SpringSecurityConfig  {
 	@Autowired
 	public void configurerGlobal( AuthenticationManagerBuilder builder ) throws Exception {
 		
+		// NOTA: Comentamos esto ya que ahora no vamos a usar usuaros en memoria, sino que estos ya están guardados en base de datos
+		/*
 		// Usamos el password encoder
 		PasswordEncoder encoder = this.passwordEncoder;
 		
@@ -51,6 +59,13 @@ public class SpringSecurityConfig  {
 		builder.inMemoryAuthentication().
 		withUser(users.username("admin").password("12345").roles("ADMIN", "USER")).
 		withUser(users.username("andres").password("12345").roles("USER"));
+		*/
+		
+		builder.jdbcAuthentication()
+			.dataSource(dataSource)
+			.passwordEncoder(passwordEncoder)
+			.usersByUsernameQuery("select username, password, enabled from users where username=?")
+			.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?");
 		
 	}
 	
