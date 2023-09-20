@@ -3,12 +3,14 @@ package com.bolsadeideas.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,11 +62,15 @@ public class ClienteController {
 	@Autowired
 	private IUploadFileService uploadFileService;
 	
+	// El siguiente atributo nos va a ayudar para realizar las traducciones a multilenguaje
+	@Autowired
+	private MessageSource messageSource;
+	
 	// NOTA: Podemos anotar con @GetMapping o @RequestMapping, en este caso vamos a variar y anotar con @RequestMapping.
 	@RequestMapping(value = {"/listar", "/"}, method = RequestMethod.GET)
 	// NOTA: Vamos a usar el request param para obtener la página actual y de esta forma llamar al nuevo método que creamos
 	//       y que se encarga de la paginación.
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
 		
 		// Una forma de obtener el usuario autenticado
 		if ( authentication != null ) {
@@ -118,7 +124,7 @@ public class ClienteController {
 		// Y el cual recibe la url y lo que devuelve el método findAll()
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
-		model.addAttribute("titulo", "Listado de clientes");
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
 		// Usamos el atributo que creamos y que hace referencia a la interface para llamar el método
 		// y se lo pasamos a la vista para mostrarlo
 		
