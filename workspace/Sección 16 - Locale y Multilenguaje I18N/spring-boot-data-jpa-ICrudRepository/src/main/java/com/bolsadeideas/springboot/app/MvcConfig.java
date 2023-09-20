@@ -3,10 +3,10 @@ package com.bolsadeideas.springboot.app;
 import java.nio.file.Paths;
 import java.util.Locale;
 
-import org.apache.tomcat.util.descriptor.LocalResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -65,7 +65,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	// sessión http, en una cookie, etc. Adicionalmente es necesario tener un interceptor que se encargue 
 	// de cambiar o modificar el locale.
 	@Bean
-	public LocalResolver localResolver() {
+	public LocaleResolver localeResolver() {
 		
 		// Creamos la implementación
 		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -73,7 +73,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		// Asigamos el locale por defecto, y se le pasa por ejemplo la sigla del lenguaje "es" (Español) y del país "ES" (España)
 		localeResolver.setDefaultLocale(new Locale("es", "ES"));
 		
-		return localResolver();
+		return localeResolver;
 	}
 	
 	// Creamos el interceptor para el local
