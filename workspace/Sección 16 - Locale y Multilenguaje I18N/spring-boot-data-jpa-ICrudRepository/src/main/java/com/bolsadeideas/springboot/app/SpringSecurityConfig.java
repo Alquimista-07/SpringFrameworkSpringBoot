@@ -89,7 +89,8 @@ public class SpringSecurityConfig  {
 			"/css/**", 
 			"/js/**", 
 			"/images/**", 
-			"/listar"
+			"/listar",
+			"/locale"
 		};
 	
 	// Configuración para la protección de rutas http
