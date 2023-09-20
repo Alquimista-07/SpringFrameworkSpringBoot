@@ -28,11 +28,19 @@ public class FacturaPdfView extends AbstractPdfView {
 		
 		// Una sola coluna y tres filas
 		PdfPTable tabla = new PdfPTable(1);
+		
+		// Colocamos una separación entre tablas
+		tabla.setSpacingAfter(20);
+		
 		tabla.addCell("Datos del cliente");
 		tabla.addCell(factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
 		tabla.addCell(factura.getCliente().getEmail());
 		
 		PdfPTable tabla2 = new PdfPTable(1);
+		
+		// Colocamos una separación entre tablas
+		tabla2.setSpacingAfter(20);
+		
 		tabla2.addCell("Folio: " + factura.getId());
 		tabla2.addCell("Descripción: " + factura.getDescripcion());
 		tabla2.addCell("Fecha: " + factura.getCreateAt());
