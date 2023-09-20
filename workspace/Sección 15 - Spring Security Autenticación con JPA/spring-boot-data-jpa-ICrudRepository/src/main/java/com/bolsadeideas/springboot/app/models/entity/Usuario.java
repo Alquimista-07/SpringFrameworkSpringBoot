@@ -28,7 +28,7 @@ public class Usuario implements Serializable {
 	@Column(length = 60)
 	private String password;
 
-	private Boolean enebled;
+	private Boolean enabled;
 
 	// Relación con la clase roles
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -59,12 +59,12 @@ public class Usuario implements Serializable {
 		this.password = password;
 	}
 
-	public Boolean getEnebled() {
-		return enebled;
+	public Boolean getEnabled() {
+		return enabled;
 	}
 
 	public void setEnebled(Boolean enebled) {
-		this.enebled = enebled;
+		this.enabled = enebled;
 	}
 
 	public List<Role> getRoles() {

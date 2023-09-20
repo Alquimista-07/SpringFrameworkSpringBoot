@@ -21,10 +21,3 @@ CREATE TABLE `db_springboot`.`authorities`(
      ON DELETE CASCADE
      ON UPDATE CASCADE
 );
-
-INSERT INTO users (username, password, enabled) VALUES('andres', '$2a$10$X3CJF5JMtM.iQNTuRdBYz.NSW2MkL5M8c4KsBEtr8dR/VwhL/OG6y', 1);
-INSERT INTO users (username, password, enabled) VALUES('admin', '$2a$10$CmmQ9ZFvJ0pWz5OfVvxmFu85v4y.MNdcWtGO82lwNqKdCgLg4HBh6', 1);
-
-INSERT INTO authorities (user_id, authority) VALUES(1, 'ROLE_USER');
-INSERT INTO authorities (user_id, authority) VALUES(2, 'ROLE_USER');
-INSERT INTO authorities (user_id, authority) VALUES(2, 'ROLE_ADMIN');

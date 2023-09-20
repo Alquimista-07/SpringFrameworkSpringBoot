@@ -1,6 +1,6 @@
 package com.bolsadeideas.springboot.app;
 
-import javax.sql.DataSource;
+//import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,15 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
+import com.bolsadeideas.springboot.app.models.dao.service.JpaUserDetailsService;
 
 @Configuration
 // Necesitamos habilitar las anotaciones @Secured("") que colocamos en la clase ClienteController y que ayudan validar
@@ -32,9 +33,15 @@ public class SpringSecurityConfig  {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
-	// Inyectamos el datasource para la conexión en base de datos.
+	// NOTA: Como vamos a usar JPA para la autenticación y ya no JDBC como lo teniamos anteriormente
+	//       tenemos que inyectar
 	@Autowired
-	private DataSource dataSource;
+	private JpaUserDetailsService userDatailsService;
+	
+	// NOTA: Adicionalmente comentamos el datasource ya que con JPA no es necesario
+	// Inyectamos el datasource para la conexión en base de datos.
+	//@Autowired
+	//private DataSource dataSource;
 
 	// Implementamos un método para poder registrar y configurar los usuarios de nuestro sistema de seguridad.
 	// Por ejemplo el usuario administrador o cualquier otro, asignar un username, un password y sus roles.
@@ -61,11 +68,18 @@ public class SpringSecurityConfig  {
 		withUser(users.username("andres").password("12345").roles("USER"));
 		*/
 		
+		// NOTA: Comentamos esto ya que no se va a usar con jdbc sino con JPA
+		/*
 		builder.jdbcAuthentication()
 			.dataSource(dataSource)
 			.passwordEncoder(passwordEncoder)
 			.usersByUsernameQuery("select username, password, enabled from users where username=?")
 			.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?");
+		*/
+		
+		// NOTA: Ahora usando JPA para la autenticación tenemos lo siguiente:
+		builder.userDetailsService(userDatailsService)
+		.passwordEncoder(passwordEncoder);
 		
 	}
 	
