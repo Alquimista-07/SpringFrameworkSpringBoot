@@ -1,13 +1,18 @@
 package com.bolsadeideas.springboot.app;
 
 import java.nio.file.Paths;
+import java.util.Locale;
 
+import org.apache.tomcat.util.descriptor.LocalResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
@@ -53,6 +58,46 @@ public class MvcConfig implements WebMvcConfigurer {
 	@Bean
 	public static BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	}	
+	}
+	
+	// Para el tema del multilenguaje es necesario implementar unos beans, por ejemplo el local resolver
+	// que se encarga del adaptador en el cual se almacena el locale, por ejemplo ya sea guardarlo en la
+	// sessión http, en una cookie, etc. Adicionalmente es necesario tener un interceptor que se encargue 
+	// de cambiar o modificar el locale.
+	@Bean
+	public LocalResolver localResolver() {
+		
+		// Creamos la implementación
+		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+		
+		// Asigamos el locale por defecto, y se le pasa por ejemplo la sigla del lenguaje "es" (Español) y del país "ES" (España)
+		localeResolver.setDefaultLocale(new Locale("es", "ES"));
+		
+		return localResolver();
+	}
+	
+	// Creamos el interceptor para el local
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		
+		// Creamos una instacia
+		LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
+		
+		// Le asignamos el nombre del parámetro en este caso lang y básicamente indica que cada vez que se pase por url
+		// a través de GET por ejemplo con el "es" y "ES" se va a ejecutar este interceptor y va a hacer el cambio del 
+		// lenguaje del sitio web
+		localeInterceptor.setParamName("lang");
+		
+		return localeInterceptor;
+		
+	}
 
+	// Lo siguiente es registrar el interceptor a través del método sobreescrito
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(localeChangeInterceptor());
+	}
+	
+	
+	
 }
