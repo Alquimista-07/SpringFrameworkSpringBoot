@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import com.bolsadeideas.springboot.app.models.entity.Factura;
+import com.bolsadeideas.springboot.app.models.entity.ItemFactura;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -61,6 +62,29 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		sheet.createRow(6).createCell(0).setCellValue("Descripción: " + factura.getDescripcion());
 		sheet.createRow(7).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
 		
+		// Detalle de la factura
+		Row header = sheet.createRow(9);
+		header.createCell(0).setCellValue("Producto");
+		header.createCell(1).setCellValue("Precio");
+		header.createCell(2).setCellValue("Cantidad");
+		header.createCell(3).setCellValue("Total");
+		
+		// Llenamos con los items
+		// NOTA: El rowNum no puede arrancar en cero ya que si contamos las celdas creadas anteriormente este nos da que vamos en la posición 10
+		int rowNum = 10;
+		
+		for ( ItemFactura item: factura.getItems() ) {
+			Row fila = sheet.createRow(rowNum ++);
+			fila.createCell(0).setCellValue(item.getProducto().getNombre());
+			fila.createCell(1).setCellValue(item.getProducto().getPrecio());
+			fila.createCell(2).setCellValue(item.getCantidad());
+			fila.createCell(3).setCellValue(item.calcularImporte());
+		}
+		
+		// Fila gran total
+		Row filaTotal = sheet.createRow(rowNum);
+		filaTotal.createCell(2).setCellValue("Gran Total");
+		filaTotal.createCell(3).setCellValue(factura.getTotal());
 	}
 
 }
