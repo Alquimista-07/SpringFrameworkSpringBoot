@@ -2,11 +2,14 @@ package com.bolsadeideas.springboot.app.view.xlsx;
 
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
@@ -32,6 +35,9 @@ public class FacturaXlsxView extends AbstractXlsxView {
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		
+		// Asginamos el nombre del archivo
+		response.setHeader("Content-Disposition", "attachment; filename=\"factura_view.xlsx\"");
 
 		// Obtenemos el objeto que se pasa por el model en la vista
 		Factura factura = (Factura) model.get("factura");
@@ -62,6 +68,24 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		sheet.createRow(6).createCell(0).setCellValue("Descripción: " + factura.getDescripcion());
 		sheet.createRow(7).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
 		
+		// Customizando la tabla
+		// Agregamos bordes
+		CellStyle theaderStyle = workbook.createCellStyle();
+		theaderStyle.setBorderBottom(BorderStyle.MEDIUM);
+		theaderStyle.setBorderTop(BorderStyle.MEDIUM);
+		theaderStyle.setBorderRight(BorderStyle.MEDIUM);
+		theaderStyle.setBorderLeft(BorderStyle.MEDIUM);
+		// Asignamos el color y su patron lo colocamos como un color sólido 
+		theaderStyle.setFillForegroundColor(IndexedColors.GOLD.index);
+		theaderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		CellStyle tbodyStyle = workbook.createCellStyle();
+		// Agregamos bordes
+		tbodyStyle.setBorderBottom(BorderStyle.THIN);
+		tbodyStyle.setBorderTop(BorderStyle.THIN);
+		tbodyStyle.setBorderRight(BorderStyle.THIN);
+		tbodyStyle.setBorderLeft(BorderStyle.THIN);
+		
 		// Detalle de la factura
 		Row header = sheet.createRow(9);
 		header.createCell(0).setCellValue("Producto");
@@ -69,22 +93,49 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		header.createCell(2).setCellValue("Cantidad");
 		header.createCell(3).setCellValue("Total");
 		
+		// Aplicamos los estilos
+		header.getCell(0).setCellStyle(theaderStyle);
+		header.getCell(1).setCellStyle(theaderStyle);
+		header.getCell(2).setCellStyle(theaderStyle);
+		header.getCell(3).setCellStyle(theaderStyle);
+		
 		// Llenamos con los items
 		// NOTA: El rowNum no puede arrancar en cero ya que si contamos las celdas creadas anteriormente este nos da que vamos en la posición 10
 		int rowNum = 10;
 		
 		for ( ItemFactura item: factura.getItems() ) {
 			Row fila = sheet.createRow(rowNum ++);
-			fila.createCell(0).setCellValue(item.getProducto().getNombre());
-			fila.createCell(1).setCellValue(item.getProducto().getPrecio());
-			fila.createCell(2).setCellValue(item.getCantidad());
-			fila.createCell(3).setCellValue(item.calcularImporte());
+			
+			// Pasamos los items con sus respectivos estilos
+			cell = fila.createCell(0);
+			cell.setCellValue(item.getProducto().getNombre());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = fila.createCell(1);
+			cell.setCellValue(item.getProducto().getPrecio());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = fila.createCell(2);
+			cell.setCellValue(item.getCantidad());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = fila.createCell(3);
+			cell.setCellValue(item.calcularImporte());
+			cell.setCellStyle(tbodyStyle);
 		}
 		
 		// Fila gran total
 		Row filaTotal = sheet.createRow(rowNum);
-		filaTotal.createCell(2).setCellValue("Gran Total");
-		filaTotal.createCell(3).setCellValue(factura.getTotal());
+
+		cell = filaTotal.createCell(2);
+		// Colocamos un borde 
+		cell.setCellValue("Gran Total");
+		cell.setCellStyle(tbodyStyle);
+		
+		cell = filaTotal.createCell(3);
+		// Colocamos un borde
+		cell.setCellValue(factura.getTotal());
+		cell.setCellStyle(tbodyStyle);
 	}
 
 }
