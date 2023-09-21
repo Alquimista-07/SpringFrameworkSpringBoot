@@ -2,11 +2,21 @@ package com.bolsadeideas.springboot.app.view.csv;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.AbstractView;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import com.bolsadeideas.springboot.app.models.entity.Cliente;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+// NOTA: Esta librería no solo sirve para escribir sino también para leer, por lo tanto ejemplos y demás los podemos encontrar
+//       en la documentación oficial en el siguiente enlace: 
+//       https://super-csv.github.io/super-csv/
 
 // NOTA: Pasamos la vista de clientes y de la misma forma que con pdf y xlsx hace referencia a la que paamos a la vista
 //       en el model. Adicionalmente a diferencia de pdf y excel no tenemos una clase heredada específica por lo tanto acá 
@@ -25,6 +35,8 @@ public class ClienteCsvView extends AbstractView {
 	}
 
 	@Override
+	// Omitimos el warning
+	@SuppressWarnings("unchecked")
 	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
@@ -34,8 +46,27 @@ public class ClienteCsvView extends AbstractView {
 		// Pasamos el content type a la respuesta
 		response.setContentType(getContentType());
 		
+		// Obtenemos los clientes que pasamos a la vista como un paginable
+		Page<Cliente> clientes = (Page<Cliente>) model.get("clientes");
+		
+		// Convertimos a texto plano y lo guardamos en la respuesta. Adicionalmente lo pasamos con STANDARD_PREFERENCE 
+		// que indica que es separado por coma, pero tenemos otras configutaciones que podemos ver haciendo Ctrl + click
+		// sobre la clase CsvPreference
+		ICsvBeanWriter beanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+		
+		// Creamos un arreglo que tenga los valores de los atributos
+		String[] header = {"id", "nombre", "apellido", "email", "createAt"};
+		
+		// Escribimos la línea del header
+		beanWriter.writeHeader(header);
+		
+		// Recorremos con un ciclo los clientes para guardar cada objeto en el archivo plano
+		for( Cliente cliente: clientes ) {
+			beanWriter.write(cliente, header);
+		}
+		
+		// Cerramos el recurso
+		beanWriter.close();
 	}
-
-	
 	
 }

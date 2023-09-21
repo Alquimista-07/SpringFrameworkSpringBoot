@@ -16,6 +16,8 @@
 				<!--NOTA: Usamo el namespace sec de spring security para agregar reglas al botón para que se muestre solo para los usuarios autorizados-->
 				<h4 class="card-title"><a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{/form}">Crear Cliete</a></h4>
 				
+				<a th:href="@{'/listar'(format=csv)}" class="btn btn-primary btn-xs float-right">CSV</a>
+				
 				<table class="table table-striped table-bordered">
 					<thead class="thead-inverse">
 						<tr>
