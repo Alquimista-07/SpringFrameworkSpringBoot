@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
@@ -43,12 +44,15 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		Factura factura = (Factura) model.get("factura");
 				
 		Sheet sheet = workbook.createSheet("Factura Spring");
+		
+		// Usamos uno de los métodos explicados con el pdf que es el más sencillo y que nos sirve para la traducción multilenguaje
+		MessageSourceAccessor mensajes = getMessageSourceAccessor();
 				
 		// El parametro en este caso cero indica la primera posición de las celdas y filas
 		// Primera fila
 		Row row = sheet.createRow(0);
 		Cell cell = row.createCell(0);
-		cell.setCellValue("Datos del cliente");
+		cell.setCellValue(mensajes.getMessage("text.factura.ver.datos.cliente"));
 				
 		// Segunda fila
 		row = sheet.createRow(1);
@@ -63,10 +67,10 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		// Otra forma más sencilla de hacer lo mismo que antes y crear filas
 		// es encadenando métodos, para efectos ilustrativos lo vamos a hacer
 		// de esta forma
-		sheet.createRow(4).createCell(0).setCellValue("Datos de la factura");
-		sheet.createRow(5).createCell(0).setCellValue("Folio: " + factura.getId());
-		sheet.createRow(6).createCell(0).setCellValue("Descripción: " + factura.getDescripcion());
-		sheet.createRow(7).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
+		sheet.createRow(4).createCell(0).setCellValue(mensajes.getMessage("text.factura.ver.datos.factura"));
+		sheet.createRow(5).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.folio") + ": " + factura.getId());
+		sheet.createRow(6).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.descripcion") + ": " + factura.getDescripcion());
+		sheet.createRow(7).createCell(0).setCellValue(mensajes.getMessage("text.cliente.factura.fecha") + ": " + factura.getCreateAt());
 		
 		// Customizando la tabla
 		// Agregamos bordes
@@ -88,10 +92,10 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		
 		// Detalle de la factura
 		Row header = sheet.createRow(9);
-		header.createCell(0).setCellValue("Producto");
-		header.createCell(1).setCellValue("Precio");
-		header.createCell(2).setCellValue("Cantidad");
-		header.createCell(3).setCellValue("Total");
+		header.createCell(0).setCellValue(mensajes.getMessage("text.factura.form.item.nombre"));
+		header.createCell(1).setCellValue(mensajes.getMessage("text.factura.form.item.precio"));
+		header.createCell(2).setCellValue(mensajes.getMessage("text.factura.form.item.cantidad"));
+		header.createCell(3).setCellValue(mensajes.getMessage("text.factura.form.item.total"));
 		
 		// Aplicamos los estilos
 		header.getCell(0).setCellStyle(theaderStyle);
@@ -129,7 +133,7 @@ public class FacturaXlsxView extends AbstractXlsxView {
 
 		cell = filaTotal.createCell(2);
 		// Colocamos un borde 
-		cell.setCellValue("Gran Total");
+		cell.setCellValue(mensajes.getMessage("text.factura.form.total"));
 		cell.setCellStyle(tbodyStyle);
 		
 		cell = filaTotal.createCell(3);
