@@ -20,8 +20,15 @@ import jakarta.servlet.http.HttpServletResponse;
 
 // NOTA: Pasamos la vista de clientes y de la misma forma que con pdf y xlsx hace referencia a la que paamos a la vista
 //       en el model. Adicionalmente a diferencia de pdf y excel no tenemos una clase heredada específica por lo tanto acá 
-//       tenemos que configurarla a partir de una más genérica
-@Component("listar")
+//       tenemos que configurarla a partir de una más genérica.
+//      
+//       Adicionalmente como se comento anteriormente un componente solo puede tener un nombre, por lo tanto al igual que se realizo
+//       con la generación de pdf y excel que usan la misma vista, nos dimos cuenta que podemos pasar una extensión y de esta forma 
+//       evitamos el inconveniente de usar una misma vista en varios componentes. OJO hay que tener en cuenta que si manejamos de esta
+//       forma con la extensión tenemos que configurar el contentngotiation.media-types en el application properties, ya que si no hacemos
+//       esto no va a arrojar error pero tampoco va a generar el archivo. Para saber el media type lo podmos buscar en google como por ejemplo
+//       "Media type o MIME type csv java"
+@Component("listar.csv")
 public class ClienteCsvView extends AbstractView {
 
 	public ClienteCsvView() {
