@@ -2,9 +2,15 @@ package com.bolsadeideas.springboot.app.view.xlsx;
 
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.hibernate.annotations.Comment;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
+
+import com.bolsadeideas.springboot.app.models.entity.Factura;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //       PDF tenemos que pasar la vista que hace referencia en el Model para el objeto, pero como dos
 //       vistas no pueden llamarse igual hacemos una pequeña distinción agregando por ejemplo la extensión
 //       y mantenemos una parte de la ruta original.
-@Comment("factura/ver.xlsx")
+@Component("factura/ver.xlsx")
 public class FacturaXlsxView extends AbstractXlsxView {
 
 	// Muy similar a lo que teníamos con pdf agregamos el método sobre cargado de la clase heredada y es sobre el cual vamos a tabajar
@@ -25,8 +31,35 @@ public class FacturaXlsxView extends AbstractXlsxView {
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
-		
+
+		// Obtenemos el objeto que se pasa por el model en la vista
+		Factura factura = (Factura) model.get("factura");
+				
+		Sheet sheet = workbook.createSheet("Factura Spring");
+				
+		// El parametro en este caso cero indica la primera posición de las celdas y filas
+		// Primera fila
+		Row row = sheet.createRow(0);
+		Cell cell = row.createCell(0);
+		cell.setCellValue("Datos del cliente");
+				
+		// Segunda fila
+		row = sheet.createRow(1);
+		cell = row.createCell(0);
+		cell.setCellValue(factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
+				
+		// Tercera fila
+		row = sheet.createRow(2);
+		cell = row.createCell(0);
+		cell.setCellValue(factura.getCliente().getEmail());
+				
+		// Otra forma más sencilla de hacer lo mismo que antes y crear filas
+		// es encadenando métodos, para efectos ilustrativos lo vamos a hacer
+		// de esta forma
+		sheet.createRow(4).createCell(0).setCellValue("Datos de la factura");
+		sheet.createRow(5).createCell(0).setCellValue("Folio: " + factura.getId());
+		sheet.createRow(6).createCell(0).setCellValue("Descripción: " + factura.getDescripcion());
+		sheet.createRow(7).createCell(0).setCellValue("Fecha: " + factura.getCreateAt());
 		
 	}
 
