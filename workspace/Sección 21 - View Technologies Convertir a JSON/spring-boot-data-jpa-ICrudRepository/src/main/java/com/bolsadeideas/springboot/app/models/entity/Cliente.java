@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -86,6 +87,10 @@ public class Cliente implements Serializable {
 	@Temporal(TemporalType.DATE)
 	// NOTA: Con @DateTimeFormat especificamos el formato de la fecha
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	// NOTA: Adicionalmente como al generar el JSON nos muestra la fecha en formato timestamp podemos cambiar
+	//       el formato de representación usando la anotación @JsonFormat el cual recibe un patron que podemos
+	//       definir y que corresponde a como queremos que se represente la información.
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createAt;
 	
 	private String foto;
@@ -106,8 +111,9 @@ public class Cliente implements Serializable {
 	//       de la base de datos.
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	// NOTA: Para convertir a JSON sucede algo similar que pasa con XML el cual entra en un loop, por lo tanto es necesario
-	//       también suprimir al momento de generar el objeto JSON y esto lo hacemos con una anotación @JsonIgnore
-	@JsonIgnore
+	//       también suprimir al momento de generar el objeto JSON y esto lo hacemos con una anotación @JsonManagedReference
+	//       y hay que tener que esta va en la parte donde se serializa, es decir, lo que queremos mostrar.
+	@JsonManagedReference
 	private List<Factura> facturas;
 	
 	public Cliente () {

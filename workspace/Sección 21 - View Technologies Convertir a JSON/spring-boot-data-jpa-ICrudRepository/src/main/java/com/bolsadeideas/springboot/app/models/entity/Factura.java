@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +46,10 @@ public class Factura implements Serializable {
 	//       Ahora para mapear la relación de muchas facturas un solo cliente usamos la anotación
 	//       que la representa @ManyToOne
 	@ManyToOne
+	// NOTA: Como esta es la contra parte de la relación par avitar el loop asociado a la generación de JSON
+	//       también tenemos que anotar con @JsonBackReference acá. Y hay que tener que esta va en la parte 
+	//       donde omite la serialización.
+	@JsonBackReference
 	private Cliente cliente;
 	
 	// Creamos un evento pre-presist para generar la fecha del día de creación
