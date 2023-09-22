@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -103,6 +105,9 @@ public class Cliente implements Serializable {
 	//       hacemos que sea bidireccional y lo que va a hacer es crear la llave foranea de clientes en la tabla facturas
 	//       de la base de datos.
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// NOTA: Para convertir a JSON sucede algo similar que pasa con XML el cual entra en un loop, por lo tanto es necesario
+	//       también suprimir al momento de generar el objeto JSON y esto lo hacemos con una anotación @JsonIgnore
+	@JsonIgnore
 	private List<Factura> facturas;
 	
 	public Cliente () {
