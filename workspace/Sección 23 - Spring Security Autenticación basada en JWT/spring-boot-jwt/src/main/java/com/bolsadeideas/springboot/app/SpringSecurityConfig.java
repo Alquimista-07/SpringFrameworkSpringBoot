@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 //import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -122,7 +123,15 @@ public class SpringSecurityConfig  {
 				.successHandler(successHandler)
 				.permitAll())
 		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))))
-		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"));
+		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"))
+		  // Para trabajar con JWT tenemos que deshabilitar el csrf para que no trabaje con sesiones y use la forma sin estado stateless
+		  // Pero esto más que nada es para cuando trabajamos con formularios y no con REST. Adicionalmente es importante quitar los input
+		  // csrf que anteriormente habíamos colocado en el layout y en el login para que no genere error ya que como se mencionó esto lo 
+		  // deshabilitamos.
+		  .csrf(csrf -> csrf.disable())
+		  // Lo siguiente que tenemos que hacer es configurar spring security habilitando la configuración en el session manager como sin estado
+		  // por sobre el uso de sesiones
+		  .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
 		return http.build();
 		
