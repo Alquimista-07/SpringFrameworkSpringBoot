@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "facturas")
@@ -97,6 +98,11 @@ public class Factura implements Serializable {
 		this.createAt = createAt;
 	}
 
+	// NOTA: Como al generar el XML se genera un loop debido a que cliente y factura tienen una relación bidireccional
+	//       es necesario bloquear el acceso de parte de la factura ya que por la parte del cliente no podemos hacerlo 
+	//       para esto entonces anotamos con @XmlTransient la cual indica que cuando se serializa no va a llamar este
+	//       método get
+	@XmlTransient
 	public Cliente getCliente() {
 		return cliente;
 	}
