@@ -3,6 +3,7 @@ package com.bolsadeideas.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,10 +30,12 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +45,7 @@ import com.bolsadeideas.springboot.app.models.dao.service.IClienteService;
 import com.bolsadeideas.springboot.app.models.dao.service.IUploadFileService;
 import com.bolsadeideas.springboot.app.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.util.paginator.PageRender;
+import com.bolsadeideas.springboot.app.view.xml.ClienteList;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -136,6 +140,22 @@ public class ClienteController {
 		model.addAttribute( "page", pageRender );
 		
 		return "listar";
+	}
+	
+	// NOTA: Método REST que retorna una lista de objetos, y para que sea rest tenemos que anotar con @responseBody
+	//       para indicar que el resultado se va a lamacenar en el cuerpo de la respuesta.
+	//       Adicionalmente si queremos indicar el formato XML por parámtro y que la respuesta la podamos obtener tanto
+	//       en XML como JSON recordemos que tenemos que pasar una clase wrapper, por lo tanto reutilizamos la clase wrapper
+	//       ClienteList y no un List e indicando que el tipo y el retorno es ClienteList en vez de retornar solo la consulta y con esto
+	//       podemos tener los 2 XML y JSON, Y simplemente al llamar el endpoint lo indicamos como: 
+	//       http://localhost:8080/listar-rest?format=xml
+	//       http://localhost:8080/listar-rest?format=json
+	//       Y es importante indicar el formato ya que por defecto va a usar xml.
+	@GetMapping(value = "/listar-rest")
+	//public @ResponseBody List<Cliente> listarRest() {
+	public @ResponseBody ClienteList listarRest() {	
+		//return clienteService.findAll();
+		return new ClienteList( clienteService.findAll());
 	}
 	
 	// Metodo para mostrar el formulario

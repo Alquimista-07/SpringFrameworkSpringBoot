@@ -89,7 +89,7 @@ public class SpringSecurityConfig  {
 			"/css/**", 
 			"/js/**", 
 			"/images/**", 
-			"/listar",
+			"/listar**",
 			"/locale"
 		};
 	
