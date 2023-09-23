@@ -92,7 +92,8 @@ public class SpringSecurityConfig  {
 			"/images/**", 
 			"/listar**",
 			"/locale",
-			"/api/clientes/**"
+			// Deshabilitamos el acceso público 
+			//"/api/clientes/**"
 		};
 	
 	// Configuración para la protección de rutas http
@@ -119,12 +120,20 @@ public class SpringSecurityConfig  {
 				
 				// Añadimos el formulario de login;
 				
-		}).formLogin(form -> form.loginPage("/login")
+		})
+		// Deshabilitamos el login ya que al hacer la petición al api y 
+		// tener seguridad lo muestra y ahora para el manejo de la seguridad 
+		// queremos manejar respuestas como por ejemplo el 401 unauthorized
+		// cuando no esta permitido o el 200 cuando es OK.
+		
+		/*.formLogin(form -> form.loginPage("/login")
 				.successHandler(successHandler)
 				.permitAll())
 		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))))
 		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"))
-		  // Para trabajar con JWT tenemos que deshabilitar el csrf para que no trabaje con sesiones y use la forma sin estado stateless
+		  */
+		  
+		// Para trabajar con JWT tenemos que deshabilitar el csrf para que no trabaje con sesiones y use la forma sin estado stateless
 		  // Pero esto más que nada es para cuando trabajamos con formularios y no con REST. Adicionalmente es importante quitar los input
 		  // csrf que anteriormente habíamos colocado en el layout y en el login para que no genere error ya que como se mencionó esto lo 
 		  // deshabilitamos.
