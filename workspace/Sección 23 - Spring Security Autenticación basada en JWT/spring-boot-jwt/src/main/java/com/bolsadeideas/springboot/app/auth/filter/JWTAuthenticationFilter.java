@@ -1,6 +1,8 @@
 package com.bolsadeideas.springboot.app.auth.filter;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,12 +10,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.FilterChain;
@@ -73,9 +77,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		String username = ((User) authResult.getPrincipal()).getUsername();
 		
+		// Obtenemos los roles ya que no tenemos un méotodo propio para pasarlos al token por lo tanto los obtenemos y los pasamos en los Claims
+		// y hay que tener en cuenta que roles es un objeto por lo tanto tenemos que pasar un string en formato JSON
+		// por lo tanto lo convertimos a JSON con ayuda del ObjectMapper()
+		Collection <? extends GrantedAuthority> roles = authResult.getAuthorities();
+		
+		Claims claims = Jwts.claims();
+		claims.put("authorities", new ObjectMapper().writeValueAsString(roles));
+		
+		
 		String token = Jwts.builder()
+				.setClaims(claims)
 				.setSubject( username )
 				.signWith(SignatureAlgorithm.HS512, "Alguna clave Secreta 1234567890".getBytes())
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + 14000000L)) // El valor 3600000 equivale a 1 hora por lo tanto podemps multiplicarlo para asingar el tiempo que necesitemos. En este caso del ejemplo multiplicamos por 4 para asingar 4 horas al token 
 				.compact();
 		
 		// Pasamos el token en la cabecera de la respuesta.
