@@ -143,6 +143,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 	}
 
+	// Implementamos el método encargado de ejecutarse cuando la autenticación es errada y poder manejar el error
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+		
+		Map<String, Object> body = new HashMap<String, Object>();
+		body.put("mensaje", "Error de autenticación: Usuario o contraseña incorrectos");
+		body.put("error", failed.getMessage());
+		
+		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+		response.setStatus(401);
+		response.setContentType("application/json");
+		
+	}
+
 	
 	
 }
