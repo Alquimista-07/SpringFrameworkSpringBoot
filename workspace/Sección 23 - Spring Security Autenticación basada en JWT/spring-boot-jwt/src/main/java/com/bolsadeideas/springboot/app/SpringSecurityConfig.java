@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,9 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
+import com.bolsadeideas.springboot.app.auth.filter.JWTAuthenticationFilter;
 import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
 import com.bolsadeideas.springboot.app.models.dao.service.JpaUserDetailsService;
 
@@ -38,6 +38,11 @@ public class SpringSecurityConfig  {
 	//       tenemos que inyectar
 	@Autowired
 	private JpaUserDetailsService userDatailsService;
+	
+	// Inyectamos el authentication manager
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+	
 	
 	// NOTA: Adicionalmente comentamos el datasource ya que con JPA no es necesario
 	// Inyectamos el datasource para la conexión en base de datos.
@@ -132,7 +137,10 @@ public class SpringSecurityConfig  {
 		  .logout(logout -> logout.addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive.COOKIES))))
 		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"))
 		  */
-		  
+		
+		// Para que el filtro funcione tenemos que registrarlo
+		  .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
+		
 		// Para trabajar con JWT tenemos que deshabilitar el csrf para que no trabaje con sesiones y use la forma sin estado stateless
 		  // Pero esto más que nada es para cuando trabajamos con formularios y no con REST. Adicionalmente es importante quitar los input
 		  // csrf que anteriormente habíamos colocado en el layout y en el login para que no genere error ya que como se mencionó esto lo 
