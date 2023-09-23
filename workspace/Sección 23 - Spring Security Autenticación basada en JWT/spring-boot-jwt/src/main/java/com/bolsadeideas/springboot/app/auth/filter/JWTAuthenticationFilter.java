@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.bolsadeideas.springboot.app.models.entity.Usuario;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
@@ -49,6 +52,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 		
+		// NOTA: Como ahora estamos recibiendo por raw estos dos if los tenemos que comentar
+		/*
 		if (username == null) {
 			username = "";
 		}
@@ -56,10 +61,32 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		if (password == null) {
 			password = "";
 		}
+		*/
 		
 		if (username != null && password != null) {
 			logger.info("Username desde request parameter (form-data): " + username);
 			logger.info("Password desde request parameter (form-data): " + password);
+		} else {
+			// Ahora como vamos a enviar en usuario y la contraseña en raw en bruto con formato JSON y no en el form-data
+			// tenemos que manejarlo y convertir el JSON a un objeto y recibirlo de la siguiente manera:
+			Usuario user = null;
+			
+			try {
+				user = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
+				
+				username = user.getUsername();
+				password = user.getPassword();
+				
+				logger.info("Username desde request InputStream (raw): " + username);
+				logger.info("Password desde request InputStream (raw): " + password);
+			
+			} catch (StreamReadException e) {
+				e.printStackTrace();
+			} catch (DatabindException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		username = username.trim();
