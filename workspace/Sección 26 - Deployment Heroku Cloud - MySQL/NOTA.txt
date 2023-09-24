@@ -1,0 +1,1 @@
+El ejercicio no se realizo ya que requiere agregar tarjeta de crédito en heroku para poder usar los adons. Por lo tanto como no quiero usar mi tarjeta solo ví los tutoriales.
