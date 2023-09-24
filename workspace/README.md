@@ -41,3 +41,5 @@ Si se nos genera un error al tratar de compilar indicando que estamos tratando d
 Posteriormente dentro del mismo Installed JREs hay una opción que dice Execution Environments en la cual vamos a elgir JavaSE-1.x y que corresponde a la versión que tenemos instalada y para finalizar le damos en aceptar Apply and Close. 
 
 Y ya con esto queda solucionado el problema y podemos volver a dar click en Maven Install.
+
+**NOTA**: Otra cosa es que si realizamos anteriormente el build y tenemos algún error o cambio podemos limpiar el directorio target haciendo click derecho sobre el proyecto y luego en Run As podemos dar Maven Clean y esto va a realizar todo el proceso de limpieza.
