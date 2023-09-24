@@ -1,1 +1,0 @@
-Es importante que los archivos los llamemos messages y seguido de _ y el idioma 
