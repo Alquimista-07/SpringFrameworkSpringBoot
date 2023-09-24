@@ -31,3 +31,13 @@ java -jar /target/nombre-proyecto-version.jar
 **NOTA:** El archivo .jar queda generado dentro de la ruta ```\target\nombre-proyecto-version.jar```
 
 3. Posteriormente ya podemos dirigirnos a la url del serviodor ya sea en la nube o local (localhost:8080).
+
+ ### NOTAS ADICIONALES:
+
+Adicionalmente podemos construir el .jar directamente desde el Spring Framework Tools (STS) haciendo click derecho sobre el proyecto y en el apartado de Run As, le damos click sobre Maven Install el cual va a hacer el build y generar un archivo .jar en la carpeta interna del proyecto llamada target. 
+
+Si se nos genera un error al tratar de compilar indicando que estamos tratando de compilar o ejecutar el proyecto con JRE y no JDK, lo podemos solucionar dirigiendonos a Window en la barra de herramientas, luego a preferences y en la parte izquierda del listado desplegamos la opción Java y luego Installed JREs, a continuación vamos a darle en el botón Add elegimos Standard VM, y le damos siguiente en el cual nos va a pedir directorio donde tenemos el JDK instalado y simplemente lo agregamos.
+  
+Posteriormente dentro del mismo Installed JREs hay una opción que dice Execution Environments en la cual vamos a elgir JavaSE-1.x y que corresponde a la versión que tenemos instalada y para finalizar le damos en aceptar Apply and Close. 
+
+Y ya con esto queda solucionado el problema y podemos volver a dar click en Maven Install.
