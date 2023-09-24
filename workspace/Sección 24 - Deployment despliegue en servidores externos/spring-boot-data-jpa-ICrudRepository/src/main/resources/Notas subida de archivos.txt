@@ -1,0 +1,5 @@
+# La siguiente configuración permite incrememntar el tamaño
+# permitido de los archivos a cargar y también en el servlet,
+# que para este caso es de 10MB
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
