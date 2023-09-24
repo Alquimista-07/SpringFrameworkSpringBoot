@@ -11,11 +11,14 @@
 		//
 		$(document).ready(function () {
 			
+			// Obtenemos la dirección a través del input que codificamos el form
+			var urlAjax = $("#urlAjax").val();
+			
 			$('#buscar_producto').autocomplete({
 				
 				source: function(request, response) {
 					$.ajax({
-						url: "/factura/cargar-productos/" + request.term,
+						url: urlAjax + request.term,
 						dataType: "json",
 						data: {
 							term: request.term

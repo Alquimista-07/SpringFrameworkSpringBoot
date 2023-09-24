@@ -84,6 +84,8 @@
 	</div>
 
 	<footer th:replace="layout/layout :: footer"></footer>
+	<!--Input para obtener el id y la ruta completa para pasarla al autocomplete-->
+	<input type="hidden" id="urlAjax" th:value="@{'/factura/cargar-productos/'}">
 	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
 	
 </body>
