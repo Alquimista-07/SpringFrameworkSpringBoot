@@ -1,8 +1,8 @@
 package com.bolsadeideas.springboot.app.auth.filter;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
+//import java.util.Collection;
+//import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,19 +10,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.bolsadeideas.springboot.app.auth.service.JWTService;
 import com.bolsadeideas.springboot.app.models.entity.Usuario;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.Claims;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,10 +35,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	// usando el proveedor JpaUserDetailsService
 	private AuthenticationManager authenticationManager;
 	
+	// Inyectamos el servicio JWT que creamos para pasarlo a través del constructor e inicializarla
+	private JWTService jwtService;
+	
 	// Constructor
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTService jwtService) {
 		this.authenticationManager = authenticationManager;
 		setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/login", "POST")); 
+		
+		this.jwtService = jwtService;
+		
 	}
 
 	// NOTA: Este método sobreescrito es importante ya que se encarga de realizar la autenticación, o al menos de intentar realizar
@@ -102,24 +109,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		String username = ((User) authResult.getPrincipal()).getUsername();
-		
-		// Obtenemos los roles ya que no tenemos un méotodo propio para pasarlos al token por lo tanto los obtenemos y los pasamos en los Claims
-		// y hay que tener en cuenta que roles es un objeto por lo tanto tenemos que pasar un string en formato JSON
-		// por lo tanto lo convertimos a JSON con ayuda del ObjectMapper()
-		Collection <? extends GrantedAuthority> roles = authResult.getAuthorities();
-		
-		Claims claims = Jwts.claims();
-		claims.put("authorities", new ObjectMapper().writeValueAsString(roles));
-		
-		
-		String token = Jwts.builder()
-				.setClaims(claims)
-				.setSubject( username )
-				.signWith(SignatureAlgorithm.HS512, "Alguna clave Secreta 1234567890".getBytes())
-				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + 14000000L)) // El valor 3600000 equivale a 1 hora por lo tanto podemps multiplicarlo para asingar el tiempo que necesitemos. En este caso del ejemplo multiplicamos por 4 para asingar 4 horas al token 
-				.compact();
+		// El token lo generamos a partir de nuestra clase servicio
+		String token = jwtService.create(authResult);
 		
 		// Pasamos el token en la cabecera de la respuesta.
 		// OJO es importante que lo pasemos como Authorization
@@ -131,7 +122,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		body.put("user", (User) authResult.getPrincipal());
 		body.put("token", token);
 		// NOTA: El patrón %s permite reemplazar por la data que tiene el segundo parántro del format, en este caso el nombre del usuario
-		body.put( "mensaje", String.format("Hola %s, has iniciado sesión con éxito", username) );
+		body.put( "mensaje", String.format("Hola %s, has iniciado sesión con éxito", authResult.getName()) );
 		
 		// Para pasar los datos a la respuesta tenemos que convertir a JSON unsando el método ObjectMapper
 		// como se muestra a continuación

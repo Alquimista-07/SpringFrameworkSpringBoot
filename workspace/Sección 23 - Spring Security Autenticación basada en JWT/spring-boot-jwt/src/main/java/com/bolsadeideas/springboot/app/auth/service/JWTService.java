@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.app.auth.service;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
@@ -10,10 +11,10 @@ import io.jsonwebtoken.Claims;
 public interface JWTService {
 	
 	// Método que se encarga de crear el token
-	public String create(Authentication auth);
+	public String create(Authentication auth) throws IOException;
 	
 	// Método para validar el token
-	public boolean validate(String role);
+	public boolean validate(String token);
 
 	// Método para obtener los claims
 	public Claims getClaims(String token);
@@ -22,8 +23,8 @@ public interface JWTService {
 	public String getUsername(String token);
 	
 	// Método para obtener los roles
-	public Collection<? extends GrantedAuthority> getRoles(String token);
+	public Collection<? extends GrantedAuthority> getRoles(String token ) throws IOException;
 	
 	// Método para resolver el token
-	public String reolve(String token);
+	public String resolve(String token);
 }

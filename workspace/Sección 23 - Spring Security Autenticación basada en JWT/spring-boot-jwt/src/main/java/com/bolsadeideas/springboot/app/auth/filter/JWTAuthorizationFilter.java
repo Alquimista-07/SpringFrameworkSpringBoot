@@ -1,35 +1,40 @@
 package com.bolsadeideas.springboot.app.auth.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
+//import java.util.Arrays;
+//import java.util.Collection;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+//import javax.crypto.SecretKey;
+//import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.bolsadeideas.springboot.app.auth.SimpleGrantedAuthorityMixin;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.bolsadeideas.springboot.app.auth.SimpleGrantedAuthorityMixin;
+import com.bolsadeideas.springboot.app.auth.service.JWTService;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.Claims;
+//import io.jsonwebtoken.JwtException;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+	
+	// Inyectamos el servicio JWT que creamos para pasarlo a través del constructor e inicializarla
+	private JWTService jwtService;
 
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
+	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTService jwtService) {
 		super(authenticationManager);
+		this.jwtService = jwtService;
 	}
 
 	@Override
@@ -44,40 +49,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			return;
 		}
 		
-		boolean validToken;
-		Claims token = null;
-		
-		SecretKey secretKey = new SecretKeySpec("Alguna clave Secreta 1234567890".getBytes(), SignatureAlgorithm.HS512.getJcaName());
-		
-		// Implementamos la validación del token y para ello tenemos que invocar el método parse para analizar el token
-		// a través de la misma clase del toen que es Jwts
-		try {
-			
-			token = Jwts.parser()
-			// Y pasamos la llave que es la misma que pasamos en el JWTAuthenticationFilter, pero luego se va a crear de forma global
-			.setSigningKey(secretKey)
-			// Lo siguiente es analizar, es validar, pero como sabemos viene con el prefijo Bearer el cual tenemos que quitar
-			.parseClaimsJws(header.replace("Bearer ", "")).getBody();
-			
-			validToken = true;
-		
-		} catch (JwtException | IllegalArgumentException e) {
-			validToken = false;
-			e.printStackTrace();
-		}
-		
 		UsernamePasswordAuthenticationToken authentication = null;
 		
-		if (validToken) {
-			String username = token.getSubject();
-			Object roles = token.get("authorities");
-			
-			Collection<? extends GrantedAuthority> authorities = Arrays.asList( new ObjectMapper()
-					.addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityMixin.class)
-					.readValue(roles.toString().getBytes(), SimpleGrantedAuthority[].class) );
-			
-			authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-			System.err.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA" + authentication);
+		if (jwtService.validate(header)) {
+				
+			authentication = new UsernamePasswordAuthenticationToken(jwtService.getUsername(header), null, jwtService.getRoles(header));
+	
 		}
 		
 		// Manejamos el contexto de seguridad para que quede autenticado en la petición ya que no estamos manejando sesiones

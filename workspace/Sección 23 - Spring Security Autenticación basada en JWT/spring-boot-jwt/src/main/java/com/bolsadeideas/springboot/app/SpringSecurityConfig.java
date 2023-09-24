@@ -18,7 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.bolsadeideas.springboot.app.auth.filter.JWTAuthenticationFilter;
 import com.bolsadeideas.springboot.app.auth.filter.JWTAuthorizationFilter;
-import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
+//import com.bolsadeideas.springboot.app.auth.handler.LoginSuccessHandler;
+import com.bolsadeideas.springboot.app.auth.service.JWTService;
 import com.bolsadeideas.springboot.app.models.dao.service.JpaUserDetailsService;
 
 @Configuration
@@ -29,8 +30,8 @@ import com.bolsadeideas.springboot.app.models.dao.service.JpaUserDetailsService;
 public class SpringSecurityConfig  {
 	
 	// Inyectamos
-	@Autowired
-	private LoginSuccessHandler successHandler;
+	//@Autowired
+	//private LoginSuccessHandler successHandler;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -43,6 +44,10 @@ public class SpringSecurityConfig  {
 	// Inyectamos el authentication manager
 	@Autowired
 	private AuthenticationConfiguration authenticationConfiguration;
+	
+	// Inyectamos nuestro JWTService el cual codificamos para centralizar todo lo relacionado a la creación, validación y demás del JSON Web Token (JWT)
+	@Autowired
+	private JWTService jwtService;
 	
 	
 	// NOTA: Adicionalmente comentamos el datasource ya que con JPA no es necesario
@@ -139,11 +144,11 @@ public class SpringSecurityConfig  {
 		  .exceptionHandling(ex -> ex.accessDeniedPage("/error_403"))
 		  */
 		
-		// Para que el filtro funcione tenemos que registrarlo
-		  .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
+		// Para que el filtro funcione tenemos que registrarlo y adicionalmente le pasamos nuesto JWTService
+		  .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtService))
 		  
-		  // Agregamos el filtro de autorización a la configuración de seguridad para que funcione
-		  .addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager()))
+		  // Agregamos el filtro de autorización a la configuración de seguridad para que funcione y adicionalmente le pasamos nuesto JWTService
+		  .addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager(), jwtService))
 		
 		// Para trabajar con JWT tenemos que deshabilitar el csrf para que no trabaje con sesiones y use la forma sin estado stateless
 		  // Pero esto más que nada es para cuando trabajamos con formularios y no con REST. Adicionalmente es importante quitar los input
