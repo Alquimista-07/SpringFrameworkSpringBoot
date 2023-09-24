@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 //import com.bolsadeideas.springboot.app.auth.SimpleGrantedAuthorityMixin;
 import com.bolsadeideas.springboot.app.auth.service.JWTService;
 //import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bolsadeideas.springboot.app.auth.service.JWTServiceImpl;
 
 //import io.jsonwebtoken.Claims;
 //import io.jsonwebtoken.JwtException;
@@ -41,7 +42,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
-		String header = request.getHeader("Authorization");
+		// Usamos la constante que definimos de forma global en el JWTServiceImpl
+		String header = request.getHeader(JWTServiceImpl.HEADER_STRING);
 		
 		if (!requeresAuthentication(header)) {
 			// Si es distinto con la ejecución y salimos del filtro
@@ -68,7 +70,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	// Método para validar si requiere autenticación
 	protected boolean requeresAuthentication(String header) {
 		
-		if (header == null || !header.startsWith("Bearer ")) {
+		// Usamos la constante que definimos de forma global en el JWTServiceImpl
+		if (header == null || !header.startsWith(JWTServiceImpl.PREFIJO_TOKEN)) {
 			return false;
 		}
 		

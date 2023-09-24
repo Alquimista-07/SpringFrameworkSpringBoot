@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.bolsadeideas.springboot.app.auth.service.JWTService;
+import com.bolsadeideas.springboot.app.auth.service.JWTServiceImpl;
 import com.bolsadeideas.springboot.app.models.entity.Usuario;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -115,7 +116,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		// Pasamos el token en la cabecera de la respuesta.
 		// OJO es importante que lo pasemos como Authorization
 		// y Bearer, es decir tal cual esta escrito el código.
-		response.addHeader("Authorization", "Bearer " + token);
+		// Adicionalmente usamos las constantes que definimos de forma global en el JWTServiceImpl
+		response.addHeader(JWTServiceImpl.HEADER_STRING, JWTServiceImpl.PREFIJO_TOKEN+ token);
 		
 		// Pasamos en forma JSON el principal, el token y un mensaje
 		Map<String, Object> body = new HashMap<String, Object>();

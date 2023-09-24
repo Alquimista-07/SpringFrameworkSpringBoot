@@ -28,7 +28,7 @@ public class ClienteRestController {
 	//       http://localhost:8080/api/clientes/listar?format=json
 	@GetMapping("/listar")
 	// Para hacer una prueba colocamos que los unicos que pueden ver la información son los admin
-	@Secured("ROLE_ADMIN")
+	//@Secured("ROLE_ADMIN")
 	public ClienteList listar() {
 		return new ClienteList(clienteService.findAll());
 	}

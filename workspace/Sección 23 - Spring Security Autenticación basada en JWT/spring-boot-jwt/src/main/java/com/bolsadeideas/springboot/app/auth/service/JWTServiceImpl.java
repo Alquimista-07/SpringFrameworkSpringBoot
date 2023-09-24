@@ -26,6 +26,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTServiceImpl implements JWTService {
 	
 	public static final SecretKey SECRET_KEY = new SecretKeySpec("Alguna clave Secreta 1234567890".getBytes(), SignatureAlgorithm.HS512.getJcaName());
+	
+	// El valor 3600000 equivale a 1 hora por lo tanto podemos multiplicarlo para asingar el tiempo que necesitemos. En este caso del ejemplo multiplicamos
+	// por 4 para asingar 4 horas al token. 
+	public static final long EXPIRATION_DATE = 14000000L;
+	
+	public static final String PREFIJO_TOKEN = "Bearer ";
+	
+	public static final String HEADER_STRING = "Authorization";
 
 	@Override
 	public String create(Authentication auth) throws IOException {
@@ -44,9 +52,9 @@ public class JWTServiceImpl implements JWTService {
 		String token = Jwts.builder()
 				.setClaims(claims)
 				.setSubject( username )
-				.signWith(SignatureAlgorithm.HS512, "Alguna clave Secreta 1234567890".getBytes())
+				.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
 				.setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + 14000000L)) // El valor 3600000 equivale a 1 hora por lo tanto podemos multiplicarlo para asingar el tiempo que necesitemos. En este caso del ejemplo multiplicamos por 4 para asingar 4 horas al token 
+				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_DATE)) 
 				.compact();
 		
 		return token;
@@ -101,10 +109,10 @@ public class JWTServiceImpl implements JWTService {
 	@Override
 	public String resolve(String token) {
 		
-		// Validamos si viene el token y adicionalmente si viene con el prefijo Bearer
-		if (token != null && token.startsWith("Bearer ")) {			
-			// Lo siguiente es analizar, es validar, pero como sabemos viene con el prefijo Bearer el cual tenemos que quitar
-			return token.replace("Bearer ", "");
+		// Validamos si viene el token y adicionalmente si viene con el prefijo Bearer y que tenemos en la constante definida
+		if (token != null && token.startsWith(PREFIJO_TOKEN)) {			
+			// Lo siguiente es analizar, es validar, pero como sabemos viene con el prefijo Bearer el cual tenemos que quitar y reemplazar por vacío
+			return token.replace(PREFIJO_TOKEN, "");
 		}
 		
 		return null;
