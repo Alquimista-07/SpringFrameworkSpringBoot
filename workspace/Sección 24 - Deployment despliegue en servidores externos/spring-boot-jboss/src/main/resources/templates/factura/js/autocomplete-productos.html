@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+	
+		// 
+		//	NOTA: Implementamos el buscar producto usando la librería JQuery User Interface (UI)
+		//	      el cual usa AJAX para hacer peticiones asíncronas al servidor para traer la información
+		//	      y de esta manera ir mostrando las opciones del autocomplete en el input con lo que coincida
+		//
+		$(document).ready(function () {
+			
+			// Obtenemos la dirección a través del input que codificamos el form
+			var urlAjax = $("#urlAjax").val();
+			
+			$('#buscar_producto').autocomplete({
+				
+				source: function(request, response) {
+					$.ajax({
+						url: urlAjax + request.term,
+						dataType: "json",
+						data: {
+							term: request.term
+						},
+						success: function(data) {
+							response($.map(data, function(item){
+								return {
+									value: item.id,
+									label: item.nombre,
+									precio: item.precio
+								};
+							}));
+						},
+					});
+				},
+				select: function(event, ui) {
+					//$("#buscar_producto").val(ui.item.label);
+					
+					if ( itemsHelper.hasProducto(ui.item.value) ) {
+						itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio);
+						return flase;
+					}
+					
+					var linea = $("#plantillaItemsFactura").html();
+					
+					linea = linea.replace(/{ID}/g, ui.item.value);
+					linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+					linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+					
+					$("#cargarItemProductos tbody").append(linea);
+					itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
+					
+					return false;
+				}
+			});
+			
+			// Elimiminamos el tbody de la tabla cuando se guarde la factura en la base de datos
+			$("form").submit( function () {
+				$("#plantillaItemsFactura").remove();
+				return;
+			});
+			
+		});
+		
+		var itemsHelper = {
+			calcularImporte: function(id, precio, cantidad) {
+				$("#total_importe_" + id).html(parseInt(precio) * parseInt(cantidad));
+				
+				this.calcularGranTotal();
+				
+			},
+			
+			// Esta función busca línea por línea si existe el producto, y si lo encuentra suma uno a la cantidad para evitar
+			// repetir líneas
+			hasProducto: function(id) {
+				
+				var resultado = false;
+				
+				$('input[name="item_id[]"]').each(function () {
+					if( parseInt(id) == parseInt( $(this).val()) ) {
+						resultado = true;
+					}
+				});
+				
+				return resultado;
+			},
+			
+			// El siguiente método incrementa la cantidad de la línea existente
+			incrementaCantidad: function(id, precio) {
+				
+				var cantidad = $("#cantidad_" + id).val() ? parseInt($("#cantidad_" + id).val()) : 0;
+				
+				$("#cantidad_" + id).val(++cantidad);
+				
+				this.calcularImporte(id, precio, cantidad);
+				
+			},
+			
+			// Función para eliminar una línea de la factura
+			eliminarLineaFactura: function(id) {
+				$("#row_" + id).remove();
+				
+				this.calcularGranTotal();
+				
+			},
+			
+			// Función para calcular el gran total
+			calcularGranTotal: function() {
+				
+				var total = 0;
+				
+				$('span[id^="total_importe_"]').each(function() {
+					total += parseInt($(this).html());
+				});
+				
+				$('#gran_total').html(total);
+				
+			}
+		}
+	
+	</script>
+
+</body>
+</html>
