@@ -26,4 +26,25 @@ public class ClienteServiceImpl implements IClienteService {
 		return (List<Cliente>) clienteDao.findAll();
 	}
 
+	// Implementación del método de buscar cliente por id.
+	@Override
+	@Transactional(readOnly = true)
+	public Cliente findById(Long id) {
+		return clienteDao.findById(id).orElse(null);
+	}
+
+	// Implementación del método para guardar un cliente.
+	@Override
+	@Transactional
+	public Cliente save(Cliente cliente) {
+		return clienteDao.save(cliente);
+	}
+
+	// Implementación del método para borrar un cliente por id.
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		clienteDao.deleteById(id);		
+	}
+
 }

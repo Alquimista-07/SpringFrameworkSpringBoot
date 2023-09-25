@@ -10,4 +10,13 @@ public interface IClienteService {
 	// Listar todo
 	public List<Cliente> findAll();
 	
+	// Buscar cliente por id
+	public Cliente findById(Long id);
+	
+	// Guardar cliente
+	public Cliente save(Cliente cliente);
+	
+	// Borrar cliente
+	public void delete(Long id);
+	
 }
