@@ -3,9 +3,14 @@ package com.bolsadeideas.springboot.backend.apirest.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
@@ -31,5 +36,23 @@ public class ClienteRestController {
 	public List<Cliente> index() {
 		return clienteService.findAll();
 	}
+	
+	// Ruta para obtener un cliente por id
+	@GetMapping("/clientes/{id}")
+	public Cliente show(@PathVariable Long id) {
+		return clienteService.findById(id);
+	}
+	
+	// Ruta para crear un cliente.
+	// Hay que tener en cuenta que como la información viene en formato JSON dentro del cuerpo de la petición, tenemos
+	// que indicar que es @RequestBody, adicionalmente anotamos con @ResponseStatus para dar el status 201 de respuesta 
+	// correspondiente a creado a la aplicación que realiza la petición, en este caso el frontend de Angular. También si 
+	// no indicamos el @ResponseStatus por defecto va a ser ok status 200.
+	@PostMapping("/clientes")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Cliente crear(@RequestBody Cliente cliente) { 
+		return clienteService.save(cliente);
+	}
+
 
 }
