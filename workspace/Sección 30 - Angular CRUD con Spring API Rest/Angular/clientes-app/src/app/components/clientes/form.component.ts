@@ -43,9 +43,21 @@ export class FormComponent implements OnInit {
     this.activatedRoute.params.subscribe(({ id }) => {
       if (id) {
         this.clienteService.getCliente(id)
-            .subscribe( cliente => this.cliente = cliente)
+          .subscribe(cliente => this.cliente = cliente)
       }
     });
+  }
+
+  public update(): void {
+    this.clienteService.update(this.cliente)
+      .subscribe(cliente => {
+        this.router.navigateByUrl("/clientes")
+        Swal.fire(
+          'Cliente Actualizado',
+          `El cliente ${this.cliente.nombre} se ha actualizado con éxito!`,
+          'success'
+        )
+      });
   }
 
 }
