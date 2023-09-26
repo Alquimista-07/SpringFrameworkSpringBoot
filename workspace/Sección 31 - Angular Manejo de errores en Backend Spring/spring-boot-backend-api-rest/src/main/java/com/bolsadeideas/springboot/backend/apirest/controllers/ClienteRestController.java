@@ -140,9 +140,32 @@ public class ClienteRestController {
 	
 	// Ruta para eliminar un cliente por id
 	@DeleteMapping("/clientes/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		clienteService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		Cliente clienteAEliminar = clienteService.findById(id);
+		
+		try {
+			
+			if(clienteAEliminar == null) {
+				response.put("mensaje", "Error: El cliente con ID: "+ id +" que desea eliminar no existe en la base de datos.");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			} 
+			
+			else {				
+				clienteService.delete(id);
+				response.put("mensaje", "El cliente ha sido eliminado con éxito!");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK); 
+			}
+			
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			response.put("mensaje", "Error al eliminar el cliente en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}	
+		
 	}
 
 }
