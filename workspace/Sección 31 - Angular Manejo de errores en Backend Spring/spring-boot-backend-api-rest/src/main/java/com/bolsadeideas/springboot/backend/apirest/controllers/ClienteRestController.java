@@ -98,21 +98,43 @@ public class ClienteRestController {
 	
 	// Ruta para actualizar un cliente
 	@PutMapping("/clientes/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente actualizar(@RequestBody Cliente cliente, @PathVariable Long id) {
+	public ResponseEntity<?> actualizar(@RequestBody Cliente cliente, @PathVariable Long id) {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		Cliente clienteUpdated = null;
 		
 		// Obtenemos el cliente de la base de datos por su id
 		Cliente clienteActual = clienteService.findById(id);
 		
-		// Pasamos los valores modificados
-		clienteActual.setNombre(cliente.getNombre());
-		clienteActual.setApellido(cliente.getApellido());
-		clienteActual.setEmail(cliente.getEmail());
+		if (clienteActual == null) {
+			response.put("mensaje", "Error: No se pudo editar, el cliente con ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
 		
-		// Persistimos el cliente con los cambios realizados. Esto internamente va a hacer un merge de los
-		// datos para actualizarlos y por lo tanto esto detás de escena se traduce en un update en la base
-		// de datos
-		return clienteService.save(clienteActual);
+		try {
+			
+			// Pasamos los valores modificados
+			clienteActual.setNombre(cliente.getNombre());
+			clienteActual.setApellido(cliente.getApellido());
+			clienteActual.setEmail(cliente.getEmail());
+			clienteActual.setCreateAt(cliente.getCreateAt());
+			
+			// Persistimos el cliente con los cambios realizados. Esto internamente va a hacer un merge de los
+			// datos para actualizarlos y por lo tanto esto detás de escena se traduce en un update en la base
+			// de datos
+			clienteUpdated = clienteService.save(clienteActual);
+		
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			response.put("mensaje", "Error al actualizar el cliente en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
+		response.put("clienteNuevo", clienteUpdated);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		
 	}
 	
