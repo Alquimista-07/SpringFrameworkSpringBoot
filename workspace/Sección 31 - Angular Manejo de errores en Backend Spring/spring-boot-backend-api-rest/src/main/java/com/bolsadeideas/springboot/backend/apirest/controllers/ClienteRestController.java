@@ -58,7 +58,7 @@ public class ClienteRestController {
 			e.printStackTrace();
 			response.put("mensaje", "Error al realizar la consulta en la base de datos. Contacte con el administrador.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		if(cliente == null) {
