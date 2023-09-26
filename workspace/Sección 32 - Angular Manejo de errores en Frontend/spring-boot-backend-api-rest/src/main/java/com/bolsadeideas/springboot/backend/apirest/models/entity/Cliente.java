@@ -12,6 +12,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
 
 // POJO: Cliente
 
@@ -26,13 +27,16 @@ public class Cliente implements Serializable {
 
 	// No puede ser nulo
 	@Column(nullable = false)
+	@NotEmpty
 	private String nombre;
 	
 	// El column no es necesario ya que el atributo se llama igual en el que en la base de datos
+	@NotEmpty
 	private String apellido;
 	
 	// No puede ser nulo y además tiene que ser único
 	@Column(nullable = false, unique = true)
+	@NotEmpty
 	private String email;
 	
 	// Colunma mapeada a un atributo que se llama distinto en la base de datos por lo tanto se mapea con @Column

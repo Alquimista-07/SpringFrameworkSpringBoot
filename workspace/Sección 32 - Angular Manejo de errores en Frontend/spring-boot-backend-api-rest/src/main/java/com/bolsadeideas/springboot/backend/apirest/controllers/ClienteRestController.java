@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
 import com.bolsadeideas.springboot.backend.apirest.models.services.IClienteService;
 
+import jakarta.validation.ValidationException;
+
 // Como se había mencionado en secciones anteriores como esta es una aplicación solo backend con API REST 
 // los controladores los anotamos con @RestController y no con @Controller.
 @RestController
@@ -86,6 +88,11 @@ public class ClienteRestController {
 			e.printStackTrace();
 			response.put("mensaje", "Error al realizar el insert en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			response.put("mensaje", "Error al realizar el insert en la base de datos.");
+			response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
