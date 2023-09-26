@@ -29,17 +29,17 @@ public class Cliente implements Serializable {
 
 	// No puede ser nulo
 	@Column(nullable = false)
-	@NotEmpty
-	@Size(min = 4, max = 12)
+	@NotEmpty(message = "no puede estar vacío")
+	@Size(min = 4, max = 12, message = "debe tener un tamaño que este entre 4 y 12 caracteres")
 	private String nombre;
 	
 	// El column no es necesario ya que el atributo se llama igual en el que en la base de datos
-	@NotEmpty
+	@NotEmpty(message = "no puede estar vacío")
 	private String apellido;
 	
 	// No puede ser nulo y además tiene que ser único
 	@Column(nullable = false, unique = true)
-	@NotEmpty
+	@NotEmpty(message = "no puede estar vacío")
 	@Email
 	private String email;
 	
