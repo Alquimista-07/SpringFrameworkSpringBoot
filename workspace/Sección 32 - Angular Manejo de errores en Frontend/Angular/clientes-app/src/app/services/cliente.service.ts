@@ -15,12 +15,12 @@ import { Cliente } from '../interfaces/cliente';
 export class ClienteService {
 
   private urlEndpoint: string = 'http://localhost:8080/api/clientes';
-  
+
   private httpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
 
-  constructor( private http: HttpClient, private router: Router ) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
@@ -28,34 +28,79 @@ export class ClienteService {
   }
 
   create(cliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(this.urlEndpoint, cliente, {headers: this.httpHeaders});
+    return this.http.post<Cliente>(this.urlEndpoint, cliente, { headers: this.httpHeaders })
+      .pipe(
+        catchError(err => {
+
+          console.log(err.error.mensaje);
+
+          Swal.fire(
+            err.error.mensaje,
+            err.error.error,
+            'error'
+          );
+
+          return throwError(() => err);
+
+        })
+      );
   }
 
   getCliente(id: string): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.urlEndpoint}/${id}`)
-           .pipe(
-            catchError(err => {
+      .pipe(
+        catchError(err => {
 
-              this.router.navigateByUrl("/clientes");
-              console.log(err.error.mensaje);
+          this.router.navigateByUrl("/clientes");
+          console.log(err.error.mensaje);
 
-              Swal.fire(
-                'Error al editar',
-                err.error.mensaje,
-                'error'
-              );
+          Swal.fire(
+            'Error al editar',
+            err.error.mensaje,
+            'error'
+          );
 
-              return throwError(() => err);
-            })
-           );
+          return throwError(() => err);
+        })
+      );
   }
 
   update(cliente: Cliente): Observable<Cliente> {
-    return this.http.put<Cliente>(`${this.urlEndpoint}/${cliente.id}`, cliente, {headers: this.httpHeaders});
+    return this.http.put<Cliente>(`${this.urlEndpoint}/${cliente.id}`, cliente, { headers: this.httpHeaders })
+      .pipe(
+        catchError(err => {
+
+          console.log(err.error.mensaje);
+
+          Swal.fire(
+            err.error.mensaje,
+            err.error.error,
+            'error'
+          );
+
+          return throwError(() => err);
+
+        })
+      );
   }
 
   delete(id: number): Observable<Cliente> {
-    return this.http.delete<Cliente>(`${this.urlEndpoint}/${id}`, {headers: this.httpHeaders});
+    return this.http.delete<Cliente>(`${this.urlEndpoint}/${id}`, { headers: this.httpHeaders })
+      .pipe(
+        catchError(err => {
+
+          console.log(err.error.mensaje);
+
+          Swal.fire(
+            err.error.mensaje,
+            err.error.error,
+            'error'
+          );
+
+          return throwError(() => err);
+
+        })
+      );
   }
 
 }
