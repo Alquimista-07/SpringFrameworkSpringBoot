@@ -32,6 +32,10 @@ export class ClienteService {
       .pipe(
         catchError(err => {
 
+          if (err.status == 400) {
+            return throwError(() => err);
+          }
+
           console.log(err.error.mensaje);
 
           Swal.fire(
@@ -69,6 +73,10 @@ export class ClienteService {
     return this.http.put<Cliente>(`${this.urlEndpoint}/${cliente.id}`, cliente, { headers: this.httpHeaders })
       .pipe(
         catchError(err => {
+
+          if (err.status == 400) {
+            return throwError(() => err);
+          }
 
           console.log(err.error.mensaje);
 
