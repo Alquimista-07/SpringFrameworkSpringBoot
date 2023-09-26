@@ -72,13 +72,28 @@ public class ClienteRestController {
 	
 	// Ruta para crear un cliente.
 	// Hay que tener en cuenta que como la información viene en formato JSON dentro del cuerpo de la petición, tenemos
-	// que indicar que es @RequestBody, adicionalmente anotamos con @ResponseStatus para dar el status 201 de respuesta 
-	// correspondiente a creado a la aplicación que realiza la petición, en este caso el frontend de Angular. También si 
-	// no indicamos el @ResponseStatus por defecto va a ser ok status 200.
+	// que indicar que es @RequestBody.
 	@PostMapping("/clientes")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente crear(@RequestBody Cliente cliente) { 
-		return clienteService.save(cliente);
+	public ResponseEntity<?> crear(@RequestBody Cliente cliente) { 
+		
+		Cliente clienteNuevo = null;
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			
+			clienteNuevo = clienteService.save(cliente);
+			
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			response.put("mensaje", "Error al realizar el insert en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "El cliente ha sido creado con éxito!");
+		response.put("clienteNuevo", clienteNuevo);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 	// Ruta para actualizar un cliente

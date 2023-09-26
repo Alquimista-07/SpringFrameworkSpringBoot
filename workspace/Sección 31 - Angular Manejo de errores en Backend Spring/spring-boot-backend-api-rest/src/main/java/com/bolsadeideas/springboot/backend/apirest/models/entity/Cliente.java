@@ -24,9 +24,15 @@ public class Cliente implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// Atributos que se llaman igual en la base de datos por lo tanto no es necesario mapear con @Column
+	// No puede ser nulo
+	@Column(nullable = false)
 	private String nombre;
+	
+	// El column no es necesario ya que el atributo se llama igual en el que en la base de datos
 	private String apellido;
+	
+	// No puede ser nulo y además tiene que ser único
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	// Colunma mapeada a un atributo que se llama distinto en la base de datos por lo tanto se mapea con @Column
