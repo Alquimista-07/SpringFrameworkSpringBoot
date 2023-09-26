@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Sweet Alert
 import Swal from 'sweetalert2';
@@ -11,17 +11,20 @@ import { ClienteService } from 'src/app/services/cliente.service';
   selector: 'app-form',
   templateUrl: './form.component.html'
 })
-export class FormComponent {
+export class FormComponent implements OnInit {
 
   public titulo = 'Crear Cliente';
 
-  constructor(private clienteService: ClienteService, private router: Router){ }
-  
+  constructor(private clienteService: ClienteService, private router: Router, private activatedRoute: ActivatedRoute) { }
   public cliente: Cliente = {
     nombre: '',
     apellido: '',
     email: ''
   };
+
+  ngOnInit(): void {
+    this.cargarCliente();
+  }
 
   public create(): void {
     this.clienteService.create(this.cliente).subscribe(
@@ -34,6 +37,15 @@ export class FormComponent {
         )
       }
     );
+  }
+
+  public cargarCliente(): void {
+    this.activatedRoute.params.subscribe(({ id }) => {
+      if (id) {
+        this.clienteService.getCliente(id)
+            .subscribe( cliente => this.cliente = cliente)
+      }
+    });
   }
 
 }
