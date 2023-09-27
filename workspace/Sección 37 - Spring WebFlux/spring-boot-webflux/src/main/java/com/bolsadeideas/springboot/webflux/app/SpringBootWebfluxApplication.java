@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 import com.bolsadeideas.springboot.webflux.app.models.dao.ProductoDao;
 import com.bolsadeideas.springboot.webflux.app.models.documents.Producto;
@@ -18,6 +19,11 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 	@Autowired
 	private ProductoDao dao;
 	
+	// Este atributo que creamos del tipo ReactiveMongoTemplate nos permite para hacer algo similar a lo que teníamos en JPA
+	// que cada vez que arrancamos o bajamos la aplicación los datos de prueba que tenemos se van a borrar de forma automática.
+	@Autowired
+	private ReactiveMongoTemplate mongoTemplate;
+	
 	final Logger log = LoggerFactory.getLogger(SpringBootWebfluxApplication.class);
 
 	public static void main(String[] args) {
@@ -26,6 +32,9 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		// Borramos los datos de prueba de forma automática. OJO esto es solo para desarrollo
+		mongoTemplate.dropCollection("productos").subscribe();
 		
 		// Creamos un flujo de productos
 		Flux.just(new Producto("TV Panasonic Pantalla LCD", 456.89),
