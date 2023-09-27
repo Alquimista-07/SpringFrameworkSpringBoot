@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { DatePipe, formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 //import { of } from 'rxjs';
@@ -32,6 +33,13 @@ export class ClienteService {
 
             return clientes.map(cliente => {
               cliente.nombre = cliente.nombre.toUpperCase();
+              
+              // Esta es una forma para el formato de fecha
+              //cliente.createAt = formatDate(cliente.createAt!, 'dd-MM-yyyy', 'en-US')
+              
+              // Esta es otra forma para el formato de fecha
+              let datePipe = new DatePipe('en-US');
+              cliente.createAt = datePipe.transform(cliente.createAt, 'dd/MM/yyyy')!;
               return cliente;
             });
 
