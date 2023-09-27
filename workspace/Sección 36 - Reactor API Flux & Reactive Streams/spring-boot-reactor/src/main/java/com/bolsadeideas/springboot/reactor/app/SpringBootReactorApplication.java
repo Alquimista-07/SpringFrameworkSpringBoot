@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.bolsadeideas.springboot.reactor.app.models.Usuario;
+
 import reactor.core.publisher.Flux;
 
 /*
@@ -31,29 +33,36 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		final Logger log = LoggerFactory.getLogger(SpringBootReactorApplication.class);
 		
 		// Creamos el observable
-		Flux<String> nombres = Flux.just("Andres", "Pedro", "Julián")
+		Flux<Usuario> nombres = Flux.just("Andres", "Pedro", "Julián")
 				// El evento doOnNext se ejecuta cada vez que el observador (nombres en este caso) notifica que ha llegado un elemento.
 				// Adicionalmente el :: es una característica de Java 8 que permite abreviar más el código ya que en si eso sería lo mismo
 				// que hacer .doOnNext(elemento -> System.out.println(elemento));
 				//.doOnNext(System.out::println);
 				
+				.map(nombre -> new Usuario(nombre.toUpperCase(), null))
+				
 				// Emulamos un error
-				.doOnNext(e -> {
-					if(e.isEmpty()) {
+				.doOnNext(usuario -> {
+					if(usuario == null) {
 						
 						throw new RuntimeException("Nombres no pueden ser vacíos");
 						
 					}					
 					
 					// Si no hubo error continúa.
-					System.out.println(e);
+					System.out.println(usuario.getNombre());
 					
+				})
+				.map(usuario -> {
+					String nombre = usuario.getNombre().toLowerCase();
+					usuario.setNombre(nombre);
+					return usuario;
 				});
 		
 		// Como ya sabemos para invocar un observable es necesario subscribirnos.
 		// Adicionalmente cuando nos suscribimos podemos manejar otras cosas.
 		//nombres.subscribe(log::info);
-		nombres.subscribe(e -> log.info(e),
+		nombres.subscribe(e -> log.info(e.getNombre()),
 				// Como segundo elemento podemos manejar el error.
 				error -> log.error(error.getMessage()),
 				// Cuando se completa la suscripción también podemos ejecutar acciones.
