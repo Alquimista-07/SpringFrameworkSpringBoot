@@ -33,16 +33,16 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		final Logger log = LoggerFactory.getLogger(SpringBootReactorApplication.class);
 		
 		// Creamos el observable
-		Flux<Usuario> nombres = Flux.just("Andres Guzman", "Pedro Fulano", "Julián Sultano", "Bruce Lee", "Bruce Willis")
-				// El evento doOnNext se ejecuta cada vez que el observador (nombres en este caso) notifica que ha llegado un elemento.
-				// Adicionalmente el :: es una característica de Java 8 que permite abreviar más el código ya que en si eso sería lo mismo
-				// que hacer .doOnNext(elemento -> System.out.println(elemento));
-				//.doOnNext(System.out::println);
+		Flux<String> nombres = Flux.just("Andres Guzman", "Pedro Fulano", "Julián Sultano", "Bruce Lee", "Bruce Willis");
 				
-				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				Flux<Usuario> usuarios = nombres.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
 				
 				.filter(usuario -> usuario.getNombre().equals("BRUCE"))
 				
+				// El evento doOnNext se ejecuta cada vez que el observador (nombres en este caso) notifica que ha llegado un elemento.
+				// Adicionalmente el :: es una característica de Java 8 que permite abreviar más el código ya que en si eso sería lo mismo
+				// que hacer .doOnNext(elemento -> System.out.println(elemento));
+				//.doOnNext(System.out::println);.
 				// Emulamos un error
 				.doOnNext(usuario -> {
 					if(usuario == null) {
@@ -64,7 +64,21 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		// Como ya sabemos para invocar un observable es necesario subscribirnos.
 		// Adicionalmente cuando nos suscribimos podemos manejar otras cosas.
 		//nombres.subscribe(log::info);
-		nombres.subscribe(e -> log.info(e.getNombre()),
+		nombres.subscribe(e -> log.info(e.toString()),
+				// Como segundo elemento podemos manejar el error.
+				error -> log.error(error.getMessage()),
+				// Cuando se completa la suscripción también podemos ejecutar acciones.
+				// Y cuando decimos completa es cuando ya se emite el último valor
+				new Runnable() {
+					
+					@Override
+					public void run() {
+						log.info("Ha finalizado la ejecución del observable con éxito");					
+					}
+				}
+				);
+		
+		usuarios.subscribe(e -> log.info(e.toString()),
 				// Como segundo elemento podemos manejar el error.
 				error -> log.error(error.getMessage()),
 				// Cuando se completa la suscripción también podemos ejecutar acciones.
