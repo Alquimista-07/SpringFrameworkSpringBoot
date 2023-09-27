@@ -33,13 +33,15 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 		final Logger log = LoggerFactory.getLogger(SpringBootReactorApplication.class);
 		
 		// Creamos el observable
-		Flux<Usuario> nombres = Flux.just("Andres", "Pedro", "Julián")
+		Flux<Usuario> nombres = Flux.just("Andres Guzman", "Pedro Fulano", "Julián Sultano", "Bruce Lee", "Bruce Willis")
 				// El evento doOnNext se ejecuta cada vez que el observador (nombres en este caso) notifica que ha llegado un elemento.
 				// Adicionalmente el :: es una característica de Java 8 que permite abreviar más el código ya que en si eso sería lo mismo
 				// que hacer .doOnNext(elemento -> System.out.println(elemento));
 				//.doOnNext(System.out::println);
 				
-				.map(nombre -> new Usuario(nombre.toUpperCase(), null))
+				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				
+				.filter(usuario -> usuario.getNombre().equals("BRUCE"))
 				
 				// Emulamos un error
 				.doOnNext(usuario -> {
@@ -50,7 +52,7 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 					}					
 					
 					// Si no hubo error continúa.
-					System.out.println(usuario.getNombre());
+					System.out.println(usuario.getNombre().concat(" ").concat(usuario.getApellido()));
 					
 				})
 				.map(usuario -> {
