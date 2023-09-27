@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError, tap } from 'rxjs';
 import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es-CO';
 import { Router } from '@angular/router';
@@ -28,6 +28,14 @@ export class ClienteService {
     //return of(CLIENTES);
     return this.http.get<Cliente[]>(this.urlEndpoint)
         .pipe(
+
+          tap(resp => {
+            let clientes = resp as Cliente[];
+            resp.forEach(cliente => {
+              console.log(cliente.nombre);
+            })
+          }),
+
           map(resp => {
 
             let clientes = resp as Cliente[];
