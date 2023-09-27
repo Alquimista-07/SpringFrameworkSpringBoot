@@ -49,7 +49,7 @@ export class ClienteService {
               // Otra forma pero para colocar en español
               registerLocaleData(localeEs, 'es');
               let datePipe = new DatePipe('es');
-              cliente.createAt = datePipe.transform(cliente.createAt, 'fullDate')!;
+              //cliente.createAt = datePipe.transform(cliente.createAt, 'fullDate')!;
 
               return cliente;
             });
