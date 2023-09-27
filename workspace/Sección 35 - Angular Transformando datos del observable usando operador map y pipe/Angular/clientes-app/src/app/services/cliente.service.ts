@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 //import { of } from 'rxjs';
@@ -24,7 +24,19 @@ export class ClienteService {
 
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
-    return this.http.get<Cliente[]>(this.urlEndpoint);
+    return this.http.get<Cliente[]>(this.urlEndpoint)
+        .pipe(
+          map(resp => {
+
+            let clientes = resp as Cliente[];
+
+            return clientes.map(cliente => {
+              cliente.nombre = cliente.nombre.toUpperCase();
+              return cliente;
+            });
+
+          })
+        );
   }
 
   create(cliente: Cliente): Observable<Cliente> {
