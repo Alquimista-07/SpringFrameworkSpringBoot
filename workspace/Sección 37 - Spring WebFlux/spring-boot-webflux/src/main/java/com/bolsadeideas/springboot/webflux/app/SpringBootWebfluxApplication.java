@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.webflux.app;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,12 @@ public class SpringBootWebfluxApplication implements CommandLineRunner {
 				  )
 		// El flatMap hace lo mismo que el Map con la diferencia de que el flatMap esta preparado para manejar y trabajar con tipos observable como Flux o Mono
 		// que es lo que nos regresa el método save
-		.flatMap(producto -> dao.save(producto))
+		.flatMap(producto -> {
+			// Agregamos la fecha
+			producto.setCreateAt(new Date());
+			// Guardamos los datos
+			return dao.save(producto);
+			})
 		.subscribe(producto -> log.info("Insert: " + producto.getId() + " " + producto.getNombre()));
 		
 	}
