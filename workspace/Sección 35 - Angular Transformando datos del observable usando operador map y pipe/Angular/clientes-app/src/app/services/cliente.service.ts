@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
-import { DatePipe, formatDate } from '@angular/common';
+import { DatePipe, formatDate, registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es-CO';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 //import { of } from 'rxjs';
@@ -38,8 +39,18 @@ export class ClienteService {
               //cliente.createAt = formatDate(cliente.createAt!, 'dd-MM-yyyy', 'en-US')
               
               // Esta es otra forma para el formato de fecha
-              let datePipe = new DatePipe('en-US');
-              cliente.createAt = datePipe.transform(cliente.createAt, 'dd/MM/yyyy')!;
+              //let datePipe = new DatePipe('en-US');
+              //cliente.createAt = datePipe.transform(cliente.createAt, 'dd/MM/yyyy')!;
+              
+              // Otras formas
+              //let datePipe = new DatePipe('en-US');
+              //cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy')!;
+              
+              // Otra forma pero para colocar en español
+              registerLocaleData(localeEs, 'es');
+              let datePipe = new DatePipe('es');
+              cliente.createAt = datePipe.transform(cliente.createAt, 'fullDate')!;
+
               return cliente;
             });
 
