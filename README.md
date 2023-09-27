@@ -1,5 +1,5 @@
 # SpringFrameworkSpringBoot
-Repositorio creado para almacenar los ejercicios realizados para el curso Spring Framework &amp; Spring Boot desde cero a experto.
+Repositorio creado para almacenar los ejercicios realizados para el curso Spring Framework &amp; Spring Boot desde cero a experto de Udemy.
 
 Instructor: Andrés Guzmán
 
